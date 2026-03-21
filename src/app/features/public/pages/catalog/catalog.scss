@@ -1,0 +1,154 @@
+.catalog-page {
+  min-height: calc(100vh - 140px);
+  background: #f8fafc;
+  padding: 2rem;
+}
+
+.catalog-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+  }
+}
+
+.catalog-filters {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto auto;
+  gap: 1rem;
+
+  input,
+  select,
+  button {
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+
+  input,
+  select {
+    border: 1px solid #d1d5db;
+  }
+
+  button {
+    border: none;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+
+    &.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+  }
+}
+
+.catalog-content {
+  .status-message {
+    text-align: center;
+    padding: 1rem;
+    color: #4b5563;
+
+    &.error {
+      color: #dc2626;
+    }
+  }
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.book-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.book-cover {
+  height: 280px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+  }
+}
+
+.book-info {
+  padding: 1rem;
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    color: #111827;
+  }
+
+  .author {
+    margin: 0 0 0.5rem;
+    color: #6b7280;
+  }
+
+  .price {
+    margin: 0 0 1rem;
+    font-weight: 700;
+    color: #f59e0b;
+  }
+
+  .details-link {
+    display: inline-block;
+    text-decoration: none;
+    background: #2563eb;
+    color: white;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+
+.pagination {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+
+  button {
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    background: #1d4ed8;
+    color: white;
+    cursor: pointer;
+
+    &:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+}

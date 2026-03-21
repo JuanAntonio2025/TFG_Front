@@ -1,1 +1,23 @@
-<p>navbar works!</p>
+<header class="navbar">
+  <div class="navbar__left">
+    <a routerLink="/" class="brand">Júpiter</a>
+    <a routerLink="/catalog" class="nav-link">Catálogo</a>
+    @if (isLoggedIn) {
+      <a routerLink="/library" class="nav-link">Mi Biblioteca</a>
+      <a routerLink="/cart" class="nav-link">Carrito</a>
+    }
+    @if (isAdmin) {
+      <a routerLink="/admin" class="nav-link">Admin</a>
+    }
+  </div>
+
+  <div class="navbar__right">
+    @if (!isLoggedIn) {
+      <a routerLink="/auth/login" class="btn btn-secondary">Iniciar sesión</a>
+      <a routerLink="/auth/register" class="btn btn-primary">Registrarse</a>
+    } @else {
+      <span class="user-name">Hola, {{ user?.name }}</span>
+      <button class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
+    }
+  </div>
+</header>

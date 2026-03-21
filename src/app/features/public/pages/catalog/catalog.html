@@ -1,1 +1,84 @@
-<p>catalog works!</p>
+<main class="catalog-page">
+  <section class="catalog-header">
+    <h1>Nuestro Catálogo</h1>
+    <p>Explora nuestra colección de libros digitales.</p>
+  </section>
+
+  <section class="catalog-filters">
+    <div class="filters-grid">
+      <input
+        type="text"
+        [(ngModel)]="search"
+        placeholder="Buscar por título o autor"
+      />
+
+      <select [(ngModel)]="selectedCategoryId">
+        <option [ngValue]="null">Todas las categorías</option>
+        @for (category of categories; track category.category_id) {
+          <option [ngValue]="category.category_id">{{ category.name }}</option>
+        }
+      </select>
+
+      <select [(ngModel)]="selectedSort">
+        <option value="title_asc">Título A-Z</option>
+        <option value="title_desc">Título Z-A</option>
+        <option value="price_asc">Precio ascendente</option>
+        <option value="price_desc">Precio descendente</option>
+      </select>
+
+      <button (click)="applyFilters()">Aplicar filtros</button>
+      <button class="secondary" (click)="clearFilters()">Limpiar</button>
+    </div>
+  </section>
+
+  <section class="catalog-content">
+    @if (loading) {
+      <p class="status-message">Cargando libros...</p>
+    }
+
+    @if (errorMessage) {
+      <p class="status-message error">{{ errorMessage }}</p>
+    }
+
+    @if (!loading && !errorMessage && books.length === 0) {
+      <p class="status-message">No se encontraron libros.</p>
+    }
+
+    <div class="books-grid">
+      @for (book of books; track book.book_id) {
+        <article class="book-card">
+          <div class="book-cover">
+            <img
+              [src]="book.front_page || 'https://via.placeholder.com/160x230?text=Libro'"
+              [alt]="book.title"
+            />
+          </div>
+
+          <div class="book-info">
+            <h3>{{ book.title }}</h3>
+            <p class="author">{{ book.author }}</p>
+            <p class="price">{{ book.price }} €</p>
+
+            <a class="details-link" [routerLink]="['/books', book.book_id]">
+              Ver detalles
+            </a>
+          </div>
+        </article>
+      }
+    </div>
+
+    @if (!loading && lastPage > 1) {
+      <div class="pagination">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+          Anterior
+        </button>
+
+        <span>Página {{ currentPage }} de {{ lastPage }}</span>
+
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === lastPage">
+          Siguiente
+        </button>
+      </div>
+    }
+  </section>
+</main>

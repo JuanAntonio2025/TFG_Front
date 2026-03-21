@@ -1,0 +1,60 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: #1d4ed8;
+  color: #ffffff;
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.nav-link {
+  color: #dbeafe;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+
+  &.btn-primary {
+    background: #f59e0b;
+    color: #111827;
+  }
+
+  &.btn-secondary {
+    background: #ffffff;
+    color: #1d4ed8;
+  }
+
+  &.btn-danger {
+    background: #dc2626;
+    color: #ffffff;
+  }
+}
