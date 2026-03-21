@@ -1,1 +1,87 @@
-<p>book-detail works!</p>
+<main class="book-detail-page">
+  @if (loading) {
+    <p class="status-message">Cargando detalle del libro...</p>
+  }
+
+  @if (errorMessage && !loading) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage && !loading) {
+    <p class="status-message success">{{ successMessage }}</p>
+  }
+
+  @if (book && !loading) {
+    <section class="book-detail-card">
+      <div class="book-cover">
+        <img
+          [src]="book.front_page || 'https://via.placeholder.com/250x360?text=Libro'"
+          [alt]="book.title"
+        />
+      </div>
+
+      <div class="book-info">
+        <h1>{{ book.title }}</h1>
+        <p class="author">{{ book.author }}</p>
+
+        <div class="meta">
+          <span class="price">{{ book.price }} €</span>
+          <span class="format">{{ book.format }}</span>
+          <span class="availability">{{ book.available }}</span>
+        </div>
+
+        @if (book.categories?.length) {
+          <div class="categories">
+            @for (category of book.categories; track category.category_id) {
+              <span class="category-badge">{{ category.name }}</span>
+            }
+          </div>
+        }
+
+        <div class="reviews-summary">
+          <strong>Valoración media:</strong>
+          @if (avgPoints !== null) {
+            <span>{{ avgPoints }}/5</span>
+          } @else {
+            <span>Sin valoraciones</span>
+          }
+          <span>({{ totalReviews }} reseñas)</span>
+        </div>
+
+        <div class="description">
+          <h2>Sinopsis</h2>
+          <p>{{ book.description || 'Este libro no tiene descripción disponible.' }}</p>
+        </div>
+
+        <button (click)="addToCart()" [disabled]="cartLoading">
+          @if (!cartLoading) {
+            Añadir al carrito
+          } @else {
+            Añadiendo...
+          }
+        </button>
+      </div>
+    </section>
+
+    <section class="reviews-section">
+      <h2>Reseñas</h2>
+
+      @if (reviews.length === 0) {
+        <p>No hay reseñas todavía para este libro.</p>
+      }
+
+      <div class="reviews-list">
+        @for (review of reviews; track review.review_id) {
+          <article class="review-card">
+            <div class="review-header">
+              <strong>{{ review.user?.name || 'Usuario' }}</strong>
+              <span>{{ review.points }}/5</span>
+            </div>
+            <p>{{ review.comment }}</p>
+            <small>{{ review.date }}</small>
+          </article>
+        }
+      </div>
+    </section>
+  }
+</main>

@@ -1,8 +1,38 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { CartData } from '../models/cart.model';
+
+export interface CartResponse {
+  data: CartData;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class Cart {
-  
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/cart';
+
+  getCart(): Observable<CartResponse> {
+    return this.http.get<CartResponse>(this.apiUrl);
+  }
+
+  addItem(bookId: number, quantity: number): Observable<CartResponse> {
+    return this.http.post<CartResponse>(`${this.apiUrl}/items`, {
+      book_id: bookId,
+      quantity
+    });
+  }
+
+  updateItem(bookId: number, quantity: number): Observable<CartResponse> {
+    return this.http.put<CartResponse>(`${this.apiUrl}/items/${bookId}`, {
+      quantity
+    });
+  }
+
+  deleteItem(bookId: number): Observable<{ message: string; data: CartData }> {
+    return this.http.delete<{ message: string; data: CartData }>(`${this.apiUrl}/items/${bookId}`);
+  }
 }

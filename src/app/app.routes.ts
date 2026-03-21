@@ -9,7 +9,7 @@ import { Catalog } from './features/public/pages/catalog/catalog';
 import { BookDetail } from './features/public/pages/book-detail/book-detail';
 import { Login } from './features/auth/pages/login/login';
 import { Register } from './features/auth/pages/register/register';
-import { Cart } from './features/cart/pages/cart/cart';
+import { CartComponent } from './features/cart/pages/cart/cart';
 import { Checkout } from './features/orders/pages/checkout/checkout';
 import { Library } from './features/library/pages/library/library';
 import { Dashboard } from './features/admin/pages/dashboard/dashboard';
@@ -39,7 +39,7 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    component: Cart,
+    component: CartComponent,
     canActivate: [authGuard]
   },
   {

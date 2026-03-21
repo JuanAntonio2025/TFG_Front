@@ -1,1 +1,70 @@
-<p>cart works!</p>
+<main class="cart-page">
+  <section class="cart-header">
+    <h1>Tu carrito</h1>
+    <p>Revisa los libros seleccionados antes de finalizar la compra.</p>
+  </section>
+
+  @if (loading) {
+    <p class="status-message">Cargando carrito...</p>
+  }
+
+  @if (errorMessage && !loading) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage && !loading) {
+    <p class="status-message success">{{ successMessage }}</p>
+  }
+
+  @if (!loading && cartData && items.length === 0) {
+    <section class="empty-cart">
+      <p>Tu carrito está vacío.</p>
+      <a routerLink="/catalog">Ir al catálogo</a>
+    </section>
+  }
+
+  @if (!loading && cartData && items.length > 0) {
+    <section class="cart-content">
+      <div class="cart-items">
+        @for (item of items; track item.book_id) {
+          <article class="cart-item">
+            <img
+              [src]="item.front_page || 'https://via.placeholder.com/120x170?text=Libro'"
+              [alt]="item.title"
+            />
+
+            <div class="item-info">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.author }}</p>
+              <p class="price">{{ item.price }} €</p>
+              <p class="format">{{ item.format }}</p>
+            </div>
+
+            <div class="item-actions">
+              <div class="quantity-controls">
+                <button (click)="decreaseQuantity(item)">-</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="increaseQuantity(item)">+</button>
+              </div>
+
+              <p class="line-total">{{ item.line_total }} €</p>
+
+              <button class="remove-btn" (click)="removeItem(item.book_id)">
+                Eliminar
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+
+      <aside class="cart-summary">
+        <h2>Resumen</h2>
+        <p><strong>Libros:</strong> {{ cartData.summary.items_count }}</p>
+        <p><strong>Cantidad total:</strong> {{ cartData.summary.total_quantity }}</p>
+        <p class="total"><strong>Total:</strong> {{ cartData.summary.total_amount }} €</p>
+
+        <button (click)="goToCheckout()">Finalizar compra</button>
+      </aside>
+    </section>
+  }
+</main>

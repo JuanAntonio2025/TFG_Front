@@ -1,0 +1,166 @@
+.cart-page {
+  min-height: calc(100vh - 140px);
+  background: #f8fafc;
+  padding: 2rem;
+}
+
+.cart-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+  }
+}
+
+.status-message {
+  text-align: center;
+  padding: 1rem;
+
+  &.error {
+    color: #dc2626;
+  }
+
+  &.success {
+    color: #15803d;
+  }
+}
+
+.empty-cart {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  a {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+.cart-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.cart-items {
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 1rem;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  img {
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
+
+.item-info {
+  h3 {
+    margin: 0 0 0.4rem;
+  }
+
+  p {
+    margin: 0 0 0.35rem;
+    color: #4b5563;
+  }
+
+  .price {
+    font-weight: 700;
+    color: #f59e0b;
+  }
+}
+
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  button {
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+  }
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.line-total {
+  font-weight: 700;
+  color: #111827;
+}
+
+.remove-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+}
+
+.cart-summary {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  height: fit-content;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  h2 {
+    margin-top: 0;
+  }
+
+  p {
+    color: #374151;
+  }
+
+  .total {
+    font-size: 1.15rem;
+    margin-top: 1rem;
+  }
+
+  button {
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+}

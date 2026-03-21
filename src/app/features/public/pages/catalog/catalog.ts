@@ -3,8 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { Navbar } from '../../../../shared/components/navbar/navbar';
-import { Footer } from '../../../../shared/components/footer/footer';
 import { Books } from '../../services/books';
 import { BooksResponse } from '../../models/books-response.model';
 import { Categories } from '../../services/categories';
@@ -13,7 +11,7 @@ import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-catalog',
-  imports: [CommonModule, FormsModule, RouterModule, Navbar, Footer],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './catalog.html',
   styleUrl: './catalog.scss',
 })
