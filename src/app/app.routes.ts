@@ -13,6 +13,9 @@ import { CartComponent } from './features/cart/pages/cart/cart';
 import { Checkout } from './features/orders/pages/checkout/checkout';
 import { LibraryComponent } from './features/library/pages/library/library';
 import { Dashboard } from './features/admin/pages/dashboard/dashboard';
+import { OrdersHistory } from './features/orders/pages/orders-history/orders-history';
+import { IncidencesList } from './features/incidences/pages/incidences-list/incidences-list';
+import { IncidenceDetail } from './features/incidences/pages/incidence-detail/incidence-detail';
 
 export const routes: Routes = [
   {
@@ -50,6 +53,21 @@ export const routes: Routes = [
   {
     path: 'library',
     component: LibraryComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'orders/history',
+    component: OrdersHistory,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'incidences',
+    component: IncidencesList,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'incidences/:id',
+    component: IncidenceDetail,
     canActivate: [authGuard]
   },
   {

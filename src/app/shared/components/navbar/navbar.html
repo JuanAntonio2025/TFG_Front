@@ -4,6 +4,8 @@
     <a routerLink="/catalog" class="nav-link">Catálogo</a>
     @if (isLoggedIn) {
       <a routerLink="/library" class="nav-link">Mi Biblioteca</a>
+      <a routerLink="/orders/history" class="nav-link">Pedidos</a>
+      <a routerLink="/incidences" class="nav-link">Soporte</a>
       <a routerLink="/cart" class="nav-link">Carrito</a>
     }
     @if (isAdmin) {

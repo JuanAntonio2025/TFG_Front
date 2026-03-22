@@ -1,1 +1,58 @@
-<p>orders-history works!</p>
+<main class="orders-history-page">
+  <section class="orders-header">
+    <h1>Historial de pedidos</h1>
+    <p>Consulta todas tus compras realizadas.</p>
+  </section>
+
+  @if (loading) {
+    <p class="status-message">Cargando pedidos...</p>
+  }
+
+  @if (errorMessage && !loading) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage && orders.length === 0) {
+    <p class="status-message">Todavía no has realizado ningún pedido.</p>
+  }
+
+  @if (!loading && orders.length > 0) {
+    <section class="orders-list">
+      @for (order of orders; track order.order_id) {
+        <article class="order-card">
+          <div class="order-top">
+            <div>
+              <h2>Pedido #{{ order.order_id }}</h2>
+              <p>{{ order.order_date }}</p>
+            </div>
+
+            <div class="order-status">
+              <span>{{ order.status }}</span>
+            </div>
+          </div>
+
+          <div class="order-meta">
+            <p><strong>Total:</strong> {{ order.total_amount }} €</p>
+            <p><strong>Libros:</strong> {{ order.items.length }}</p>
+          </div>
+
+          <div class="order-items">
+            @for (item of order.items; track item.book_id) {
+              <div class="order-item">
+                <img
+                  [src]="item.front_page || 'https://via.placeholder.com/90x130?text=Libro'"
+                  [alt]="item.title"
+                />
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.author }}</p>
+                  <small>{{ item.unit_price }} €</small>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </section>
+  }
+</main>
