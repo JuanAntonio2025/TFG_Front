@@ -161,3 +161,52 @@
     color: #6b7280;
   }
 }
+
+.review-form-section {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  label {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  select,
+  textarea {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+.review-form-actions,
+.own-review-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.secondary {
+  background: #e5e7eb !important;
+  color: #111827 !important;
+}
+
+.danger {
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
