@@ -1,1 +1,39 @@
-<p>library works!</p>
+<main class="library-page">
+  <section class="library-header">
+    <h1>Mi biblioteca</h1>
+    <p>Aquí encontrarás todos los libros que has comprado.</p>
+  </section>
+
+  @if (loading) {
+    <p class="status-message">Cargando biblioteca...</p>
+  }
+
+  @if (errorMessage && !loading) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (!loading && !errorMessage && libraryBooks.length === 0) {
+    <p class="status-message">Todavía no tienes libros en tu biblioteca.</p>
+  }
+
+  @if (!loading && libraryBooks.length > 0) {
+    <section class="library-grid">
+      @for (book of libraryBooks; track book.book_id) {
+        <article class="library-card">
+          <img
+            [src]="book.front_page || 'https://via.placeholder.com/160x230?text=Libro'"
+            [alt]="book.title"
+          />
+
+          <div class="library-info">
+            <h3>{{ book.title }}</h3>
+            <p>{{ book.author }}</p>
+            <p><strong>Formato:</strong> {{ book.format }}</p>
+            <p><strong>Comprado el:</strong> {{ book.purchase_info.purchased_at }}</p>
+            <!--<p><strong>Precio:</strong> {{ book.purchase_info.unit_price }} €</p>-->
+          </div>
+        </article>
+      }
+    </section>
+  }
+</main>

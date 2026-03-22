@@ -11,7 +11,7 @@ import { Login } from './features/auth/pages/login/login';
 import { Register } from './features/auth/pages/register/register';
 import { CartComponent } from './features/cart/pages/cart/cart';
 import { Checkout } from './features/orders/pages/checkout/checkout';
-import { Library } from './features/library/pages/library/library';
+import { LibraryComponent } from './features/library/pages/library/library';
 import { Dashboard } from './features/admin/pages/dashboard/dashboard';
 
 export const routes: Routes = [
@@ -49,7 +49,7 @@ export const routes: Routes = [
   },
   {
     path: 'library',
-    component: Library,
+    component: LibraryComponent,
     canActivate: [authGuard]
   },
   {
