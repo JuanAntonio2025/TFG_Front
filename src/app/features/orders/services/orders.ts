@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Order } from '../models/order.model';
+import { environment } from '../../../../environments/environment';
 
 export interface CreateOrderResponse {
   message: string;
@@ -29,7 +30,7 @@ export interface OrderResponse {
 })
 export class Orders {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/orders';
+  private readonly apiUrl = `${environment.apiBaseUrl}/orders`;
 
   createOrder(paymentMethod: 'card' | 'paypal'): Observable<CreateOrderResponse> {
     return this.http.post<CreateOrderResponse>(this.apiUrl, {

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Category } from '../../public/models/category.model';
+import { environment } from '../../../../environments/environment';
 
 export interface AdminCategoriesResponse {
   data: Category[];
@@ -18,7 +19,7 @@ export interface AdminCategoryResponse {
 })
 export class AdminCategories {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/admin/categories';
+  private readonly apiUrl = `${environment.apiBaseUrl}/admin/categories`;
 
   getCategories(): Observable<AdminCategoriesResponse> {
     return this.http.get<AdminCategoriesResponse>(this.apiUrl);

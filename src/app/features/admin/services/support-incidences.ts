@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Incidence } from '../../incidences/models/incidence.model';
 import { IncidenceMessage } from '../../incidences/models/message.model';
+import { environment } from '../../../../environments/environment';
 
 export interface SupportIncidencesResponse {
   data: Incidence[];
@@ -23,7 +24,7 @@ export interface SupportMessageResponse {
 })
 export class SupportIncidences {
   private readonly http = inject(HttpClient);
-  private readonly supportApiUrl = 'http://127.0.0.1:8000/api/v1/support/incidences';
+  private readonly supportApiUrl = `${environment.apiBaseUrl}/support/incidences`;
 
   getIncidences(status?: 'active' | 'inactive'): Observable<SupportIncidencesResponse> {
     let params = new HttpParams();

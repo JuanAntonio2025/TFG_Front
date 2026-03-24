@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { CartData } from '../models/cart.model';
+import { environment } from '../../../../environments/environment';
 
 export interface CartResponse {
   data: CartData;
@@ -13,7 +14,7 @@ export interface CartResponse {
 })
 export class Cart {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/cart';
+  private readonly apiUrl = `${environment.apiBaseUrl}/cart`;
 
   getCart(): Observable<CartResponse> {
     return this.http.get<CartResponse>(this.apiUrl);

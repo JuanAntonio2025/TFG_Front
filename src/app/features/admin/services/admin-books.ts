@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Book } from '../../public/models/book.model';
+import { environment } from '../../../../environments/environment';
 
 export interface AdminBooksResponse {
   data: Book[];
@@ -18,7 +19,7 @@ export interface AdminBookResponse {
 })
 export class AdminBooks {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/admin/books';
+  private readonly apiUrl = `${environment.apiBaseUrl}/admin/books`;
 
   getBooks(): Observable<AdminBooksResponse> {
     return this.http.get<AdminBooksResponse>(this.apiUrl);

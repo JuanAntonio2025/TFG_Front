@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 
 import { BookDetailResponse } from '../models/book-detail-response.model';
 import { BooksResponse } from '../models/books-response.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Books {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/books';
+  private readonly apiUrl = `${environment.apiBaseUrl}/books`;
 
   getBooks(filters?: {
     search?: string;

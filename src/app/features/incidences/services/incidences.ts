@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Incidence } from '../models/incidence.model';
 import { IncidenceMessage } from '../models/message.model';
+import { environment } from '../../../../environments/environment';
 
 export interface IncidencesResponse {
   data: Incidence[];
@@ -28,7 +29,7 @@ export interface CreateMessageResponse {
 })
 export class Incidences {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/incidences';
+  private readonly apiUrl = `${environment.apiBaseUrl}/incidences`;
 
   getIncidences(): Observable<IncidencesResponse> {
     return this.http.get<IncidencesResponse>(this.apiUrl);

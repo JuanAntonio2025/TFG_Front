@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { AuthResponse } from '../models/auth-response.model';
 import { Storage } from './storage';
 import { User } from '../models/user.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class Auth {
   private readonly http = inject(HttpClient);
   private readonly storageService = inject(Storage);
 
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1/auth';
+  private readonly apiUrl = `${environment.apiBaseUrl}/auth`;
 
   register(payload: { name: string; email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, payload).pipe(

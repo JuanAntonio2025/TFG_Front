@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Review } from '../models/review.model';
+import { environment } from '../../../../environments/environment';
 
 export interface ReviewsResponse {
   data: Review[];
@@ -18,7 +19,7 @@ export interface ReviewResponse {
 })
 export class Reviews {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://127.0.0.1:8000/api/v1';
+  private readonly apiUrl = `${environment.apiBaseUrl}`;
 
   getReviewsByBook(bookId: number): Observable<ReviewsResponse> {
     return this.http.get<ReviewsResponse>(`${this.apiUrl}/books/${bookId}/reviews`);
