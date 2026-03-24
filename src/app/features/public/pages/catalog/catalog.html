@@ -1,86 +1,158 @@
 <main class="catalog-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      Inicio > Catálogo de Libros
+    </div>
+
     <section class="catalog-header">
-      <h1>Nuestro Catálogo</h1>
-      <p>Explora nuestra colección de libros digitales.</p>
+      <h1 class="page-title">Nuestro Catálogo</h1>
+      <p class="page-subtitle">Explora nuestra colección de libros digitales.</p>
     </section>
 
-    <section class="catalog-filters">
-      <div class="filters-grid">
-        <input
-          type="text"
-          [(ngModel)]="search"
-          placeholder="Buscar por título o autor"
-        />
+    <section class="catalog-layout">
+      <aside class="catalog-sidebar section-card">
+        <div class="sidebar-header">
+          <h2>Filtrar Libros</h2>
+        </div>
 
-        <select [(ngModel)]="selectedCategoryId">
-          <option [ngValue]="null">Todas las categorías</option>
-          @for (category of categories; track category.category_id) {
-            <option [ngValue]="category.category_id">{{ category.name }}</option>
-          }
-        </select>
+        <div class="sidebar-block">
+          <label for="search">Buscar</label>
+          <input
+            id="search"
+            class="app-input"
+            type="text"
+            [(ngModel)]="search"
+            placeholder="Título o autor"
+          />
+        </div>
 
-        <select [(ngModel)]="selectedSort">
-          <option value="title_asc">Título A-Z</option>
-          <option value="title_desc">Título Z-A</option>
-          <option value="price_asc">Precio ascendente</option>
-          <option value="price_desc">Precio descendente</option>
-        </select>
+        <div class="sidebar-block">
+          <label for="category">Categoría</label>
+          <select
+            id="category"
+            class="app-select"
+            [(ngModel)]="selectedCategoryId"
+          >
+            <option [ngValue]="null">Todas las categorías</option>
+            @for (category of categories; track category.category_id) {
+              <option [ngValue]="category.category_id">{{ category.name }}</option>
+            }
+          </select>
+        </div>
 
-        <button (click)="applyFilters()">Aplicar filtros</button>
-        <button class="secondary" (click)="clearFilters()">Limpiar</button>
-      </div>
-    </section>
+        <div class="sidebar-block">
+          <label for="sort">Ordenar por</label>
+          <select
+            id="sort"
+            class="app-select"
+            [(ngModel)]="selectedSort"
+          >
+            <option value="title_asc">Título A-Z</option>
+            <option value="title_desc">Título Z-A</option>
+            <option value="price_asc">Precio ascendente</option>
+            <option value="price_desc">Precio descendente</option>
+          </select>
+        </div>
 
-    <section class="catalog-content">
-      @if (loading) {
-        <p class="status-message">Cargando libros...</p>
-      }
-
-      @if (errorMessage) {
-        <p class="status-message error">{{ errorMessage }}</p>
-      }
-
-      @if (!loading && !errorMessage && books.length === 0) {
-        <p class="status-message">No se encontraron libros.</p>
-      }
-
-      <div class="books-grid">
-        @for (book of books; track book.book_id) {
-          <article class="book-card">
-            <div class="book-cover">
-              <img
-                [src]="book.front_page || 'https://via.placeholder.com/160x230?text=Libro'"
-                [alt]="book.title"
-              />
-            </div>
-
-            <div class="book-info">
-              <h3>{{ book.title }}</h3>
-              <p class="author">{{ book.author }}</p>
-              <p class="price">{{ book.price }} €</p>
-
-              <a class="details-link" [routerLink]="['/books', book.book_id]">
-                Ver detalles
-              </a>
-            </div>
-          </article>
-        }
-      </div>
-
-      @if (!loading && lastPage > 1) {
-        <div class="pagination">
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            Anterior
+        <div class="sidebar-actions">
+          <button class="app-btn app-btn--primary" (click)="applyFilters()">
+            Buscar
           </button>
-
-          <span>Página {{ currentPage }} de {{ lastPage }}</span>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === lastPage">
-            Siguiente
+          <button class="app-btn app-btn--secondary" (click)="clearFilters()">
+            Limpiar filtros
           </button>
         </div>
-      }
+      </aside>
+
+      <section class="catalog-main">
+        <div class="catalog-toolbar section-card">
+          <div>
+            <strong>{{ books.length }}</strong> libros mostrados
+          </div>
+
+          <button class="app-btn app-btn--secondary" (click)="clearFilters()">
+            Limpiar filtros
+          </button>
+        </div>
+
+        @if (loading) {
+          <div class="catalog-state section-card">
+            <p>Cargando libros...</p>
+          </div>
+        }
+
+        @if (errorMessage) {
+          <div class="catalog-state section-card error">
+            <p>{{ errorMessage }}</p>
+          </div>
+        }
+
+        @if (!loading && !errorMessage && books.length === 0) {
+          <div class="catalog-state section-card">
+            <p>No se encontraron libros con los filtros aplicados.</p>
+          </div>
+        }
+
+        @if (!loading && !errorMessage && books.length > 0) {
+          <div class="books-grid">
+            @for (book of books; track book.book_id) {
+              <article class="catalog-book-card">
+                <a class="book-cover-link" [routerLink]="['/books', book.book_id]">
+                  <div class="book-cover">
+                    <img
+                      [src]="book.front_page || 'https://via.placeholder.com/180x260?text=Libro'"
+                      [alt]="book.title"
+                    />
+                  </div>
+                </a>
+
+                <div class="book-body">
+                  <h3 class="book-title">{{ book.title }}</h3>
+                  <p class="book-author">{{ book.author }}</p>
+
+                  @if (book.categories?.length) {
+                    <div class="book-categories">
+                      @for (category of (book.categories ?? []).slice(0, 2); track category.category_id) {
+                        <span>{{ category.name }}</span>
+                      }
+                    </div>
+                  }
+
+                  <p class="book-price">{{ book.price }} €</p>
+
+                  <a class="details-btn" [routerLink]="['/books', book.book_id]">
+                    Ver detalles
+                  </a>
+                </div>
+              </article>
+            }
+          </div>
+        }
+
+        @if (!loading && lastPage > 1) {
+          <div class="catalog-pagination">
+            <button
+              class="page-btn"
+              (click)="goToPage(currentPage - 1)"
+              [disabled]="currentPage === 1"
+            >
+              ‹
+            </button>
+
+            <span class="page-indicator">
+              Página {{ currentPage }} de {{ lastPage }}
+            </span>
+
+            <button
+              class="page-btn"
+              (click)="goToPage(currentPage + 1)"
+              [disabled]="currentPage === lastPage"
+            >
+              ›
+            </button>
+          </div>
+        }
+      </section>
     </section>
   </div>
 </main>

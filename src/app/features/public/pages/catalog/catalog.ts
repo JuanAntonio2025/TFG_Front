@@ -69,6 +69,7 @@ export class Catalog implements OnInit {
   }
 
   applyFilters(): void {
+    this.errorMessage = '';
     this.loadBooks(1);
   }
 
@@ -76,6 +77,7 @@ export class Catalog implements OnInit {
     this.search = '';
     this.selectedCategoryId = null;
     this.selectedSort = 'title_asc';
+    this.errorMessage = '';
     this.loadBooks(1);
   }
 
