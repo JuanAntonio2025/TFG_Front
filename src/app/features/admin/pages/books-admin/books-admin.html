@@ -1,1 +1,97 @@
-<p>books-admin works!</p>
+<main class="admin-page">
+  <section class="page-header">
+    <h1>Gestión de libros</h1>
+    <p>Crear, editar y eliminar libros del catálogo.</p>
+  </section>
+
+  @if (errorMessage) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="status-message success">{{ successMessage }}</p>
+  }
+
+  <section class="admin-form-card">
+    <h2>
+      @if (editingBookId) {
+        Editar libro
+      } @else {
+        Nuevo libro
+      }
+    </h2>
+
+    <div class="form-grid">
+      <input type="text" [(ngModel)]="form.title" placeholder="Título" />
+      <input type="text" [(ngModel)]="form.author" placeholder="Autor" />
+      <input type="number" [(ngModel)]="form.price" placeholder="Precio" />
+      <input type="text" [(ngModel)]="form.front_page" placeholder="Portada (URL o ruta)" />
+
+      <select [(ngModel)]="form.format">
+        <option value="PDF">PDF</option>
+        <option value="EPUB">EPUB</option>
+      </select>
+
+      <select [(ngModel)]="form.available">
+        <option value="available">available</option>
+        <option value="unavailable">unavailable</option>
+      </select>
+    </div>
+
+    <textarea rows="4" [(ngModel)]="form.description" placeholder="Descripción"></textarea>
+
+    <div class="categories-box">
+      <p><strong>Categorías</strong></p>
+      <div class="categories-grid">
+        @for (category of categories; track category.category_id) {
+          <label>
+            <input
+              type="checkbox"
+              [checked]="form.category_ids.includes(category.category_id)"
+              (change)="toggleCategory(category.category_id)"
+            />
+            {{ category.name }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button (click)="submit()" [disabled]="submitting">
+        @if (!submitting) {
+          {{ editingBookId ? 'Actualizar' : 'Crear' }}
+        } @else {
+          Guardando...
+        }
+      </button>
+
+      @if (editingBookId) {
+        <button class="secondary" (click)="cancelEdit()">Cancelar</button>
+      }
+    </div>
+  </section>
+
+  <section class="admin-list-card">
+    <h2>Libros</h2>
+
+    @if (loading) {
+      <p>Cargando libros...</p>
+    }
+
+    <div class="admin-list">
+      @for (book of books; track book.book_id) {
+        <article class="list-item">
+          <div>
+            <h3>{{ book.title }}</h3>
+            <p>{{ book.author }} · {{ book.price }} € · {{ book.format }}</p>
+          </div>
+
+          <div class="item-actions">
+            <button class="secondary" (click)="editBook(book)">Editar</button>
+            <button class="danger" (click)="deleteBook(book.book_id)">Eliminar</button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+</main>

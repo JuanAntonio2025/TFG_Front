@@ -1,0 +1,44 @@
+.admin-dashboard-page {
+  min-height: calc(100vh - 140px);
+  background: #f8fafc;
+  padding: 2rem;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  h2 {
+    margin-top: 0;
+    color: #1d4ed8;
+  }
+
+  p {
+    color: #4b5563;
+  }
+}

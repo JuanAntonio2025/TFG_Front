@@ -1,1 +1,74 @@
-<p>incidences-admin works!</p>
+<main class="admin-page">
+  <section class="page-header">
+    <h1>Gestión de incidencias</h1>
+    <p>Consulta incidencias, cambia su estado y responde a usuarios.</p>
+  </section>
+
+  @if (errorMessage) {
+    <p class="status-message error">{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p class="status-message success">{{ successMessage }}</p>
+  }
+
+  <section class="admin-list-card">
+    <div class="filter-box">
+      <select [(ngModel)]="selectedStatus" (change)="filterByStatus()">
+        <option value="">Todas</option>
+        <option value="active">Activas</option>
+        <option value="inactive">Inactivas</option>
+      </select>
+    </div>
+
+    @if (loading) {
+      <p>Cargando incidencias...</p>
+    }
+
+    <div class="admin-list">
+      @for (incidence of incidences; track incidence.incidence_id) {
+        <article class="list-item">
+          <div>
+            <h3>{{ incidence.subject }}</h3>
+            <p>{{ incidence.type_of_incident }}</p>
+            <p>{{ incidence.user?.name }} · {{ incidence.user?.email }}</p>
+          </div>
+
+          <div class="item-actions">
+            <span class="status">{{ incidence.status }}</span>
+            <button class="secondary" (click)="openIncidence(incidence.incidence_id)">Abrir</button>
+          </div>
+        </article>
+      }
+    </div>
+  </section>
+
+  @if (selectedIncidence) {
+    <section class="admin-form-card">
+      <h2>Detalle incidencia #{{ selectedIncidence.incidence_id }}</h2>
+      <p><strong>Asunto:</strong> {{ selectedIncidence.subject }}</p>
+      <p><strong>Tipo:</strong> {{ selectedIncidence.type_of_incident }}</p>
+      <p><strong>Estado:</strong> {{ selectedIncidence.status }}</p>
+
+      <div class="form-actions">
+        <button (click)="updateStatus('active')">Marcar activa</button>
+        <button class="secondary" (click)="updateStatus('inactive')">Marcar inactiva</button>
+      </div>
+
+      <div class="messages-box">
+        <h3>Mensajes</h3>
+
+        @for (msg of selectedIncidence.messages ?? []; track msg.message_id) {
+          <article class="message-card">
+            <strong>{{ msg.user?.name || 'Usuario' }}</strong>
+            <small>{{ msg.sent_date }}</small>
+            <p>{{ msg.message }}</p>
+          </article>
+        }
+      </div>
+
+      <textarea rows="4" [(ngModel)]="supportMessage" placeholder="Escribe una respuesta..."></textarea>
+      <button (click)="sendMessage()">Enviar respuesta</button>
+    </section>
+  }
+</main>

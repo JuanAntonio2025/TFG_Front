@@ -17,6 +17,11 @@ import { OrdersHistory } from './features/orders/pages/orders-history/orders-his
 import { IncidencesList } from './features/incidences/pages/incidences-list/incidences-list';
 import { IncidenceDetail } from './features/incidences/pages/incidence-detail/incidence-detail';
 
+import { BooksAdmin } from './features/admin/pages/books-admin/books-admin';
+import { CategoriesAdmin } from './features/admin/pages/categories-admin/categories-admin';
+import { UsersAdmin } from './features/admin/pages/users-admin/users-admin';
+import { IncidencesAdmin } from './features/admin/pages/incidences-admin/incidences-admin';
+
 export const routes: Routes = [
   {
     path: '',
@@ -75,6 +80,30 @@ export const routes: Routes = [
     component: Dashboard,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['admin'] }
+  },
+  {
+    path: 'admin/books',
+    component: BooksAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'admin/categories',
+    component: CategoriesAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'admin/users',
+    component: UsersAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'admin/incidences',
+    component: IncidencesAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'support'] }
   },
   {
     path: '**',
