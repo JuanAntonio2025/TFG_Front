@@ -1,10 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+
+import { environment } from '../../../environments/environment';
 import { AuthResponse } from '../models/auth-response.model';
 import { Storage } from './storage';
 import { User } from '../models/user.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,15 @@ export class Auth {
 
   private readonly apiUrl = `${environment.apiBaseUrl}/auth`;
 
+  private readonly currentUserSignal = signal<User | null>(this.storageService.getUser());
+
+  readonly currentUser = computed(() => this.currentUserSignal());
+  readonly isAuthenticated = computed(() => !!this.currentUserSignal());
+
   register(payload: { name: string; email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, payload).pipe(
       tap((response) => {
-        this.storageService.setToken(response.token);
-        this.storageService.setUser(response.user);
+        this.storageAuth(response.token, response.user);
       })
     );
   }
@@ -27,8 +32,7 @@ export class Auth {
   login(payload: { email: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, payload).pipe(
       tap((response) => {
-        this.storageService.setToken(response.token);
-        this.storageService.setUser(response.user);
+        this.storageAuth(response.token, response.user);
       })
     );
   }
@@ -36,7 +40,7 @@ export class Auth {
   logout(): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
-        this.storageService.clearAuth();
+        this.clearAuth();
       })
     );
   }
@@ -45,12 +49,13 @@ export class Auth {
     return this.http.get<User>(`${this.apiUrl}/me`).pipe(
       tap((user) => {
         this.storageService.setUser(user);
+        this.currentUserSignal.set(user);
       })
     );
   }
 
   getCurrentUser(): User | null {
-    return this.storageService.getUser();
+    return this.currentUserSignal();
   }
 
   getToken(): string | null {
@@ -58,11 +63,12 @@ export class Auth {
   }
 
   isLoggedIn(): boolean {
-    return this.storageService.isLoggedIn();
+    return !!this.storageService.getToken();
   }
 
   hasRole(roleName: string): boolean {
-    const user = this.getCurrentUser();
+    const user = this.currentUserSignal();
+
     if (!user?.roles) {
       return false;
     }
@@ -72,5 +78,16 @@ export class Auth {
 
   hasAnyRole(roleNames: string[]): boolean {
     return roleNames.some(role => this.hasRole(role));
+  }
+
+  clearAuth(): void {
+    this.storageService.clearAuth();
+    this.currentUserSignal.set(null);
+  }
+
+  private storageAuth(token: string, user: User): void {
+    this.storageService.setToken(token);
+    this.storageService.setUser(user);
+    this.currentUserSignal.set(user);
   }
 }

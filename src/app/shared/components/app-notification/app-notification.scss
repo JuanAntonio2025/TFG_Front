@@ -1,0 +1,29 @@
+.app-notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  min-width: 260px;
+  max-width: 380px;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+
+  &.success {
+    background: #15803d;
+  }
+
+  &.error {
+    background: #dc2626;
+  }
+
+  &.info {
+    background: #2563eb;
+  }
+
+  &.warning {
+    background: #d97706;
+  }
+}

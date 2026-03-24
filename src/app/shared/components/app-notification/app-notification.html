@@ -1,0 +1,5 @@
+@if (notificationService.notification(); as notification) {
+  <div class="app-notification" [ngClass]="notification.type">
+    {{ notification.message }}
+  </div>
+}

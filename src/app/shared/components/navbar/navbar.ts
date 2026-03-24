@@ -3,27 +3,28 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { Auth } from '../../../core/services/auth';
-import { Storage } from '../../../core/services/storage';
+import { Notification } from '../../../core/services/notification';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
   private readonly authService = inject(Auth);
-  private readonly storageService = inject(Storage);
   private readonly router = inject(Router);
+  private readonly notificationService = inject(Notification);
 
   isMenuOpen = false;
 
   get user() {
-    return this.storageService.getUser();
+    return this.authService.currentUser();
   }
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.isAuthenticated();
   }
 
   get isAdmin(): boolean {
@@ -33,11 +34,12 @@ export class Navbar {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.notificationService.success('Sesión cerrada correctamente.');
+        this.router.navigate(['/auth/login']);
       },
       error: () => {
-        this.storageService.clearAuth();
-        this.router.navigate(['/']);
+        this.authService.clearAuth();
+        this.router.navigate(['/auth/login']);
       }
     });
   }
