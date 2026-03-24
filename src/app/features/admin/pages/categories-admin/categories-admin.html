@@ -1,65 +1,67 @@
 <main class="admin-page">
-  <section class="page-header">
-    <h1>Gestión de categorías</h1>
-    <p>Crear, editar y eliminar categorías.</p>
-  </section>
+  <div class="page-container">
+    <section class="page-header">
+      <h1>Gestión de categorías</h1>
+      <p>Crear, editar y eliminar categorías.</p>
+    </section>
 
-  @if (errorMessage) {
-    <p class="status-message error">{{ errorMessage }}</p>
-  }
-
-  @if (successMessage) {
-    <p class="status-message success">{{ successMessage }}</p>
-  }
-
-  <section class="admin-form-card">
-    <h2>
-      @if (editingCategoryId) {
-        Editar categoría
-      } @else {
-        Nueva categoría
-      }
-    </h2>
-
-    <input type="text" [(ngModel)]="form.name" placeholder="Nombre" />
-    <textarea rows="4" [(ngModel)]="form.description" placeholder="Descripción"></textarea>
-
-    <div class="form-actions">
-      <button (click)="submit()" [disabled]="submitting">
-        @if (!submitting) {
-          {{ editingCategoryId ? 'Actualizar' : 'Crear' }}
-        } @else {
-          Guardando...
-        }
-      </button>
-
-      @if (editingCategoryId) {
-        <button class="secondary" (click)="cancelEdit()">Cancelar</button>
-      }
-    </div>
-  </section>
-
-  <section class="admin-list-card">
-    <h2>Categorías</h2>
-
-    @if (loading) {
-      <p>Cargando categorías...</p>
+    @if (errorMessage) {
+      <p class="status-message error">{{ errorMessage }}</p>
     }
 
-    <div class="admin-list">
-      @for (category of categories; track category.category_id) {
-        <article class="list-item">
-          <div>
-            <h3>{{ category.name }}</h3>
-            <p>{{ category.description }}</p>
-          </div>
+    @if (successMessage) {
+      <p class="status-message success">{{ successMessage }}</p>
+    }
 
-          <div class="item-actions">
-            <button class="secondary" (click)="editCategory(category)">Editar</button>
-            <button class="danger" (click)="deleteCategory(category.category_id)">Eliminar</button>
-          </div>
-        </article>
+    <section class="admin-form-card">
+      <h2>
+        @if (editingCategoryId) {
+          Editar categoría
+        } @else {
+          Nueva categoría
+        }
+      </h2>
+
+      <input type="text" [(ngModel)]="form.name" placeholder="Nombre" />
+      <textarea rows="4" [(ngModel)]="form.description" placeholder="Descripción"></textarea>
+
+      <div class="form-actions">
+        <button (click)="submit()" [disabled]="submitting">
+          @if (!submitting) {
+            {{ editingCategoryId ? 'Actualizar' : 'Crear' }}
+          } @else {
+            Guardando...
+          }
+        </button>
+
+        @if (editingCategoryId) {
+          <button class="secondary" (click)="cancelEdit()">Cancelar</button>
+        }
+      </div>
+    </section>
+
+    <section class="admin-list-card">
+      <h2>Categorías</h2>
+
+      @if (loading) {
+        <p>Cargando categorías...</p>
       }
-    </div>
-  </section>
+
+      <div class="admin-list">
+        @for (category of categories; track category.category_id) {
+          <article class="list-item">
+            <div>
+              <h3>{{ category.name }}</h3>
+              <p>{{ category.description }}</p>
+            </div>
+
+            <div class="item-actions">
+              <button class="secondary" (click)="editCategory(category)">Editar</button>
+              <button class="danger" (click)="deleteCategory(category.category_id)">Eliminar</button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
 </main>

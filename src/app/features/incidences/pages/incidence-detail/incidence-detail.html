@@ -1,56 +1,58 @@
 <main class="incidence-detail-page">
-  @if (loading) {
-    <p class="status-message">Cargando incidencia...</p>
-  }
-
-  @if (errorMessage && !loading) {
-    <p class="status-message error">{{ errorMessage }}</p>
-  }
-
-  @if (successMessage && !loading) {
-    <p class="status-message success">{{ successMessage }}</p>
-  }
-
-  @if (incidence && !loading) {
-    <section class="incidence-header-card">
-      <h1>{{ incidence.subject }}</h1>
-      <p><strong>Tipo:</strong> {{ incidence.type_of_incident }}</p>
-      <p><strong>Estado:</strong> {{ incidence.status }}</p>
-      <p><strong>Fecha:</strong> {{ incidence.creation_date }}</p>
-    </section>
-
-    <section class="messages-card">
-      <h2>Mensajes</h2>
-
-      @if (!incidence.messages?.length) {
-        <p>No hay mensajes todavía.</p>
-      }
-
-      <div class="messages-list">
-        @for (msg of incidence.messages ?? []; track msg.message_id) {
-          <article class="message-card">
-            <div class="message-header">
-              <strong>{{ msg.user?.name || 'Usuario' }}</strong>
-              <small>{{ msg.sent_date }}</small>
-            </div>
-            <p>{{ msg.message }}</p>
-          </article>
-        }
-      </div>
-    </section>
-
-    @if (incidence.status === 'active') {
-      <section class="new-message-card">
-        <h2>Responder</h2>
-        <textarea rows="4" [(ngModel)]="newMessage" placeholder="Escribe tu mensaje..."></textarea>
-        <button (click)="sendMessage()" [disabled]="sending">
-          @if (!sending) {
-            Enviar mensaje
-          } @else {
-            Enviando...
-          }
-        </button>
-      </section>
+  <div class="page-container">
+    @if (loading) {
+      <p class="status-message">Cargando incidencia...</p>
     }
-  }
+
+    @if (errorMessage && !loading) {
+      <p class="status-message error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage && !loading) {
+      <p class="status-message success">{{ successMessage }}</p>
+    }
+
+    @if (incidence && !loading) {
+      <section class="incidence-header-card">
+        <h1>{{ incidence.subject }}</h1>
+        <p><strong>Tipo:</strong> {{ incidence.type_of_incident }}</p>
+        <p><strong>Estado:</strong> {{ incidence.status }}</p>
+        <p><strong>Fecha:</strong> {{ incidence.creation_date }}</p>
+      </section>
+
+      <section class="messages-card">
+        <h2>Mensajes</h2>
+
+        @if (!incidence.messages?.length) {
+          <p>No hay mensajes todavía.</p>
+        }
+
+        <div class="messages-list">
+          @for (msg of incidence.messages ?? []; track msg.message_id) {
+            <article class="message-card">
+              <div class="message-header">
+                <strong>{{ msg.user?.name || 'Usuario' }}</strong>
+                <small>{{ msg.sent_date }}</small>
+              </div>
+              <p>{{ msg.message }}</p>
+            </article>
+          }
+        </div>
+      </section>
+
+      @if (incidence.status === 'active') {
+        <section class="new-message-card">
+          <h2>Responder</h2>
+          <textarea rows="4" [(ngModel)]="newMessage" placeholder="Escribe tu mensaje..."></textarea>
+          <button (click)="sendMessage()" [disabled]="sending">
+            @if (!sending) {
+              Enviar mensaje
+            } @else {
+              Enviando...
+            }
+          </button>
+        </section>
+      }
+    }
+  </div>
 </main>

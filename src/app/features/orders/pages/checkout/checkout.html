@@ -1,74 +1,76 @@
 <main class="checkout-page">
-  <section class="checkout-header">
-    <h1>Finalizar compra</h1>
-    <p>Confirma tu pedido y elige un método de pago simulado.</p>
-  </section>
-
-  @if (loading) {
-    <p class="status-message">Cargando resumen del pedido...</p>
-  }
-
-  @if (errorMessage && !loading) {
-    <p class="status-message error">{{ errorMessage }}</p>
-  }
-
-  @if (successMessage && !loading) {
-    <p class="status-message success">{{ successMessage }}</p>
-  }
-
-  @if (!loading && cartData && cartData.items.length > 0) {
-    <section class="checkout-content">
-      <div class="checkout-items">
-        <h2>Resumen del pedido</h2>
-
-        @for (item of cartData.items; track item.book_id) {
-          <article class="checkout-item">
-            <div>
-              <strong>{{ item.title }}</strong>
-              <p>{{ item.author }}</p>
-            </div>
-            <span>{{ item.line_total }} €</span>
-          </article>
-        }
-      </div>
-
-      <aside class="checkout-summary">
-        <h2>Pago</h2>
-
-        <div class="payment-options">
-          <label>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="card"
-              [(ngModel)]="selectedPaymentMethod"
-            />
-            Tarjeta
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="paypal"
-              [(ngModel)]="selectedPaymentMethod"
-            />
-            PayPal
-          </label>
-        </div>
-
-        <div class="total-box">
-          <p><strong>Total:</strong> {{ cartData.summary.total_amount }} €</p>
-        </div>
-
-        <button (click)="confirmOrder()" [disabled]="orderLoading">
-          @if (!orderLoading) {
-            Confirmar compra
-          } @else {
-            Procesando...
-          }
-        </button>
-      </aside>
+  <div class="page-container">
+    <section class="checkout-header">
+      <h1>Finalizar compra</h1>
+      <p>Confirma tu pedido y elige un método de pago simulado.</p>
     </section>
-  }
+
+    @if (loading) {
+      <p class="status-message">Cargando resumen del pedido...</p>
+    }
+
+    @if (errorMessage && !loading) {
+      <p class="status-message error">{{ errorMessage }}</p>
+    }
+
+    @if (successMessage && !loading) {
+      <p class="status-message success">{{ successMessage }}</p>
+    }
+
+    @if (!loading && cartData && cartData.items.length > 0) {
+      <section class="checkout-content">
+        <div class="checkout-items">
+          <h2>Resumen del pedido</h2>
+
+          @for (item of cartData.items; track item.book_id) {
+            <article class="checkout-item">
+              <div>
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.author }}</p>
+              </div>
+              <span>{{ item.line_total }} €</span>
+            </article>
+          }
+        </div>
+
+        <aside class="checkout-summary">
+          <h2>Pago</h2>
+
+          <div class="payment-options">
+            <label>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="card"
+                [(ngModel)]="selectedPaymentMethod"
+              />
+              Tarjeta
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="paypal"
+                [(ngModel)]="selectedPaymentMethod"
+              />
+              PayPal
+            </label>
+          </div>
+
+          <div class="total-box">
+            <p><strong>Total:</strong> {{ cartData.summary.total_amount }} €</p>
+          </div>
+
+          <button (click)="confirmOrder()" [disabled]="orderLoading">
+            @if (!orderLoading) {
+              Confirmar compra
+            } @else {
+              Procesando...
+            }
+          </button>
+        </aside>
+      </section>
+    }
+  </div>
 </main>

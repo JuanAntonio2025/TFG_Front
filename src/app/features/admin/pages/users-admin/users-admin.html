@@ -1,43 +1,45 @@
 <main class="admin-page">
-  <section class="page-header">
-    <h1>Gestión de usuarios</h1>
-    <p>Consulta usuarios y cambia su estado.</p>
-  </section>
+  <div class="page-container">
+    <section class="page-header">
+      <h1>Gestión de usuarios</h1>
+      <p>Consulta usuarios y cambia su estado.</p>
+    </section>
 
-  @if (errorMessage) {
-    <p class="status-message error">{{ errorMessage }}</p>
-  }
-
-  @if (successMessage) {
-    <p class="status-message success">{{ successMessage }}</p>
-  }
-
-  <section class="admin-list-card">
-    <h2>Usuarios</h2>
-
-    @if (loading) {
-      <p>Cargando usuarios...</p>
+    @if (errorMessage) {
+      <p class="status-message error">{{ errorMessage }}</p>
     }
 
-    <div class="admin-list">
-      @for (user of users; track user.user_id) {
-        <article class="list-item">
-          <div>
-            <h3>{{ user.name }}</h3>
-            <p>{{ user.email }}</p>
-            <p>Estado: {{ user.status }}</p>
-            <p>
-              Roles: {{ getRoleNames(user) }}
-            </p>
-          </div>
+    @if (successMessage) {
+      <p class="status-message success">{{ successMessage }}</p>
+    }
 
-          <div class="item-actions">
-            <button (click)="toggleStatus(user)">
-              {{ user.status === 'active' ? 'Banear' : 'Activar' }}
-            </button>
-          </div>
-        </article>
+    <section class="admin-list-card">
+      <h2>Usuarios</h2>
+
+      @if (loading) {
+        <p>Cargando usuarios...</p>
       }
-    </div>
-  </section>
+
+      <div class="admin-list">
+        @for (user of users; track user.user_id) {
+          <article class="list-item">
+            <div>
+              <h3>{{ user.name }}</h3>
+              <p>{{ user.email }}</p>
+              <p>Estado: {{ user.status }}</p>
+              <p>
+                Roles: {{ getRoleNames(user) }}
+              </p>
+            </div>
+
+            <div class="item-actions">
+              <button (click)="toggleStatus(user)">
+                {{ user.status === 'active' ? 'Banear' : 'Activar' }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
 </main>

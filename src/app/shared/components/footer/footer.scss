@@ -1,6 +1,51 @@
-.footer {
-  background: #1f2937;
-  color: #ffffff;
-  text-align: center;
-  padding: 1.25rem;
+.app-footer {
+  background: var(--color-primary);
+  color: #fff;
+  margin-top: 3rem;
+}
+
+.app-footer__inner {
+  display: grid;
+  grid-template-columns: 1.3fr 2fr;
+  gap: 2rem;
+  padding: 2rem 1rem;
+}
+
+.app-footer__brand {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+
+  p {
+    margin: 0.5rem 0 0;
+    color: #dbeafe;
+  }
+}
+
+.footer-logo {
+  width: 48px;
+  height: 48px;
+  background: var(--color-accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.app-footer__links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  h4 {
+    margin: 0 0 0.8rem;
+  }
+
+  a {
+    display: block;
+    color: #dbeafe;
+    margin-bottom: 0.45rem;
+  }
 }

@@ -1,25 +1,36 @@
-<header class="navbar">
-  <div class="navbar__left">
-    <a routerLink="/" class="brand">Júpiter</a>
-    <a routerLink="/catalog" class="nav-link">Catálogo</a>
-    @if (isLoggedIn) {
-      <a routerLink="/library" class="nav-link">Mi Biblioteca</a>
-      <a routerLink="/orders/history" class="nav-link">Pedidos</a>
-      <a routerLink="/incidences" class="nav-link">Soporte</a>
-      <a routerLink="/cart" class="nav-link">Carrito</a>
-    }
-    @if (isAdmin) {
-      <a routerLink="/admin" class="nav-link">Admin</a>
-    }
-  </div>
+<header class="app-navbar">
+  <div class="page-container app-navbar__inner">
+    <div class="app-navbar__left">
+      <a routerLink="/" class="app-navbar__brand">
+        <span class="brand-box">J</span>
+        <span class="brand-text">Júpiter</span>
+      </a>
 
-  <div class="navbar__right">
-    @if (!isLoggedIn) {
-      <a routerLink="/auth/login" class="btn btn-secondary">Iniciar sesión</a>
-      <a routerLink="/auth/register" class="btn btn-primary">Registrarse</a>
-    } @else {
-      <span class="user-name">Hola, {{ user?.name }}</span>
-      <button class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
-    }
+      <nav class="app-navbar__nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+        <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
+
+        @if (isLoggedIn) {
+          <a routerLink="/library" routerLinkActive="active">Mi Biblioteca</a>
+          <a routerLink="/orders/history" routerLinkActive="active">Mis Pedidos</a>
+          <a routerLink="/incidences" routerLinkActive="active">Soporte</a>
+          <a routerLink="/cart" routerLinkActive="active">Carrito</a>
+        }
+
+        @if (isAdmin) {
+          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        }
+      </nav>
+    </div>
+
+    <div class="app-navbar__right">
+      @if (!isLoggedIn) {
+        <a routerLink="/auth/login" class="nav-btn nav-btn--ghost">Iniciar sesión</a>
+        <a routerLink="/auth/register" class="nav-btn nav-btn--primary">Registrarse</a>
+      } @else {
+        <span class="user-chip">Hola, {{ user?.name }}</span>
+        <button class="nav-btn nav-btn--danger" (click)="logout()">Cerrar sesión</button>
+      }
+    </div>
   </div>
 </header>

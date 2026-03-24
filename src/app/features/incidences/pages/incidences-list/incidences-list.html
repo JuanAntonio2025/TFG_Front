@@ -1,70 +1,72 @@
 <main class="incidences-page">
-  <section class="incidences-header">
-    <h1>Mis incidencias</h1>
-    <p>Crea y consulta tus solicitudes de soporte.</p>
-  </section>
+  <div class="page-container">
+    <section class="incidences-header">
+      <h1>Mis incidencias</h1>
+      <p>Crea y consulta tus solicitudes de soporte.</p>
+    </section>
 
-  @if (errorMessage) {
-    <p class="status-message error">{{ errorMessage }}</p>
-  }
-
-  @if (successMessage) {
-    <p class="status-message success">{{ successMessage }}</p>
-  }
-
-  <section class="incidence-form-card">
-    <h2>Nueva incidencia</h2>
-
-    <div class="form-group">
-      <label>Asunto</label>
-      <input type="text" [(ngModel)]="form.subject" />
-    </div>
-
-    <div class="form-group">
-      <label>Tipo de incidencia</label>
-      <input type="text" [(ngModel)]="form.type_of_incident" />
-    </div>
-
-    <div class="form-group">
-      <label>Mensaje inicial</label>
-      <textarea rows="4" [(ngModel)]="form.initial_message"></textarea>
-    </div>
-
-    <button (click)="createIncidence()" [disabled]="submitting">
-      @if (!submitting) {
-        Crear incidencia
-      } @else {
-        Enviando...
-      }
-    </button>
-  </section>
-
-  <section class="incidences-list-card">
-    <h2>Historial</h2>
-
-    @if (loading) {
-      <p>Cargando incidencias...</p>
+    @if (errorMessage) {
+      <p class="status-message error">{{ errorMessage }}</p>
     }
 
-    @if (!loading && incidences.length === 0) {
-      <p>No tienes incidencias registradas.</p>
+    @if (successMessage) {
+      <p class="status-message success">{{ successMessage }}</p>
     }
 
-    <div class="incidences-list">
-      @for (incidence of incidences; track incidence.incidence_id) {
-        <article class="incidence-card">
-          <div>
-            <h3>{{ incidence.subject }}</h3>
-            <p>{{ incidence.type_of_incident }}</p>
-            <small>{{ incidence.creation_date }}</small>
-          </div>
+    <section class="incidence-form-card">
+      <h2>Nueva incidencia</h2>
 
-          <div class="incidence-actions">
-            <span class="status">{{ incidence.status }}</span>
-            <a [routerLink]="['/incidences', incidence.incidence_id]">Ver detalle</a>
-          </div>
-        </article>
+      <div class="form-group">
+        <label>Asunto</label>
+        <input type="text" [(ngModel)]="form.subject" />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de incidencia</label>
+        <input type="text" [(ngModel)]="form.type_of_incident" />
+      </div>
+
+      <div class="form-group">
+        <label>Mensaje inicial</label>
+        <textarea rows="4" [(ngModel)]="form.initial_message"></textarea>
+      </div>
+
+      <button (click)="createIncidence()" [disabled]="submitting">
+        @if (!submitting) {
+          Crear incidencia
+        } @else {
+          Enviando...
+        }
+      </button>
+    </section>
+
+    <section class="incidences-list-card">
+      <h2>Historial</h2>
+
+      @if (loading) {
+        <p>Cargando incidencias...</p>
       }
-    </div>
-  </section>
+
+      @if (!loading && incidences.length === 0) {
+        <p>No tienes incidencias registradas.</p>
+      }
+
+      <div class="incidences-list">
+        @for (incidence of incidences; track incidence.incidence_id) {
+          <article class="incidence-card">
+            <div>
+              <h3>{{ incidence.subject }}</h3>
+              <p>{{ incidence.type_of_incident }}</p>
+              <small>{{ incidence.creation_date }}</small>
+            </div>
+
+            <div class="incidence-actions">
+              <span class="status">{{ incidence.status }}</span>
+              <a [routerLink]="['/incidences', incidence.incidence_id]">Ver detalle</a>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
 </main>
