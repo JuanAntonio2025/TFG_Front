@@ -1,30 +1,118 @@
 <main class="admin-dashboard-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Panel de administración</span>
+    </div>
+
     <section class="dashboard-header">
-      <h1>Panel de administración</h1>
-      <p>Gestiona catálogo, usuarios e incidencias.</p>
+      <div>
+        <h1 class="page-title">Panel de Administración</h1>
+        <p class="page-subtitle">
+          Gestiona el catálogo, los usuarios y las incidencias de la plataforma.
+        </p>
+      </div>
     </section>
 
-    <section class="dashboard-grid">
-      <a routerLink="/admin/books" class="dashboard-card">
-        <h2>Libros</h2>
-        <p>Crear, editar y eliminar libros del catálogo.</p>
-      </a>
+    <section class="dashboard-stats">
+      <article class="stat-card section-card">
+        <div class="stat-card__icon">📚</div>
+        <div class="stat-card__content">
+          <span>Gestión de libros</span>
+          <strong>Catálogo</strong>
+        </div>
+      </article>
 
-      <a routerLink="/admin/categories" class="dashboard-card">
-        <h2>Categorías</h2>
-        <p>Gestionar categorías del sistema.</p>
-      </a>
+      <article class="stat-card section-card">
+        <div class="stat-card__icon">🗂</div>
+        <div class="stat-card__content">
+          <span>Gestión de categorías</span>
+          <strong>Clasificación</strong>
+        </div>
+      </article>
 
-      <a routerLink="/admin/users" class="dashboard-card">
-        <h2>Usuarios</h2>
-        <p>Consultar y cambiar el estado de los usuarios.</p>
-      </a>
+      <article class="stat-card section-card">
+        <div class="stat-card__icon">👤</div>
+        <div class="stat-card__content">
+          <span>Gestión de usuarios</span>
+          <strong>Cuentas</strong>
+        </div>
+      </article>
 
-      <a routerLink="/admin/incidences" class="dashboard-card">
-        <h2>Incidencias</h2>
-        <p>Atender solicitudes de soporte y responder mensajes.</p>
-      </a>
+      <article class="stat-card section-card">
+        <div class="stat-card__icon">💬</div>
+        <div class="stat-card__content">
+          <span>Gestión de incidencias</span>
+          <strong>Soporte</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="dashboard-main">
+      <div class="dashboard-panel section-card">
+        <div class="panel-header">
+          <h2>Accesos rápidos</h2>
+          <p>Accede a las secciones principales del panel.</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <a routerLink="/admin/books" class="dashboard-card">
+            <div class="dashboard-card__icon">📘</div>
+            <div class="dashboard-card__body">
+              <h3>Libros</h3>
+              <p>Crear, editar y eliminar libros del catálogo.</p>
+            </div>
+          </a>
+
+          <a routerLink="/admin/categories" class="dashboard-card">
+            <div class="dashboard-card__icon">🏷</div>
+            <div class="dashboard-card__body">
+              <h3>Categorías</h3>
+              <p>Organiza y administra las categorías disponibles.</p>
+            </div>
+          </a>
+
+          <a routerLink="/admin/users" class="dashboard-card">
+            <div class="dashboard-card__icon">👥</div>
+            <div class="dashboard-card__body">
+              <h3>Usuarios</h3>
+              <p>Consulta usuarios y actualiza su estado.</p>
+            </div>
+          </a>
+
+          <a routerLink="/admin/incidences" class="dashboard-card">
+            <div class="dashboard-card__icon">🛠</div>
+            <div class="dashboard-card__body">
+              <h3>Incidencias</h3>
+              <p>Revisa solicitudes de soporte y responde mensajes.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <aside class="dashboard-side section-card">
+        <h2>Resumen</h2>
+        <p>
+          Desde este panel puedes gestionar los elementos clave de la plataforma:
+          catálogo, usuarios, categorías e incidencias.
+        </p>
+
+        <div class="summary-list">
+          <div class="summary-item">
+            <strong>Catálogo</strong>
+            <span>Alta, edición y baja de libros.</span>
+          </div>
+
+          <div class="summary-item">
+            <strong>Usuarios</strong>
+            <span>Control del estado de acceso.</span>
+          </div>
+
+          <div class="summary-item">
+            <strong>Soporte</strong>
+            <span>Seguimiento de incidencias activas e inactivas.</span>
+          </div>
+        </div>
+      </aside>
     </section>
   </div>
 </main>

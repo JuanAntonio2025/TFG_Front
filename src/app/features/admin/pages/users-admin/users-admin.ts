@@ -3,11 +3,12 @@ import { Component, OnInit, inject } from '@angular/core';
 
 import { AdminUsers } from '../../services/admin-users';
 import { User } from '../../../../core/models/user.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-users-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './users-admin.html',
   styleUrl: './users-admin.scss',
 })

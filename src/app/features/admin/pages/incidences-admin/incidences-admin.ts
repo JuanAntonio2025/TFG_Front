@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { SupportIncidences } from '../../services/support-incidences';
 import { Incidence } from '../../../incidences/models/incidence.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-incidences-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './incidences-admin.html',
   styleUrl: './incidences-admin.scss',
 })

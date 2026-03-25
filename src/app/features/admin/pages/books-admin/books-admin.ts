@@ -6,11 +6,12 @@ import { AdminBooks } from '../../services/admin-books';
 import { AdminCategories } from '../../services/admin-categories';
 import { Book } from '../../../public/models/book.model';
 import { Category } from '../../../public/models/category.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-books-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './books-admin.html',
   styleUrl: './books-admin.scss',
 })

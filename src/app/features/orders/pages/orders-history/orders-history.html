@@ -1,40 +1,64 @@
 <main class="orders-history-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Historial de pedidos</span>
+    </div>
+
     <section class="orders-header">
-      <h1>Historial de pedidos</h1>
-      <p>Consulta todas tus compras realizadas.</p>
+      <h1 class="page-title">Historial de Pedidos</h1>
+      <p class="page-subtitle">Consulta todas las compras realizadas en tu cuenta.</p>
     </section>
 
     @if (loading) {
-      <p class="status-message">Cargando pedidos...</p>
+      <div class="orders-state section-card">
+        <p>Cargando pedidos...</p>
+      </div>
     }
 
     @if (errorMessage && !loading) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="orders-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (!loading && !errorMessage && orders.length === 0) {
-      <p class="status-message">Todavía no has realizado ningún pedido.</p>
+      <div class="orders-state section-card">
+        <p>Todavía no has realizado ningún pedido.</p>
+      </div>
     }
 
     @if (!loading && orders.length > 0) {
       <section class="orders-list">
         @for (order of orders; track order.order_id) {
-          <article class="order-card">
-            <div class="order-top">
-              <div>
+          <article class="order-card section-card">
+            <div class="order-card__top">
+              <div class="order-card__top-left">
                 <h2>Pedido #{{ order.order_id }}</h2>
                 <p>{{ order.order_date }}</p>
               </div>
 
-              <div class="order-status">
-                <span>{{ order.status }}</span>
+              <div class="order-card__top-right">
+                <span
+                  class="order-status"
+                  [class.paid]="order.status === 'paid'"
+                  [class.pending]="order.status === 'pending'"
+                  [class.canceled]="order.status === 'canceled'"
+                >
+                  {{ order.status }}
+                </span>
               </div>
             </div>
 
-            <div class="order-meta">
-              <p><strong>Total:</strong> {{ order.total_amount }} €</p>
-              <p><strong>Libros:</strong> {{ order.items.length }}</p>
+            <div class="order-card__summary">
+              <div class="summary-box">
+                <span>Total</span>
+                <strong>{{ order.total_amount }} €</strong>
+              </div>
+
+              <div class="summary-box">
+                <span>Libros</span>
+                <strong>{{ order.items.length }}</strong>
+              </div>
             </div>
 
             <div class="order-items">
@@ -44,10 +68,15 @@
                     [src]="item.front_page || 'https://via.placeholder.com/90x130?text=Libro'"
                     [alt]="item.title"
                   />
-                  <div>
-                    <strong>{{ item.title }}</strong>
+
+                  <div class="order-item__info">
+                    <h3>{{ item.title }}</h3>
                     <p>{{ item.author }}</p>
-                    <small>{{ item.unit_price }} €</small>
+                    <small>{{ item.format }}</small>
+                  </div>
+
+                  <div class="order-item__price">
+                    {{ item.unit_price }} €
                   </div>
                 </div>
               }

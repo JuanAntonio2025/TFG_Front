@@ -1,94 +1,75 @@
 .admin-page {
   min-height: calc(100vh - 140px);
-  background: #f8fafc;
-  padding: 2rem;
+  background: var(--color-bg);
+  padding: 2rem 0 3rem;
+}
+
+.breadcrumb {
+  font-size: 0.9rem;
+  color: var(--color-text-soft);
+  margin-bottom: 1rem;
+
+  a {
+    color: inherit;
+  }
 }
 
 .page-header {
   margin-bottom: 2rem;
+}
 
-  h1 {
-    margin: 0 0 0.5rem;
+.admin-state {
+  padding: 1rem;
+  text-align: center;
+
+  &.error {
+    color: var(--color-danger);
+  }
+
+  &.success {
+    color: var(--color-success);
   }
 
   p {
     margin: 0;
-    color: #6b7280;
-  }
-}
-
-.status-message {
-  text-align: center;
-  padding: 0.75rem;
-
-  &.error {
-    color: #dc2626;
-  }
-
-  &.success {
-    color: #15803d;
   }
 }
 
 .admin-form-card,
 .admin-list-card {
-  background: #ffffff;
-  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   margin-bottom: 2rem;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+.card-header {
+  margin-bottom: 1.25rem;
+
+  h2 {
+    margin: 0;
+    color: var(--color-text);
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1rem;
+
+  label {
+    margin-bottom: 0.45rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
 }
 
-input,
-select,
-textarea {
-  width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 0.85rem 1rem;
+.form-group--full {
+  margin-bottom: 1.25rem;
 }
 
-.categories-box {
-  margin: 1rem 0;
-}
-
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-}
-
-.form-actions,
-.item-actions {
+.form-actions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
-  cursor: pointer;
-  background: #2563eb;
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.danger {
-  background: #dc2626;
 }
 
 .admin-list {
@@ -96,20 +77,71 @@ button {
   gap: 1rem;
 }
 
-.list-item {
+.category-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  gap: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   padding: 1rem;
+  background: #fff;
+}
 
+.category-row__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.category-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #eef3fb;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.category-row__info {
   h3 {
     margin: 0 0 0.35rem;
+    color: var(--color-text);
   }
 
   p {
     margin: 0;
-    color: #6b7280;
+    color: var(--color-text-soft);
+    line-height: 1.5;
+  }
+}
+
+.category-row__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .admin-form-card,
+  .admin-list-card {
+    padding: 1.25rem;
+  }
+
+  .category-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-row__actions {
+    width: 100%;
   }
 }

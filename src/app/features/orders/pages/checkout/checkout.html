@@ -1,74 +1,129 @@
 <main class="checkout-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/cart">Carrito</a> > <span>Realizar Compra</span>
+    </div>
+
     <section class="checkout-header">
-      <h1>Finalizar compra</h1>
-      <p>Confirma tu pedido y elige un método de pago simulado.</p>
+      <h1 class="page-title">Realizar Compra</h1>
+      <p class="page-subtitle">Selecciona un método de pago para completar la compra simulada.</p>
     </section>
 
     @if (loading) {
-      <p class="status-message">Cargando resumen del pedido...</p>
+      <div class="checkout-state section-card">
+        <p>Cargando resumen del pedido...</p>
+      </div>
     }
 
     @if (errorMessage && !loading) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="checkout-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (successMessage && !loading) {
-      <p class="status-message success">{{ successMessage }}</p>
+      <div class="checkout-state section-card success">
+        <p>{{ successMessage }}</p>
+      </div>
     }
 
     @if (!loading && cartData && cartData.items.length > 0) {
-      <section class="checkout-content">
-        <div class="checkout-items">
-          <h2>Resumen del pedido</h2>
+      <section class="checkout-layout">
+        <div class="payment-panel section-card">
+          <h2>Método de pago</h2>
 
-          @for (item of cartData.items; track item.book_id) {
-            <article class="checkout-item">
-              <div>
-                <strong>{{ item.title }}</strong>
-                <p>{{ item.author }}</p>
-              </div>
-              <span>{{ item.line_total }} €</span>
-            </article>
-          }
-        </div>
-
-        <aside class="checkout-summary">
-          <h2>Pago</h2>
-
-          <div class="payment-options">
-            <label>
+          <div class="payment-option" [class.active]="selectedPaymentMethod === 'card'">
+            <label class="payment-option__header">
               <input
                 type="radio"
                 name="paymentMethod"
                 value="card"
                 [(ngModel)]="selectedPaymentMethod"
               />
-              Tarjeta
+              <span>Tarjeta de Crédito / Débito</span>
             </label>
 
-            <label>
+            @if (selectedPaymentMethod === 'card') {
+              <div class="payment-card-box">
+                <div class="payment-card-visual">
+                  <div class="payment-card-visual__chip"></div>
+                  <div class="payment-card-visual__number">**** **** **** 1234</div>
+                  <div class="payment-card-visual__footer">
+                    <span>VISA</span>
+                    <span>SIMULADO</span>
+                  </div>
+                </div>
+
+                <div class="card-form-grid">
+                  <input class="app-input" type="text" placeholder="Número de tarjeta" disabled />
+                  <input class="app-input" type="text" placeholder="Titular" disabled />
+                  <input class="app-input" type="text" placeholder="MM/AA" disabled />
+                  <input class="app-input" type="text" placeholder="CVV" disabled />
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="payment-option" [class.active]="selectedPaymentMethod === 'paypal'">
+            <label class="payment-option__header">
               <input
                 type="radio"
                 name="paymentMethod"
                 value="paypal"
                 [(ngModel)]="selectedPaymentMethod"
               />
-              PayPal
+              <span>PayPal</span>
             </label>
+
+            @if (selectedPaymentMethod === 'paypal') {
+              <div class="paypal-box">
+                <p>El pago se realizará de forma simulada mediante PayPal.</p>
+              </div>
+            }
           </div>
 
-          <div class="total-box">
-            <p><strong>Total:</strong> {{ cartData.summary.total_amount }} €</p>
+          <div class="checkout-actions">
+            <a class="app-btn app-btn--secondary" routerLink="/catalog">Volver al catálogo</a>
+          </div>
+        </div>
+
+        <aside class="checkout-summary section-card">
+          <div class="summary-header">
+            <h2>Resumen del Pedido</h2>
           </div>
 
-          <button (click)="confirmOrder()" [disabled]="orderLoading">
+          <div class="summary-items">
+            @for (item of cartData.items; track item.book_id) {
+              <div class="summary-item">
+                <span>{{ item.title }}</span>
+                <strong>{{ item.line_total }} €</strong>
+              </div>
+            }
+          </div>
+
+          <div class="summary-total">
+            <div class="summary-row">
+              <span>Total Parcial:</span>
+              <strong>{{ cartData.summary.total_amount }} €</strong>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total:</span>
+              <strong>{{ cartData.summary.total_amount }} €</strong>
+            </div>
+          </div>
+
+          <button class="app-btn app-btn--primary summary-btn" (click)="confirmOrder()" [disabled]="orderLoading">
             @if (!orderLoading) {
-              Confirmar compra
+              Finalizar Compra
             } @else {
               Procesando...
             }
           </button>
+
+          <p class="checkout-note">
+            Al continuar, aceptas los términos y condiciones del proceso de compra simulado.
+          </p>
         </aside>
       </section>
     }

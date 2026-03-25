@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { AdminCategories } from '../../services/admin-categories';
 import { Category } from '../../../public/models/category.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-categories-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './categories-admin.html',
   styleUrl: './categories-admin.scss',
 })

@@ -1,138 +1,194 @@
 .book-detail-page {
   min-height: calc(100vh - 140px);
-  background: #f8fafc;
-  padding: 2rem;
+  background: var(--color-bg);
+  padding: 2rem 0 3rem;
 }
 
-.status-message {
+.breadcrumb {
+  font-size: 0.9rem;
+  color: var(--color-text-soft);
+  margin-bottom: 1rem;
+
+  a {
+    color: inherit;
+  }
+}
+
+.detail-state {
+  padding: 1.5rem;
   text-align: center;
-  padding: 1rem;
-  color: #374151;
 
   &.error {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 
   &.success {
-    color: #15803d;
+    color: var(--color-success);
+  }
+
+  p {
+    margin: 0;
   }
 }
 
-.book-detail-card {
+.book-hero {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
-  background: #ffffff;
-  border-radius: 14px;
   padding: 2rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   margin-bottom: 2rem;
 }
 
-.book-cover {
+.book-hero__cover {
   display: flex;
   justify-content: center;
   align-items: flex-start;
 
   img {
     width: 100%;
-    max-width: 260px;
+    max-width: 270px;
     border-radius: 10px;
+    box-shadow: var(--shadow-md);
     object-fit: cover;
   }
 }
 
-.book-info {
-  h1 {
-    margin: 0 0 0.5rem;
-    color: #111827;
+.book-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.book-author {
+  margin: -0.5rem 0 0;
+  font-size: 1.05rem;
+  color: var(--color-text-soft);
+}
+
+.book-price-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.book-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+}
+
+.book-meta {
+  display: grid;
+  gap: 1rem;
+}
+
+.meta-item {
+  color: var(--color-text);
+
+  strong {
+    margin-right: 0.4rem;
   }
 
-  .author {
-    margin: 0 0 1rem;
-    color: #6b7280;
-    font-size: 1.05rem;
-  }
-
-  .meta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
-
-    span {
-      background: #eef2ff;
-      color: #1e3a8a;
-      padding: 0.4rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.9rem;
-    }
-
-    .price {
-      background: #fef3c7;
-      color: #92400e;
-      font-weight: 700;
-    }
-  }
-
-  .categories {
-    margin-bottom: 1rem;
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .category-badge {
-    background: #e0f2fe;
-    color: #075985;
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.85rem;
-  }
-
-  .reviews-summary {
-    margin-bottom: 1.5rem;
-    color: #374151;
-  }
-
-  .description {
-    margin-bottom: 1.5rem;
-
-    h2 {
-      margin-bottom: 0.5rem;
-      color: #111827;
-    }
-
-    p {
-      color: #4b5563;
-      line-height: 1.6;
-    }
-  }
-
-  button {
-    border: none;
-    border-radius: 8px;
-    padding: 0.9rem 1.2rem;
-    background: #2563eb;
-    color: #ffffff;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
+  small {
+    margin-left: 0.45rem;
+    color: var(--color-text-soft);
   }
 }
 
-.reviews-section {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 2rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+.meta-item--categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
+  strong {
+    margin-right: 0;
+  }
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-badge {
+  background: #e7eefc;
+  color: var(--color-primary);
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.book-description {
   h2 {
-    margin-top: 0;
+    margin: 0 0 0.75rem;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.7;
+    color: #374151;
+  }
+}
+
+.review-form-section,
+.reviews-section {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.review-form-section h2,
+.reviews-section h2 {
+  margin-top: 0;
+}
+
+.own-review-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+
+  p {
+    width: 100%;
+    margin: 0;
+    color: var(--color-text-soft);
+  }
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+
+  label {
+    font-weight: 700;
+  }
+}
+
+.review-form__actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.reviews-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+
+  span {
+    color: var(--color-text-soft);
+    font-weight: 600;
   }
 }
 
@@ -142,71 +198,66 @@
 }
 
 .review-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   padding: 1rem;
+  background: #fff;
+}
 
-  .review-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
+.review-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
 
-  p {
-    margin: 0 0 0.5rem;
-    color: #374151;
+  strong {
+    display: block;
   }
 
   small {
-    color: #6b7280;
+    color: var(--color-text-soft);
   }
 }
 
-.review-form-section {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 2rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  margin-bottom: 2rem;
+.review-score {
+  background: #fff3d4;
+  color: #9a6700;
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-weight: 700;
+  height: fit-content;
+}
 
-  h2 {
-    margin-top: 0;
+.review-card p {
+  margin: 0;
+  color: #374151;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .book-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .book-hero__cover {
+    justify-content: center;
   }
 }
 
-.review-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  label {
-    font-weight: 600;
-    color: #374151;
+@media (max-width: 640px) {
+  .book-detail-page {
+    padding: 1.25rem 0 2rem;
   }
 
-  select,
-  textarea {
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 0.85rem 1rem;
-    font-size: 0.95rem;
+  .book-hero,
+  .review-form-section,
+  .reviews-section {
+    padding: 1.25rem;
   }
-}
 
-.review-form-actions,
-.own-review-actions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
-.secondary {
-  background: #e5e7eb !important;
-  color: #111827 !important;
-}
-
-.danger {
-  background: #dc2626 !important;
-  color: #ffffff !important;
+  .reviews-section__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
 }

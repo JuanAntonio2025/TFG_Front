@@ -1,95 +1,148 @@
 <main class="admin-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/admin">Panel de administración</a> > <span>Libros</span>
+    </div>
+
     <section class="page-header">
-      <h1>Gestión de libros</h1>
-      <p>Crear, editar y eliminar libros del catálogo.</p>
+      <h1 class="page-title">Gestión de Libros</h1>
+      <p class="page-subtitle">Crea, edita y elimina libros del catálogo.</p>
     </section>
 
     @if (errorMessage) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="admin-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (successMessage) {
-      <p class="status-message success">{{ successMessage }}</p>
+      <div class="admin-state section-card success">
+        <p>{{ successMessage }}</p>
+      </div>
     }
 
-    <section class="admin-form-card">
-      <h2>
-        @if (editingBookId) {
-          Editar libro
-        } @else {
-          Nuevo libro
-        }
-      </h2>
-
-      <div class="form-grid">
-        <input type="text" [(ngModel)]="form.title" placeholder="Título" />
-        <input type="text" [(ngModel)]="form.author" placeholder="Autor" />
-        <input type="number" [(ngModel)]="form.price" placeholder="Precio" />
-        <input type="text" [(ngModel)]="form.front_page" placeholder="Portada (URL o ruta)" />
-
-        <select [(ngModel)]="form.format">
-          <option value="PDF">PDF</option>
-          <option value="EPUB">EPUB</option>
-        </select>
-
-        <select [(ngModel)]="form.available">
-          <option value="available">available</option>
-          <option value="unavailable">unavailable</option>
-        </select>
+    <section class="admin-form-card section-card">
+      <div class="card-header">
+        <h2>
+          @if (editingBookId) {
+            Editar libro
+          } @else {
+            Nuevo libro
+          }
+        </h2>
       </div>
 
-      <textarea rows="4" [(ngModel)]="form.description" placeholder="Descripción"></textarea>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título</label>
+          <input class="app-input" type="text" [(ngModel)]="form.title" placeholder="Título del libro" />
+        </div>
+
+        <div class="form-group">
+          <label>Autor</label>
+          <input class="app-input" type="text" [(ngModel)]="form.author" placeholder="Autor" />
+        </div>
+
+        <div class="form-group">
+          <label>Precio</label>
+          <input class="app-input" type="number" [(ngModel)]="form.price" placeholder="Precio" />
+        </div>
+
+        <div class="form-group">
+          <label>Portada</label>
+          <input class="app-input" type="text" [(ngModel)]="form.front_page" placeholder="Ruta o URL de portada" />
+        </div>
+
+        <div class="form-group">
+          <label>Formato</label>
+          <select class="app-select" [(ngModel)]="form.format">
+            <option value="PDF">PDF</option>
+            <option value="EPUB">EPUB</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Disponibilidad</label>
+          <select class="app-select" [(ngModel)]="form.available">
+            <option value="available">available</option>
+            <option value="unavailable">unavailable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label>Descripción</label>
+        <textarea
+          class="app-textarea"
+          rows="5"
+          [(ngModel)]="form.description"
+          placeholder="Descripción del libro"
+        ></textarea>
+      </div>
 
       <div class="categories-box">
-        <p><strong>Categorías</strong></p>
+        <label class="categories-box__label">Categorías</label>
         <div class="categories-grid">
           @for (category of categories; track category.category_id) {
-            <label>
+            <label class="category-chip" [class.selected]="form.category_ids.includes(category.category_id)">
               <input
                 type="checkbox"
                 [checked]="form.category_ids.includes(category.category_id)"
                 (change)="toggleCategory(category.category_id)"
               />
-              {{ category.name }}
+              <span>{{ category.name }}</span>
             </label>
           }
         </div>
       </div>
 
       <div class="form-actions">
-        <button (click)="submit()" [disabled]="submitting">
+        <button class="app-btn app-btn--primary" (click)="submit()" [disabled]="submitting">
           @if (!submitting) {
-            {{ editingBookId ? 'Actualizar' : 'Crear' }}
+            {{ editingBookId ? 'Actualizar libro' : 'Crear libro' }}
           } @else {
             Guardando...
           }
         </button>
 
         @if (editingBookId) {
-          <button class="secondary" (click)="cancelEdit()">Cancelar</button>
+          <button class="app-btn app-btn--secondary" (click)="cancelEdit()">Cancelar</button>
         }
       </div>
     </section>
 
-    <section class="admin-list-card">
-      <h2>Libros</h2>
+    <section class="admin-list-card section-card">
+      <div class="card-header">
+        <h2>Libros del catálogo</h2>
+      </div>
 
       @if (loading) {
-        <p>Cargando libros...</p>
+        <div class="admin-state">
+          <p>Cargando libros...</p>
+        </div>
       }
 
       <div class="admin-list">
         @for (book of books; track book.book_id) {
-          <article class="list-item">
-            <div>
-              <h3>{{ book.title }}</h3>
-              <p>{{ book.author }} · {{ book.price }} € · {{ book.format }}</p>
+          <article class="book-row">
+            <div class="book-row__main">
+              <div class="book-row__cover">
+                <img
+                  [src]="book.front_page || 'https://via.placeholder.com/90x130?text=Libro'"
+                  [alt]="book.title"
+                />
+              </div>
+
+              <div class="book-row__info">
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.author }}</p>
+                <small>{{ book.format }} · {{ book.price }} € · {{ book.available }}</small>
+              </div>
             </div>
 
-            <div class="item-actions">
-              <button class="secondary" (click)="editBook(book)">Editar</button>
-              <button class="danger" (click)="deleteBook(book.book_id)">Eliminar</button>
+            <div class="book-row__actions">
+              <button class="app-btn app-btn--secondary" (click)="editBook(book)">Editar</button>
+              <button class="app-btn app-btn--danger" (click)="deleteBook(book.book_id)">Eliminar</button>
             </div>
           </article>
         }

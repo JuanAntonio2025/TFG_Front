@@ -1,27 +1,61 @@
 <main class="incidence-detail-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/incidences">Soporte</a> > <span>Detalle de incidencia</span>
+    </div>
+
     @if (loading) {
-      <p class="status-message">Cargando incidencia...</p>
+      <div class="detail-state section-card">
+        <p>Cargando incidencia...</p>
+      </div>
     }
 
     @if (errorMessage && !loading) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="detail-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (successMessage && !loading) {
-      <p class="status-message success">{{ successMessage }}</p>
+      <div class="detail-state section-card success">
+        <p>{{ successMessage }}</p>
+      </div>
     }
 
     @if (incidence && !loading) {
-      <section class="incidence-header-card">
-        <h1>{{ incidence.subject }}</h1>
-        <p><strong>Tipo:</strong> {{ incidence.type_of_incident }}</p>
-        <p><strong>Estado:</strong> {{ incidence.status }}</p>
-        <p><strong>Fecha:</strong> {{ incidence.creation_date }}</p>
+      <section class="incidence-header-card section-card">
+        <div class="incidence-header-card__top">
+          <div>
+            <h1 class="page-title">{{ incidence.subject }}</h1>
+            <p class="page-subtitle">{{ incidence.type_of_incident }}</p>
+          </div>
+
+          <span
+            class="status-badge"
+            [class.active]="incidence.status === 'active'"
+            [class.inactive]="incidence.status === 'inactive'"
+          >
+            {{ incidence.status }}
+          </span>
+        </div>
+
+        <div class="incidence-meta">
+          <div class="meta-box">
+            <span>Fecha de creación</span>
+            <strong>{{ incidence.creation_date }}</strong>
+          </div>
+
+          <div class="meta-box">
+            <span>ID incidencia</span>
+            <strong>#{{ incidence.incidence_id }}</strong>
+          </div>
+        </div>
       </section>
 
-      <section class="messages-card">
-        <h2>Mensajes</h2>
+      <section class="messages-card section-card">
+        <div class="messages-card__header">
+          <h2>Mensajes</h2>
+        </div>
 
         @if (!incidence.messages?.length) {
           <p>No hay mensajes todavía.</p>
@@ -30,9 +64,11 @@
         <div class="messages-list">
           @for (msg of incidence.messages ?? []; track msg.message_id) {
             <article class="message-card">
-              <div class="message-header">
-                <strong>{{ msg.user?.name || 'Usuario' }}</strong>
-                <small>{{ msg.sent_date }}</small>
+              <div class="message-card__header">
+                <div>
+                  <strong>{{ msg.user?.name || 'Usuario' }}</strong>
+                  <small>{{ msg.sent_date }}</small>
+                </div>
               </div>
               <p>{{ msg.message }}</p>
             </article>
@@ -41,10 +77,18 @@
       </section>
 
       @if (incidence.status === 'active') {
-        <section class="new-message-card">
+        <section class="new-message-card section-card">
           <h2>Responder</h2>
-          <textarea rows="4" [(ngModel)]="newMessage" placeholder="Escribe tu mensaje..."></textarea>
-          <button (click)="sendMessage()" [disabled]="sending">
+          <p class="card-subtitle">Añade más información o responde al soporte.</p>
+
+          <textarea
+            class="app-textarea"
+            rows="5"
+            [(ngModel)]="newMessage"
+            placeholder="Escribe tu mensaje..."
+          ></textarea>
+
+          <button class="app-btn app-btn--primary send-btn" (click)="sendMessage()" [disabled]="sending">
             @if (!sending) {
               Enviar mensaje
             } @else {

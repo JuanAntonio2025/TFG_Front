@@ -1,39 +1,67 @@
 <main class="admin-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/admin">Panel de administración</a> > <span>Usuarios</span>
+    </div>
+
     <section class="page-header">
-      <h1>Gestión de usuarios</h1>
-      <p>Consulta usuarios y cambia su estado.</p>
+      <h1 class="page-title">Gestión de Usuarios</h1>
+      <p class="page-subtitle">Consulta usuarios registrados y actualiza su estado.</p>
     </section>
 
     @if (errorMessage) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="admin-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (successMessage) {
-      <p class="status-message success">{{ successMessage }}</p>
+      <div class="admin-state section-card success">
+        <p>{{ successMessage }}</p>
+      </div>
     }
 
-    <section class="admin-list-card">
-      <h2>Usuarios</h2>
+    <section class="admin-list-card section-card">
+      <div class="card-header">
+        <h2>Usuarios registrados</h2>
+      </div>
 
       @if (loading) {
-        <p>Cargando usuarios...</p>
+        <div class="admin-state">
+          <p>Cargando usuarios...</p>
+        </div>
       }
 
       <div class="admin-list">
         @for (user of users; track user.user_id) {
-          <article class="list-item">
-            <div>
-              <h3>{{ user.name }}</h3>
-              <p>{{ user.email }}</p>
-              <p>Estado: {{ user.status }}</p>
-              <p>
-                Roles: {{ getRoleNames(user) }}
-              </p>
+          <article class="user-row">
+            <div class="user-row__main">
+              <div class="user-avatar">
+                {{ user.name.charAt(0).toUpperCase() }}
+              </div>
+
+              <div class="user-row__info">
+                <h3>{{ user.name }}</h3>
+                <p>{{ user.email }}</p>
+
+                <div class="user-meta">
+                  <span
+                    class="status-badge"
+                    [class.active]="user.status === 'active'"
+                    [class.banned]="user.status === 'banned'"
+                  >
+                    {{ user.status }}
+                  </span>
+
+                  <span class="roles-badge">
+                    {{ getRoleNames(user) }}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <div class="item-actions">
-              <button (click)="toggleStatus(user)">
+            <div class="user-row__actions">
+              <button class="app-btn app-btn--secondary" (click)="toggleStatus(user)">
                 {{ user.status === 'active' ? 'Banear' : 'Activar' }}
               </button>
             </div>

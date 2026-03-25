@@ -1,40 +1,112 @@
 <main class="library-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Mi Biblioteca</span>
+    </div>
+
     <section class="library-header">
-      <h1>Mi biblioteca</h1>
-      <p>Aquí encontrarás todos los libros que has comprado.</p>
+      <h1 class="page-title">Mi Biblioteca</h1>
+      <p class="page-subtitle">Accede a todos los libros que has comprado.</p>
     </section>
 
     @if (loading) {
-      <p class="status-message">Cargando biblioteca...</p>
+      <div class="library-state section-card">
+        <p>Cargando biblioteca...</p>
+      </div>
     }
 
     @if (errorMessage && !loading) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="library-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
-    @if (!loading && !errorMessage && libraryBooks.length === 0) {
-      <p class="status-message">Todavía no tienes libros en tu biblioteca.</p>
-    }
+    @if (!loading && !errorMessage) {
+      <section class="library-layout">
+        <aside class="library-sidebar section-card">
+          <div class="sidebar-header">
+            <h2>Filtrar Libros</h2>
+          </div>
 
-    @if (!loading && libraryBooks.length > 0) {
-      <section class="library-grid">
-        @for (book of libraryBooks; track book.book_id) {
-          <article class="library-card">
-            <img
-              [src]="book.front_page || 'https://via.placeholder.com/160x230?text=Libro'"
-              [alt]="book.title"
+          <div class="sidebar-block">
+            <label for="search">Buscar</label>
+            <input
+              id="search"
+              class="app-input"
+              type="text"
+              [(ngModel)]="searchTerm"
+              placeholder="Buscar en mi biblioteca..."
             />
+          </div>
 
-            <div class="library-info">
-              <h3>{{ book.title }}</h3>
-              <p>{{ book.author }}</p>
-              <p><strong>Formato:</strong> {{ book.format }}</p>
-              <p><strong>Comprado el:</strong> {{ book.purchase_info.purchased_at }}</p>
-              <!--<p><strong>Precio:</strong> {{ book.purchase_info.unit_price }} €</p>-->
+          <div class="sidebar-block">
+            <label for="format">Formato</label>
+            <select
+              id="format"
+              class="app-select"
+              [(ngModel)]="selectedFormat"
+            >
+              <option value="">Todos</option>
+              <option value="PDF">PDF</option>
+              <option value="EPUB">EPUB</option>
+            </select>
+          </div>
+
+          <div class="sidebar-actions">
+            <button class="app-btn app-btn--primary" (click)="applyFilters()">
+              Buscar
+            </button>
+            <button class="app-btn app-btn--secondary" (click)="clearFilters()">
+              Limpiar filtros
+            </button>
+          </div>
+        </aside>
+
+        <section class="library-main">
+          <div class="library-toolbar section-card">
+            <div>
+              <strong>{{ filteredBooks.length }}</strong> libros en tu biblioteca
             </div>
-          </article>
-        }
+          </div>
+
+          @if (filteredBooks.length === 0) {
+            <div class="library-state section-card">
+              <p>No se encontraron libros en tu biblioteca.</p>
+            </div>
+          }
+
+          @if (filteredBooks.length > 0) {
+            <div class="library-grid">
+              @for (book of filteredBooks; track book.book_id) {
+                <article class="library-book-card">
+                  <div class="book-cover">
+                    <img
+                      [src]="book.front_page || 'https://via.placeholder.com/180x260?text=Libro'"
+                      [alt]="book.title"
+                    />
+                  </div>
+
+                  <div class="book-body">
+                    <h3 class="book-title">{{ book.title }}</h3>
+                    <p class="book-author">{{ book.author }}</p>
+                    <p class="book-meta"><strong>Formato:</strong> {{ book.format }}</p>
+                    <p class="book-meta"><strong>Comprado:</strong> {{ book.purchase_info.purchased_at }}</p>
+                    <p class="book-price">{{ book.purchase_info.unit_price }} €</p>
+
+                    <div class="book-actions">
+                      <button class="app-btn app-btn--primary" disabled>
+                        Leer
+                      </button>
+                      <a class="app-btn app-btn--secondary" [routerLink]="['/books', book.book_id]">
+                        Ver detalles
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </section>
       </section>
     }
   </div>

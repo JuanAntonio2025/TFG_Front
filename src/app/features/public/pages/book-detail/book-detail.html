@@ -1,70 +1,95 @@
 <main class="book-detail-page">
   <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/catalog">Catálogo de Libros</a> >
+      @if (book) {
+        <span>{{ book.title }}</span>
+      }
+    </div>
+
     @if (loading) {
-      <p class="status-message">Cargando detalle del libro...</p>
+      <div class="detail-state section-card">
+        <p>Cargando detalle del libro...</p>
+      </div>
     }
 
     @if (errorMessage && !loading) {
-      <p class="status-message error">{{ errorMessage }}</p>
+      <div class="detail-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
     }
 
     @if (successMessage && !loading) {
-      <p class="status-message success">{{ successMessage }}</p>
+      <div class="detail-state section-card success">
+        <p>{{ successMessage }}</p>
+      </div>
     }
 
     @if (book && !loading) {
-      <section class="book-detail-card">
-        <div class="book-cover">
+      <section class="book-hero section-card">
+        <div class="book-hero__cover">
           <img
-            [src]="book.front_page || 'https://via.placeholder.com/250x360?text=Libro'"
+            [src]="book.front_page || 'https://via.placeholder.com/280x420?text=Libro'"
             [alt]="book.title"
           />
         </div>
 
-        <div class="book-info">
-          <h1>{{ book.title }}</h1>
-          <p class="author">{{ book.author }}</p>
+        <div class="book-hero__content">
+          <h1 class="page-title">{{ book.title }}</h1>
+          <p class="book-author">{{ book.author }}</p>
 
-          <div class="meta">
-            <span class="price">{{ book.price }} €</span>
-            <span class="format">{{ book.format }}</span>
-            <span class="availability">{{ book.available }}</span>
-          </div>
-
-          @if (book.categories?.length) {
-            <div class="categories">
-              @for (category of book.categories; track category.category_id) {
-                <span class="category-badge">{{ category.name }}</span>
+          <div class="book-price-box">
+            <span class="book-price">{{ book.price }} €</span>
+            <button class="app-btn app-btn--primary" (click)="addToCart()" [disabled]="cartLoading">
+              @if (!cartLoading) {
+                Añadir al carrito
+              } @else {
+                Añadiendo...
               }
-            </div>
-          }
-
-          <div class="reviews-summary">
-            <strong>Valoración media:</strong>
-            @if (avgPoints !== null) {
-              <span>{{ avgPoints }}/5</span>
-            } @else {
-              <span>Sin valoraciones</span>
-            }
-            <span>({{ totalReviews }} reseñas)</span>
+            </button>
           </div>
 
-          <div class="description">
-            <h2>Sinopsis</h2>
+          <div class="book-meta">
+            <div class="meta-item">
+              <strong>Formato:</strong>
+              <span>{{ book.format }}</span>
+            </div>
+
+            <div class="meta-item">
+              <strong>Disponibilidad:</strong>
+              <span>{{ book.available }}</span>
+            </div>
+
+            @if (book.categories?.length) {
+              <div class="meta-item meta-item--categories">
+                <strong>Categorías:</strong>
+                <div class="category-list">
+                  @for (category of (book.categories ?? []); track category.category_id) {
+                    <span class="category-badge">{{ category.name }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="meta-item">
+              <strong>Valoración media:</strong>
+              @if (avgPoints !== null) {
+                <span>{{ avgPoints }}/5</span>
+              } @else {
+                <span>Sin valoraciones</span>
+              }
+              <small>({{ totalReviews }} reseñas)</small>
+            </div>
+          </div>
+
+          <div class="book-description">
+            <h2>Descripción</h2>
             <p>{{ book.description || 'Este libro no tiene descripción disponible.' }}</p>
           </div>
-
-          <button (click)="addToCart()" [disabled]="cartLoading">
-            @if (!cartLoading) {
-              Añadir al carrito
-            } @else {
-              Añadiendo...
-            }
-          </button>
         </div>
       </section>
 
-      <section class="review-form-section">
+      <section class="review-form-section section-card">
         <h2>
           @if (editingReviewId) {
             Editar reseña
@@ -78,32 +103,39 @@
         } @else if (hasOwnReview() && !editingReviewId) {
           <div class="own-review-actions">
             <p>Ya has escrito una reseña para este libro.</p>
-            <button class="secondary" (click)="startEditReview(getOwnReview()!)">Editar mi reseña</button>
-            <button class="danger" (click)="deleteReview(getOwnReview()!.review_id)" [disabled]="reviewLoading">
+            <button class="app-btn app-btn--secondary" (click)="startEditReview(getOwnReview()!)">
+              Editar mi reseña
+            </button>
+            <button class="app-btn app-btn--danger" (click)="deleteReview(getOwnReview()!.review_id)" [disabled]="reviewLoading">
               Eliminar mi reseña
             </button>
           </div>
         } @else {
           <div class="review-form">
-            <label for="points">Puntuación</label>
-            <select id="points" [(ngModel)]="reviewForm.points">
-              <option [ngValue]="1">1</option>
-              <option [ngValue]="2">2</option>
-              <option [ngValue]="3">3</option>
-              <option [ngValue]="4">4</option>
-              <option [ngValue]="5">5</option>
-            </select>
+            <div class="review-form__row">
+              <label for="points">Puntuación</label>
+              <select id="points" class="app-select" [(ngModel)]="reviewForm.points">
+                <option [ngValue]="1">1</option>
+                <option [ngValue]="2">2</option>
+                <option [ngValue]="3">3</option>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="5">5</option>
+              </select>
+            </div>
 
-            <label for="comment">Comentario</label>
-            <textarea
-              id="comment"
-              rows="4"
-              [(ngModel)]="reviewForm.comment"
-              placeholder="Escribe tu opinión sobre este libro..."
-            ></textarea>
+            <div class="review-form__row">
+              <label for="comment">Comentario</label>
+              <textarea
+                id="comment"
+                class="app-textarea"
+                rows="4"
+                [(ngModel)]="reviewForm.comment"
+                placeholder="Escribe tu opinión sobre este libro..."
+              ></textarea>
+            </div>
 
-            <div class="review-form-actions">
-              <button (click)="submitReview()" [disabled]="reviewLoading">
+            <div class="review-form__actions">
+              <button class="app-btn app-btn--primary" (click)="submitReview()" [disabled]="reviewLoading">
                 @if (!reviewLoading) {
                   {{ editingReviewId ? 'Actualizar reseña' : 'Publicar reseña' }}
                 } @else {
@@ -112,15 +144,18 @@
               </button>
 
               @if (editingReviewId) {
-                <button class="secondary" (click)="cancelEditReview()">Cancelar</button>
+                <button class="app-btn app-btn--secondary" (click)="cancelEditReview()">Cancelar</button>
               }
             </div>
           </div>
         }
       </section>
 
-      <section class="reviews-section">
-        <h2>Reseñas</h2>
+      <section class="reviews-section section-card">
+        <div class="reviews-section__header">
+          <h2>Reseñas</h2>
+          <span>{{ totalReviews }} opiniones</span>
+        </div>
 
         @if (reviews.length === 0) {
           <p>No hay reseñas todavía para este libro.</p>
@@ -129,12 +164,14 @@
         <div class="reviews-list">
           @for (review of reviews; track review.review_id) {
             <article class="review-card">
-              <div class="review-header">
-                <strong>{{ review.user?.name || 'Usuario' }}</strong>
-                <span>{{ review.points }}/5</span>
+              <div class="review-card__header">
+                <div>
+                  <strong>{{ review.user?.name || 'Usuario' }}</strong>
+                  <small>{{ review.date }}</small>
+                </div>
+                <span class="review-score">{{ review.points }}/5</span>
               </div>
               <p>{{ review.comment }}</p>
-              <small>{{ review.date }}</small>
             </article>
           }
         </div>

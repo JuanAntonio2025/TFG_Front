@@ -1,5 +1,116 @@
 <main class="landing-page">
-  <div class="page-container">
-    ...
-  </div>
+  <section class="hero">
+    <div class="page-container hero__inner">
+      <div class="hero__content">
+        <span class="hero__eyebrow">Librería Digital</span>
+        <h1>Descubre tu próxima lectura en Júpiter</h1>
+        <p>
+          Explora nuestro catálogo de libros digitales, compra de forma sencilla
+          y accede a tu biblioteca personal desde cualquier lugar.
+        </p>
+
+        <div class="hero__actions">
+          <a routerLink="/catalog" class="app-btn app-btn--primary">Explorar Catálogo</a>
+          <a routerLink="/auth/register" class="app-btn app-btn--secondary">Crear Cuenta</a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero-card hero-card--main">
+          <img src="https://via.placeholder.com/340x460?text=Portada+Destacada" alt="Libro destacado" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="page-container">
+      <div class="section-heading">
+        <h2>¿Por qué elegir Júpiter?</h2>
+        <p>Una experiencia cómoda, moderna y pensada para lectores digitales.</p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature-card section-card">
+          <h3>Catálogo variado</h3>
+          <p>Encuentra libros de distintos géneros y formatos digitales.</p>
+        </article>
+
+        <article class="feature-card section-card">
+          <h3>Biblioteca personal</h3>
+          <p>Accede a tus libros comprados desde tu espacio privado.</p>
+        </article>
+
+        <article class="feature-card section-card">
+          <h3>Compra sencilla</h3>
+          <p>Proceso de compra ágil y preparado para una experiencia intuitiva.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-highlight">
+    <div class="page-container">
+      <div class="section-heading">
+        <h2>Explora por categorías</h2>
+        <p>Empieza a descubrir lecturas según tus intereses.</p>
+      </div>
+
+      <div class="categories-grid">
+        <div class="category-tile">Fantasía</div>
+        <div class="category-tile">Ciencia Ficción</div>
+        <div class="category-tile">Romance</div>
+        <div class="category-tile">Misterio</div>
+        <div class="category-tile">Historia</div>
+        <div class="category-tile">Programación</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="books-showcase">
+    <div class="page-container">
+      <div class="section-heading">
+        <h2>Libros destacados</h2>
+        <p>Una selección visual de algunos títulos de ejemplo.</p>
+      </div>
+
+      <div class="showcase-grid">
+        <article class="showcase-book section-card">
+          <img src="https://via.placeholder.com/200x290?text=Libro+1" alt="Libro 1" />
+          <h3>Libro destacado 1</h3>
+          <p>Autor de ejemplo</p>
+        </article>
+
+        <article class="showcase-book section-card">
+          <img src="https://via.placeholder.com/200x290?text=Libro+2" alt="Libro 2" />
+          <h3>Libro destacado 2</h3>
+          <p>Autor de ejemplo</p>
+        </article>
+
+        <article class="showcase-book section-card">
+          <img src="https://via.placeholder.com/200x290?text=Libro+3" alt="Libro 3" />
+          <h3>Libro destacado 3</h3>
+          <p>Autor de ejemplo</p>
+        </article>
+
+        <article class="showcase-book section-card">
+          <img src="https://via.placeholder.com/200x290?text=Libro+4" alt="Libro 4" />
+          <h3>Libro destacado 4</h3>
+          <p>Autor de ejemplo</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="page-container cta-banner__inner">
+      <div>
+        <h2>Empieza hoy tu biblioteca digital</h2>
+        <p>Regístrate y accede a una experiencia moderna de lectura y gestión de libros.</p>
+      </div>
+
+      <a routerLink="/auth/register" class="app-btn app-btn--primary">Registrarse ahora</a>
+    </div>
+  </section>
 </main>
