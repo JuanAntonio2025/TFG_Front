@@ -1,4 +1,4 @@
-<main class="reader-page">
+<main class="reader-page" [class.reader-page--dark]="darkMode()">
   <div class="page-container">
     <div class="breadcrumb">
       <a routerLink="/">Inicio</a> > <a routerLink="/library">Mi Biblioteca</a> > <span>Lector</span>
@@ -28,9 +28,27 @@
         </div>
       </section>
 
+      <section class="reader-toolbar section-card">
+        <div class="toolbar-group">
+          <button class="app-btn app-btn--secondary" (click)="decreaseFontSize()">A-</button>
+          <span class="toolbar-label">Tamaño: {{ fontSize() }}px</span>
+          <button class="app-btn app-btn--secondary" (click)="increaseFontSize()">A+</button>
+        </div>
+
+        <div class="toolbar-group">
+          <button class="app-btn app-btn--secondary" (click)="toggleDarkMode()">
+            @if (!darkMode()) {
+              Modo oscuro
+            } @else {
+              Modo claro
+            }
+          </button>
+        </div>
+      </section>
+
       <section class="reader-content section-card">
         @if (currentPage()) {
-          <pre>{{ currentPage()!.content }}</pre>
+          <pre [style.fontSize.px]="fontSize()">{{ currentPage()!.content }}</pre>
         }
       </section>
 

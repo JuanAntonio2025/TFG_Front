@@ -22,6 +22,9 @@ export class ReaderComponent implements OnInit {
   bookContent = signal<ReaderContent | null>(null);
   currentPageIndex = signal(0);
 
+  fontSize = signal(18);
+  darkMode = signal(false);
+
   currentPage = computed(() => {
     const content = this.bookContent();
     if (!content || content.pages.length === 0) return null;
@@ -36,6 +39,7 @@ export class ReaderComponent implements OnInit {
       return;
     }
 
+    this.restoreReaderPreferences();
     this.loadContent(bookId);
   }
 
@@ -47,7 +51,15 @@ export class ReaderComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         this.bookContent.set(response.data);
-        this.currentPageIndex.set(0);
+
+        const savedPage = this.getSavedProgress(response.data.book_id);
+        const maxIndex = response.data.pages.length - 1;
+
+        if (savedPage >= 0 && savedPage <= maxIndex) {
+          this.currentPageIndex.set(savedPage);
+        } else {
+          this.currentPageIndex.set(0);
+        }
       },
       error: (error) => {
         this.loading = false;
@@ -62,12 +74,70 @@ export class ReaderComponent implements OnInit {
 
     if (this.currentPageIndex() < content.pages.length - 1) {
       this.currentPageIndex.update(value => value + 1);
+      this.saveProgress();
     }
   }
 
   previousPage(): void {
     if (this.currentPageIndex() > 0) {
       this.currentPageIndex.update(value => value - 1);
+      this.saveProgress();
+    }
+  }
+
+  increaseFontSize(): void {
+    if (this.fontSize() < 28) {
+      this.fontSize.update(value => value + 2);
+      this.saveReaderPreferences();
+    }
+  }
+
+  decreaseFontSize(): void {
+    if (this.fontSize() > 14) {
+      this.fontSize.update(value => value - 2);
+      this.saveReaderPreferences();
+    }
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode.update(value => !value);
+    this.saveReaderPreferences();
+  }
+
+  private saveProgress(): void {
+    const content = this.bookContent();
+    if (!content) return;
+
+    localStorage.setItem(
+      this.getProgressKey(content.book_id),
+      String(this.currentPageIndex())
+    );
+  }
+
+  private getSavedProgress(bookId: number): number {
+    const rawValue = localStorage.getItem(this.getProgressKey(bookId));
+    return rawValue ? Number(rawValue) : 0;
+  }
+
+  private getProgressKey(bookId: number): string {
+    return `reader_progress_${bookId}`;
+  }
+
+  private saveReaderPreferences(): void {
+    localStorage.setItem('reader_font_size', String(this.fontSize()));
+    localStorage.setItem('reader_dark_mode', String(this.darkMode()));
+  }
+
+  private restoreReaderPreferences(): void {
+    const savedFontSize = localStorage.getItem('reader_font_size');
+    const savedDarkMode = localStorage.getItem('reader_dark_mode');
+
+    if (savedFontSize) {
+      this.fontSize.set(Number(savedFontSize));
+    }
+
+    if (savedDarkMode) {
+      this.darkMode.set(savedDarkMode === 'true');
     }
   }
 }
