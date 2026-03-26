@@ -94,9 +94,9 @@
                     <p class="book-price">{{ book.purchase_info.unit_price }} €</p>
 
                     <div class="book-actions">
-                      <button class="app-btn app-btn--primary" disabled>
+                      <a class="app-btn app-btn--primary" [routerLink]="['/reader', book.book_id]">
                         Leer
-                      </button>
+                      </a>
                       <a class="app-btn app-btn--secondary" [routerLink]="['/books', book.book_id]">
                         Ver detalles
                       </a>

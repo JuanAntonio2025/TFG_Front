@@ -21,6 +21,7 @@ import { BooksAdmin } from './features/admin/pages/books-admin/books-admin';
 import { CategoriesAdmin } from './features/admin/pages/categories-admin/categories-admin';
 import { UsersAdmin } from './features/admin/pages/users-admin/users-admin';
 import { IncidencesAdmin } from './features/admin/pages/incidences-admin/incidences-admin';
+import { ReaderComponent } from './features/library/pages/reader/reader';
 
 export const routes: Routes = [
   {
@@ -73,6 +74,11 @@ export const routes: Routes = [
   {
     path: 'incidences/:id',
     component: IncidenceDetail,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'reader/:bookId',
+    component: ReaderComponent,
     canActivate: [authGuard]
   },
   {
