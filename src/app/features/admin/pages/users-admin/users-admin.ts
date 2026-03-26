@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AdminUsers } from '../../services/admin-users';
 import { User } from '../../../../core/models/user.model';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { Role } from '../../../../core/models/role.model';
 
 @Component({
   selector: 'app-users-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './users-admin.html',
   styleUrl: './users-admin.scss',
 })
@@ -20,9 +22,14 @@ export class UsersAdmin implements OnInit {
   successMessage = '';
 
   users: User[] = [];
+  roles: Role[] = [];
+
+  editingRolesUserId: number | null = null;
+  selectedRoleIds: number[] = [];
 
   ngOnInit(): void {
     this.loadUsers();
+    this.loadRoles();
   }
 
   loadUsers(): void {
@@ -35,6 +42,14 @@ export class UsersAdmin implements OnInit {
       error: () => {
         this.loading = false;
         this.errorMessage = 'No se pudieron cargar los usuarios.';
+      }
+    });
+  }
+
+  loadRoles(): void {
+    this.adminUsersService.getRoles().subscribe({
+      next: (response) => {
+        this.roles = response.data;
       }
     });
   }
@@ -59,5 +74,43 @@ export class UsersAdmin implements OnInit {
     }
 
     return user.roles.map(role => role.name).join(', ');
+  }
+
+  editRoles(user: User): void {
+    this.editingRolesUserId = user.user_id;
+    this.selectedRoleIds = user.roles?.map(role => role.role_id) || [];
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  cancelEditRoles(): void {
+    this.editingRolesUserId = null;
+    this.selectedRoleIds = [];
+  }
+
+  toggleRole(roleId: number): void {
+    if (this.selectedRoleIds.includes(roleId)) {
+      this.selectedRoleIds = this.selectedRoleIds.filter(id => id !== roleId);
+    } else {
+      this.selectedRoleIds = [...this.selectedRoleIds, roleId];
+    }
+  }
+
+  saveRoles(userId: number): void {
+    if (this.selectedRoleIds.length === 0) {
+      this.errorMessage = 'Debes seleccionar al menos un rol.';
+      return;
+    }
+
+    this.adminUsersService.updateUserRoles(userId, this.selectedRoleIds).subscribe({
+      next: () => {
+        this.successMessage = 'Roles actualizados correctamente.';
+        this.cancelEditRoles();
+        this.loadUsers();
+      },
+      error: (error) => {
+        this.errorMessage = error?.error?.message || 'No se pudieron actualizar los roles.';
+      }
+    });
   }
 }
