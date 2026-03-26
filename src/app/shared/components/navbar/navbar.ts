@@ -31,6 +31,10 @@ export class Navbar {
     return this.authService.hasRole('admin');
   }
 
+  get isSupport(): boolean {
+    return this.authService.hasRole('support');
+  }
+
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {

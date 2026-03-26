@@ -118,6 +118,12 @@ export const routes: Routes = [
     data: { roles: ['admin', 'support'] }
   },
   {
+    path: 'support/incidences',
+    component: IncidencesAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'support'] }
+  },
+  {
     path: '**',
     redirectTo: ''
   }
