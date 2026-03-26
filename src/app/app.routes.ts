@@ -22,6 +22,7 @@ import { CategoriesAdmin } from './features/admin/pages/categories-admin/categor
 import { UsersAdmin } from './features/admin/pages/users-admin/users-admin';
 import { IncidencesAdmin } from './features/admin/pages/incidences-admin/incidences-admin';
 import { ReaderComponent } from './features/library/pages/reader/reader';
+import { Profile } from './features/auth/pages/profile/profile';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,11 @@ export const routes: Routes = [
   {
     path: 'incidences/:id',
     component: IncidenceDetail,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'profile',
+    component: Profile,
     canActivate: [authGuard]
   },
   {

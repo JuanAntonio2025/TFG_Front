@@ -54,6 +54,33 @@ export class Auth {
     );
   }
 
+  profile() {
+    return this.http.get<{ data: User }>(`${this.apiUrl.replace('/auth', '')}/profile`).pipe(
+      tap((response) => {
+        this.storageService.setUser(response.data);
+        this.currentUserSignal.set(response.data);
+      })
+    );
+  }
+
+  updateProfile(payload: {
+    name: string;
+    email: string;
+    current_password?: string;
+    new_password?: string;
+    new_password_confirmation?: string;
+  }) {
+    return this.http.put<{ message: string; data: User }>(
+      `${this.apiUrl.replace('/auth', '')}/profile`,
+      payload
+    ).pipe(
+      tap((response) => {
+        this.storageService.setUser(response.data);
+        this.currentUserSignal.set(response.data);
+      })
+    );
+  }
+
   getCurrentUser(): User | null {
     return this.currentUserSignal();
   }

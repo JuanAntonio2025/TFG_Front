@@ -1,0 +1,72 @@
+<main class="profile-page">
+  <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Mi perfil</span>
+    </div>
+
+    <section class="profile-header">
+      <h1 class="page-title">Mi Perfil</h1>
+      <p class="page-subtitle">Actualiza tus datos personales y tu contraseña.</p>
+    </section>
+
+    @if (loading) {
+      <div class="profile-state section-card">
+        <p>Cargando perfil...</p>
+      </div>
+    }
+
+    @if (errorMessage && !loading) {
+      <div class="profile-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    @if (!loading) {
+      <section class="profile-card section-card">
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input id="name" class="app-input" type="text" formControlName="name" />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Correo electrónico</label>
+              <input id="email" class="app-input" type="email" formControlName="email" />
+            </div>
+
+            <div class="form-group">
+              <label for="current_password">Contraseña actual</label>
+              <input id="current_password" class="app-input" type="password" formControlName="current_password" />
+            </div>
+
+            <div class="form-group">
+              <label for="new_password">Nueva contraseña</label>
+              <input id="new_password" class="app-input" type="password" formControlName="new_password" />
+            </div>
+
+            <div class="form-group form-group--full">
+              <label for="new_password_confirmation">Confirmar nueva contraseña</label>
+              <input
+                id="new_password_confirmation"
+                class="app-input"
+                type="password"
+                formControlName="new_password_confirmation"
+              />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="app-btn app-btn--primary" type="submit" [disabled]="submitting">
+              @if (!submitting) {
+                Guardar cambios
+              } @else {
+                Guardando...
+              }
+            </button>
+          </div>
+        </form>
+      </section>
+    }
+  </div>
+</main>
