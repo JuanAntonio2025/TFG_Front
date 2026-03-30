@@ -24,6 +24,9 @@
     @if (successMessage && !loading) {
       <div class="checkout-state section-card success">
         <p>{{ successMessage }}</p>
+        @if (transactionReference) {
+          <p><strong>Referencia:</strong> {{ transactionReference }}</p>
+        }
       </div>
     }
 
@@ -47,18 +50,43 @@
               <div class="payment-card-box">
                 <div class="payment-card-visual">
                   <div class="payment-card-visual__chip"></div>
-                  <div class="payment-card-visual__number">**** **** **** 1234</div>
+                  <div class="payment-card-visual__number">
+                    {{ cardForm.card_number || '**** **** **** 1234' }}
+                  </div>
                   <div class="payment-card-visual__footer">
-                    <span>VISA</span>
-                    <span>SIMULADO</span>
+                    <span>{{ cardForm.card_holder || 'CARD HOLDER' }}</span>
+                    <span>{{ cardForm.expiry_date || 'MM/YY' }}</span>
                   </div>
                 </div>
 
                 <div class="card-form-grid">
-                  <input class="app-input" type="text" placeholder="Número de tarjeta" disabled />
-                  <input class="app-input" type="text" placeholder="Titular" disabled />
-                  <input class="app-input" type="text" placeholder="MM/AA" disabled />
-                  <input class="app-input" type="text" placeholder="CVV" disabled />
+                  <input
+                    class="app-input"
+                    type="text"
+                    placeholder="Titular"
+                    [(ngModel)]="cardForm.card_holder"
+                  />
+
+                  <input
+                    class="app-input"
+                    type="text"
+                    placeholder="Número de tarjeta"
+                    [(ngModel)]="cardForm.card_number"
+                  />
+
+                  <input
+                    class="app-input"
+                    type="text"
+                    placeholder="MM/AA"
+                    [(ngModel)]="cardForm.expiry_date"
+                  />
+
+                  <input
+                    class="app-input"
+                    type="text"
+                    placeholder="CVV"
+                    [(ngModel)]="cardForm.cvv"
+                  />
                 </div>
               </div>
             }
@@ -77,7 +105,13 @@
 
             @if (selectedPaymentMethod === 'paypal') {
               <div class="paypal-box">
-                <p>El pago se realizará de forma simulada mediante PayPal.</p>
+                <input
+                  class="app-input"
+                  type="email"
+                  placeholder="Correo de PayPal"
+                  [(ngModel)]="paypalForm.paypal_email"
+                />
+                <p>La autorización del pago se simulará mediante tu cuenta PayPal.</p>
               </div>
             }
           </div>
@@ -102,11 +136,6 @@
           </div>
 
           <div class="summary-total">
-            <div class="summary-row">
-              <span>Total Parcial:</span>
-              <strong>{{ cartData.summary.total_amount }} €</strong>
-            </div>
-
             <div class="summary-row total">
               <span>Total:</span>
               <strong>{{ cartData.summary.total_amount }} €</strong>
@@ -122,7 +151,7 @@
           </button>
 
           <p class="checkout-note">
-            Al continuar, aceptas los términos y condiciones del proceso de compra simulado.
+            Este pago es una simulación académica. No se realizará ningún cargo real.
           </p>
         </aside>
       </section>

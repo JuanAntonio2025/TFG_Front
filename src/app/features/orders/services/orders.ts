@@ -5,6 +5,15 @@ import { Observable } from 'rxjs';
 import { Order } from '../models/order.model';
 import { environment } from '../../../../environments/environment';
 
+export interface CreateOrderPayload {
+  payment_method: 'card' | 'paypal';
+  card_holder?: string;
+  card_number?: string;
+  expiry_date?: string;
+  cvv?: string;
+  paypal_email?: string;
+}
+
 export interface CreateOrderResponse {
   message: string;
   data: {
@@ -12,6 +21,7 @@ export interface CreateOrderResponse {
       simulated: boolean;
       method: string | null;
       status: string;
+      transaction_reference: string;
     };
     order: Order;
   };
@@ -32,10 +42,8 @@ export class Orders {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiBaseUrl}/orders`;
 
-  createOrder(paymentMethod: 'card' | 'paypal'): Observable<CreateOrderResponse> {
-    return this.http.post<CreateOrderResponse>(this.apiUrl, {
-      payment_method: paymentMethod
-    });
+  createOrder(payload: CreateOrderPayload): Observable<CreateOrderResponse> {
+    return this.http.post<CreateOrderResponse>(this.apiUrl, payload);
   }
 
   getOrders(): Observable<OrdersResponse> {
