@@ -1,0 +1,65 @@
+<main class="admin-page">
+  <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/admin">Panel de administración</a> > <span>Reseñas</span>
+    </div>
+
+    <section class="page-header">
+      <h1 class="page-title">Moderación de Reseñas</h1>
+      <p class="page-subtitle">Consulta y elimina reseñas publicadas por los usuarios.</p>
+    </section>
+
+    @if (errorMessage) {
+      <div class="admin-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    <section class="admin-list-card section-card">
+      <div class="card-header">
+        <h2>Reseñas registradas</h2>
+      </div>
+
+      @if (loading) {
+        <div class="admin-state">
+          <p>Cargando reseñas...</p>
+        </div>
+      }
+
+      @if (!loading && reviews.length === 0) {
+        <div class="admin-state">
+          <p>No hay reseñas registradas.</p>
+        </div>
+      }
+
+      <div class="admin-list">
+        @for (review of reviews; track review.review_id) {
+          <article class="review-row">
+            <div class="review-row__main">
+              <div class="review-score">{{ review.points }}/5</div>
+
+              <div class="review-row__info">
+                <h3>{{ review.book?.title || 'Libro' }}</h3>
+                <p class="review-meta">
+                  {{ review.book?.author || 'Autor desconocido' }} ·
+                  {{ review.user?.name || 'Usuario' }}
+                  @if (review.user?.email) {
+                    · {{ review.user?.email }}
+                  }
+                </p>
+                <p class="review-comment">{{ review.comment }}</p>
+                <small>{{ review.date }}</small>
+              </div>
+            </div>
+
+            <div class="review-row__actions">
+              <button class="app-btn app-btn--danger" (click)="deleteReview(review.review_id)">
+                Eliminar
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+</main>
