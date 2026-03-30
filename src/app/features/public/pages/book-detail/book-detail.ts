@@ -112,7 +112,7 @@ export class BookDetail implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.cartService.addItem(this.book.book_id, 1).subscribe({
+    this.cartService.addItem(this.book.book_id).subscribe({
       next: () => {
         this.cartLoading = false;
         this.successMessage = 'Libro añadido al carrito correctamente.';
@@ -120,8 +120,14 @@ export class BookDetail implements OnInit {
       error: (error) => {
         this.cartLoading = false;
 
-        if (error?.error?.message) {
-          this.errorMessage = error.error.message;
+        const backendMessage = error?.error?.message;
+
+        if (backendMessage === 'You already own this book.') {
+          this.errorMessage = 'Ya has comprado este libro.';
+        } else if (backendMessage === 'This book is already in your cart.') {
+          this.errorMessage = 'Este libro ya está en tu carrito.';
+        } else if (backendMessage) {
+          this.errorMessage = backendMessage;
         } else {
           this.errorMessage = 'No se pudo añadir el libro al carrito.';
         }

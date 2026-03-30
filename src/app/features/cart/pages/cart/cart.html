@@ -38,7 +38,7 @@
       <section class="cart-layout">
         <div class="cart-products section-card">
           <div class="cart-products__header">
-            <span>Productos</span>
+            <span>Libros</span>
             <span>Precio</span>
             <span>Subtotal</span>
             <span></span>
@@ -57,12 +57,6 @@
                     <h3>{{ item.title }}</h3>
                     <p>{{ item.author }}</p>
                     <small>{{ item.format }}</small>
-
-                    <div class="quantity-controls">
-                      <button (click)="decreaseQuantity(item)">-</button>
-                      <span>{{ item.quantity }}</span>
-                      <button (click)="increaseQuantity(item)">+</button>
-                    </div>
                   </div>
                 </div>
 

@@ -5,13 +5,11 @@ export interface CartItem {
   front_page?: string | null;
   format: string;
   price: number;
-  quantity: number;
   line_total: number;
 }
 
 export interface CartSummary {
   items_count: number;
-  total_quantity: number;
   total_amount: number;
 }
 

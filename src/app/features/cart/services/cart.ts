@@ -20,10 +20,9 @@ export class Cart {
     return this.http.get<CartResponse>(this.apiUrl);
   }
 
-  addItem(bookId: number, quantity: number): Observable<CartResponse> {
+  addItem(bookId: number): Observable<CartResponse> {
     return this.http.post<CartResponse>(`${this.apiUrl}/items`, {
-      book_id: bookId,
-      quantity
+      book_id: bookId
     });
   }
 
