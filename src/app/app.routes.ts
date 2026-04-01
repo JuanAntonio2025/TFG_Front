@@ -9,6 +9,7 @@ import { Catalog } from './features/public/pages/catalog/catalog';
 import { BookDetail } from './features/public/pages/book-detail/book-detail';
 import { Login } from './features/auth/pages/login/login';
 import { Register } from './features/auth/pages/register/register';
+import { Faq } from './features/public/pages/faq/faq';
 import { ForgotPassword } from './features/auth/pages/forgot-password/forgot-password';
 import { ResetPassword } from './features/auth/pages/reset-password/reset-password';
 
@@ -51,6 +52,10 @@ export const routes: Routes = [
     path: 'auth/register',
     component: Register,
     canActivate: [guestGuard]
+  },
+  {
+    path: 'faq',
+    component: Faq
   },
   {
     path: 'auth/forgot-password',

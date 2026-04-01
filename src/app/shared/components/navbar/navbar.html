@@ -9,11 +9,11 @@
       <nav class="app-navbar__nav">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
         <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
+        <a routerLink="/faq" routerLinkActive="active">FAQ</a>
 
         @if (isLoggedIn) {
           <a routerLink="/library" routerLinkActive="active">Mi Biblioteca</a>
           <a routerLink="/orders/history" routerLinkActive="active">Mis Pedidos</a>
-          <a routerLink="/incidences" routerLinkActive="active">Soporte</a>
           <a routerLink="/cart" routerLinkActive="active">Carrito</a>
           <a routerLink="/profile" routerLinkActive="active">Mi Perfil</a>
         }

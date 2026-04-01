@@ -1,0 +1,80 @@
+<main class="faq-page">
+  <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Preguntas frecuentes</span>
+    </div>
+
+    <section class="faq-header">
+      <h1 class="page-title">Preguntas Frecuentes</h1>
+      <p class="page-subtitle">
+        Encuentra respuestas rápidas sobre acceso, compras, biblioteca digital y soporte.
+      </p>
+    </section>
+
+    <section class="faq-hero section-card">
+      <div class="faq-hero__content">
+        <h2>¿Necesitas ayuda?</h2>
+        <p>
+          Aquí puedes consultar las dudas más habituales sobre el funcionamiento
+          de la plataforma Júpiter.
+        </p>
+      </div>
+
+      <div class="faq-hero__actions">
+        <a class="app-btn app-btn--primary" routerLink="/catalog">Ir al catálogo</a>
+        <a class="app-btn app-btn--secondary" routerLink="/auth/register">Crear cuenta</a>
+      </div>
+    </section>
+
+    <section class="faq-sections">
+      @for (section of sections; track section.title; let sectionIndex = $index) {
+        <article class="faq-section section-card">
+          <div class="faq-section__header">
+            <h2>{{ section.title }}</h2>
+          </div>
+
+          <div class="faq-list">
+            @for (item of section.items; track item.question; let itemIndex = $index) {
+              <div class="faq-item" [class.open]="item.open">
+                <button
+                  type="button"
+                  class="faq-question"
+                  (click)="toggleItem(sectionIndex, itemIndex)"
+                >
+                  <span>{{ item.question }}</span>
+                  <span class="faq-icon">
+                    @if (!item.open) {
+                      +
+                    } @else {
+                      −
+                    }
+                  </span>
+                </button>
+
+                @if (item.open) {
+                  <div class="faq-answer">
+                    <p>{{ item.answer }}</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </section>
+
+    <section class="faq-cta section-card">
+      <div>
+        <h2>¿No has encontrado tu respuesta?</h2>
+        <p>
+          Puedes registrarte o iniciar sesión para contactar con soporte mediante una incidencia.
+        </p>
+      </div>
+
+      <div class="faq-cta__actions">
+        <a class="app-btn app-btn--primary" routerLink="/auth/login">Iniciar sesión</a>
+        <a class="app-btn app-btn--secondary" routerLink="/incidences">Ir a soporte</a>
+      </div>
+    </section>
+  </div>
+</main>
