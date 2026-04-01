@@ -9,6 +9,9 @@ import { Catalog } from './features/public/pages/catalog/catalog';
 import { BookDetail } from './features/public/pages/book-detail/book-detail';
 import { Login } from './features/auth/pages/login/login';
 import { Register } from './features/auth/pages/register/register';
+import { ForgotPassword } from './features/auth/pages/forgot-password/forgot-password';
+import { ResetPassword } from './features/auth/pages/reset-password/reset-password';
+
 import { CartComponent } from './features/cart/pages/cart/cart';
 import { Checkout } from './features/orders/pages/checkout/checkout';
 import { LibraryComponent } from './features/library/pages/library/library';
@@ -47,6 +50,16 @@ export const routes: Routes = [
   {
     path: 'auth/register',
     component: Register,
+    canActivate: [guestGuard]
+  },
+  {
+    path: 'auth/forgot-password',
+    component: ForgotPassword,
+    canActivate: [guestGuard]
+  },
+  {
+    path: 'auth/reset-password',
+    component: ResetPassword,
     canActivate: [guestGuard]
   },
   {

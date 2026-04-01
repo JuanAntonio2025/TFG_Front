@@ -117,4 +117,23 @@ export class Auth {
     this.storageService.setUser(user);
     this.currentUserSignal.set(user);
   }
+
+  forgotPassword(payload: { email: string }) {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/forgot-password`,
+      payload
+    );
+  }
+
+  resetPassword(payload: {
+    token: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+  }) {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/reset-password`,
+      payload
+    );
+  }
 }
