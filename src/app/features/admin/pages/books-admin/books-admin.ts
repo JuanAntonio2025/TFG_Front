@@ -36,6 +36,7 @@ export class BooksAdmin implements OnInit {
     front_page: '',
     format: 'PDF',
     available: 'available',
+    featured: false,
     category_ids: [] as number[]
   };
 
@@ -84,6 +85,7 @@ export class BooksAdmin implements OnInit {
       front_page: book.front_page || '',
       format: book.format,
       available: book.available,
+      featured: !!book.featured,
       category_ids: book.categories?.map(category => category.category_id) || []
     };
     this.errorMessage = '';
@@ -100,6 +102,7 @@ export class BooksAdmin implements OnInit {
       front_page: '',
       format: 'PDF',
       available: 'available',
+      featured: false,
       category_ids: []
     };
   }

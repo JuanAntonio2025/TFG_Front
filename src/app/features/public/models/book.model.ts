@@ -13,6 +13,7 @@ export interface Book {
   front_page?: string | null;
   format: BookFormat;
   available: BookAvailability;
+  featured?: boolean;
   categories?: Category[];
   reviews?: Review[];
 }

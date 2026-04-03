@@ -34,4 +34,8 @@ export class Books {
   getBookById(bookId: number): Observable<BookDetailResponse> {
     return this.http.get<BookDetailResponse>(`${this.apiUrl}/${bookId}`);
   }
+
+  getFeaturedBooks() {
+    return this.http.get<BooksResponse>(`${this.apiUrl}?featured=true`);
+  }
 }

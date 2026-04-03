@@ -68,6 +68,14 @@
             <option value="unavailable">unavailable</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label>Destacado</label>
+          <label class="checkbox-inline">
+            <input type="checkbox" [(ngModel)]="form.featured" />
+            <span>Marcar como destacado</span>
+          </label>
+        </div>
       </div>
 
       <div class="form-group form-group--full">
@@ -124,6 +132,14 @@
 
       <div class="admin-list">
         @for (book of books; track book.book_id) {
+
+          <small>
+            {{ book.format }} · {{ book.price }} € · {{ book.available }}
+            @if (book.featured) {
+              · Destacado
+            }
+          </small>
+
           <article class="book-row">
             <div class="book-row__main">
               <div class="book-row__cover">

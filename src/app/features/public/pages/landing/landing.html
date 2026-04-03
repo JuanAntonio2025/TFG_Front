@@ -72,33 +72,40 @@
     <div class="page-container">
       <div class="section-heading">
         <h2>Libros destacados</h2>
-        <p>Una selección visual de algunos títulos de ejemplo.</p>
+        <p>Una selección de títulos recomendados de nuestro catálogo.</p>
       </div>
 
-      <div class="showcase-grid">
-        <article class="showcase-book section-card">
-          <img src="https://via.placeholder.com/200x290?text=Libro+1" alt="Libro 1" />
-          <h3>Libro destacado 1</h3>
-          <p>Autor de ejemplo</p>
-        </article>
+      @if (featuredLoading) {
+        <div class="showcase-state section-card">
+          <p>Cargando libros destacados...</p>
+        </div>
+      }
 
-        <article class="showcase-book section-card">
-          <img src="https://via.placeholder.com/200x290?text=Libro+2" alt="Libro 2" />
-          <h3>Libro destacado 2</h3>
-          <p>Autor de ejemplo</p>
-        </article>
+      @if (!featuredLoading && featuredBooks.length === 0) {
+        <div class="showcase-state section-card">
+          <p>No hay libros destacados disponibles en este momento.</p>
+        </div>
+      }
 
-        <article class="showcase-book section-card">
-          <img src="https://via.placeholder.com/200x290?text=Libro+3" alt="Libro 3" />
-          <h3>Libro destacado 3</h3>
-          <p>Autor de ejemplo</p>
-        </article>
+      @if (!featuredLoading && featuredBooks.length > 0) {
+        <div class="showcase-grid">
+          @for (book of featuredBooks; track book.book_id) {
+            <article class="showcase-book section-card">
+              <a [routerLink]="['/books', book.book_id]" class="showcase-book__link">
+                <img
+                  [src]="book.front_page || 'https://via.placeholder.com/200x290?text=Libro'"
+                  [alt]="book.title"
+                />
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.author }}</p>
+              </a>
+            </article>
+          }
+        </div>
+      }
 
-        <article class="showcase-book section-card">
-          <img src="https://via.placeholder.com/200x290?text=Libro+4" alt="Libro 4" />
-          <h3>Libro destacado 4</h3>
-          <p>Autor de ejemplo</p>
-        </article>
+      <div class="showcase-actions">
+        <a routerLink="/catalog" class="app-btn app-btn--primary">Ver todo el catálogo</a>
       </div>
     </div>
   </section>
