@@ -111,19 +111,19 @@ export const routes: Routes = [
     path: 'admin',
     component: Dashboard,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
+    data: { roles: ['admin', 'employee'] }
   },
   {
     path: 'admin/books',
     component: BooksAdmin,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
+    data: { roles: ['admin', 'employee'] }
   },
   {
     path: 'admin/categories',
     component: CategoriesAdmin,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
+    data: { roles: ['admin', 'employee'] }
   },
   {
     path: 'admin/users',

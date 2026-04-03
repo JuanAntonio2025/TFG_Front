@@ -1,4 +1,4 @@
-<main class="admin-dashboard-page">
+<!--<main class="admin-dashboard-page">
   <div class="page-container">
     <div class="breadcrumb">
       <a routerLink="/">Inicio</a> > <span>Panel de administración</span>
@@ -121,6 +121,69 @@
           </div>
         </div>
       </aside>
+    </section>
+  </div>
+</main>-->
+
+<main class="admin-dashboard-page">
+  <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <span>Panel de gestión</span>
+    </div>
+
+    <section class="dashboard-header">
+      <div>
+        <h1 class="page-title">
+          @if (isAdmin) {
+            Panel de Administración
+          } @else {
+            Panel de Empleado
+          }
+        </h1>
+        <p class="page-subtitle">
+          @if (isAdmin) {
+            Gestiona el catálogo, usuarios, reseñas e incidencias de la plataforma.
+          } @else {
+            Gestiona el catálogo de libros y categorías.
+          }
+        </p>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <a routerLink="/admin/books" class="dashboard-card">
+        <div class="dashboard-card__icon">📘</div>
+        <div class="dashboard-card__body">
+          <h3>Libros</h3>
+          <p>Crear, editar y eliminar libros del catálogo.</p>
+        </div>
+      </a>
+
+      <a routerLink="/admin/categories" class="dashboard-card">
+        <div class="dashboard-card__icon">🏷</div>
+        <div class="dashboard-card__body">
+          <h3>Categorías</h3>
+          <p>Organiza y administra las categorías disponibles.</p>
+        </div>
+      </a>
+
+      @if (isAdmin) {
+        <a routerLink="/admin/users" class="dashboard-card">
+          <div class="dashboard-card__icon">👥</div>
+          <div class="dashboard-card__body">
+            <h3>Usuarios</h3>
+            <p>Gestiona cuentas, estados y roles.</p>
+          </div>
+        </a>
+
+        <a routerLink="/admin/reviews" class="dashboard-card">
+          <div class="dashboard-card__icon">⭐</div>
+          <div class="dashboard-card__body">
+            <h3>Reseñas</h3>
+            <p>Modera y elimina reseñas inapropiadas.</p>
+          </div>
+        </a>
+      }
     </section>
   </div>
 </main>

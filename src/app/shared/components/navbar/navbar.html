@@ -18,8 +18,8 @@
           <a routerLink="/profile" routerLinkActive="active">Mi Perfil</a>
         }
 
-        @if (isAdmin) {
-          <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        @if (canAccessAdminPanel) {
+          <a routerLink="/admin" routerLinkActive="active">Panel</a>
         }
 
         @if (isSupport) {
