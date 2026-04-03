@@ -34,6 +34,29 @@ export class AdminUsers {
     return this.http.get<AdminUserResponse>(`${this.apiUrl}/${userId}`);
   }
 
+  createUser(payload: {
+    name: string;
+    email: string;
+    password: string;
+    status: 'active' | 'banned';
+    role_ids: number[];
+  }) {
+    return this.http.post<{ message: string; data: User }>(this.apiUrl, payload);
+  }
+
+  updateUser(
+    userId: number,
+    payload: {
+      name: string;
+      email: string;
+      password?: string;
+      status: 'active' | 'banned';
+      role_ids: number[];
+    }
+  ) {
+    return this.http.put<{ message: string; data: User }>(`${this.apiUrl}/${userId}`, payload);
+  }
+
   updateUserStatus(userId: number, status: 'active' | 'banned') {
     return this.http.patch<{ message: string; data: { user_id: number; status: string } }>(
       `${this.apiUrl}/${userId}/status`,
@@ -50,5 +73,9 @@ export class AdminUsers {
       `${this.apiUrl}/${userId}/roles`,
       { role_ids: roleIds }
     );
+  }
+
+  deleteUser(userId: number) {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${userId}`);
   }
 }

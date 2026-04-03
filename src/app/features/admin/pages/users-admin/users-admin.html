@@ -21,6 +21,82 @@
       </div>
     }
 
+    <section class="admin-form-card section-card">
+      <div class="card-header">
+        <h2>
+          @if (editingUserId) {
+            Editar usuario
+          } @else {
+            Nuevo usuario
+          }
+        </h2>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input class="app-input" type="text" [(ngModel)]="userForm.name" />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input class="app-input" type="email" [(ngModel)]="userForm.email" />
+        </div>
+
+        <div class="form-group">
+          <label>
+            @if (editingUserId) {
+              Nueva contraseña (opcional)
+            } @else {
+              Contraseña
+            }
+          </label>
+          <input class="app-input" type="password" [(ngModel)]="userForm.password" />
+        </div>
+
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="app-select" [(ngModel)]="userForm.status">
+            <option value="active">active</option>
+            <option value="banned">banned</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="roles-editor">
+        <p>Roles</p>
+
+        <div class="roles-list">
+          @for (role of roles; track role.role_id) {
+            <label class="role-chip" [class.selected]="userForm.role_ids.includes(role.role_id)">
+              <input
+                type="checkbox"
+                [checked]="userForm.role_ids.includes(role.role_id)"
+                (change)="toggleFormRole(role.role_id)"
+              />
+              <span>{{ role.name }}</span>
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="roles-editor__actions">
+        <button class="app-btn app-btn--primary" (click)="submitUser()" [disabled]="submitting">
+          @if (!submitting) {
+            {{ editingUserId ? 'Guardar cambios' : 'Crear usuario' }}
+          } @else {
+            Guardando...
+          }
+        </button>
+
+        @if (editingUserId) {
+          <button class="app-btn app-btn--secondary" (click)="resetUserForm()">
+            Cancelar
+          </button>
+        }
+      </div>
+    </section>
+
     <section class="admin-list-card section-card">
       <div class="card-header">
         <h2>Usuarios registrados</h2>
@@ -57,30 +133,6 @@
                     {{ getRoleNames(user) }}
                   </span>
                 </div>
-
-                @if (editingRolesUserId === user.user_id) {
-                  <div class="roles-editor">
-                    <p>Selecciona roles:</p>
-
-                    <div class="roles-list">
-                      @for (role of roles; track role.role_id) {
-                        <label class="role-chip" [class.selected]="selectedRoleIds.includes(role.role_id)">
-                          <input
-                            type="checkbox"
-                            [checked]="selectedRoleIds.includes(role.role_id)"
-                            (change)="toggleRole(role.role_id)"
-                          />
-                          <span>{{ role.name }}</span>
-                        </label>
-                      }
-                    </div>
-
-                    <div class="roles-editor__actions">
-                      <button class="app-btn app-btn--primary" (click)="saveRoles(user.user_id)">Guardar roles</button>
-                      <button class="app-btn app-btn--secondary" (click)="cancelEditRoles()">Cancelar</button>
-                    </div>
-                  </div>
-                }
               </div>
             </div>
 
@@ -90,10 +142,14 @@
               </button>
 
               @if (editingRolesUserId !== user.user_id) {
-                <button class="app-btn app-btn--primary" (click)="editRoles(user)">
-                  Editar roles
+                <button class="app-btn app-btn--primary" (click)="editUser(user)">
+                  Editar
                 </button>
               }
+
+              <button class="app-btn app-btn--danger" (click)="deleteUser(user)">
+                Eliminar
+              </button>
             </div>
           </article>
         }

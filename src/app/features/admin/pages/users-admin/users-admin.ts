@@ -27,9 +27,21 @@ export class UsersAdmin implements OnInit {
   editingRolesUserId: number | null = null;
   selectedRoleIds: number[] = [];
 
+  editingUserId: number | null = null;
+  submitting = false;
+
+  userForm = {
+    name: '',
+    email: '',
+    password: '',
+    status: 'active' as 'active' | 'banned',
+    role_ids: [] as number[]
+  };
+
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
+    this.resetUserForm();
   }
 
   loadUsers(): void {
@@ -110,6 +122,106 @@ export class UsersAdmin implements OnInit {
       },
       error: (error) => {
         this.errorMessage = error?.error?.message || 'No se pudieron actualizar los roles.';
+      }
+    });
+  }
+
+  deleteUser(user: User): void {
+    const confirmed = window.confirm(
+      `¿Seguro que quieres eliminar al usuario "${user.name}"? Esta acción no se puede deshacer.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.adminUsersService.deleteUser(user.user_id).subscribe({
+      next: (response) => {
+        this.successMessage = response.message;
+        this.loadUsers();
+      },
+      error: (error) => {
+        this.errorMessage = error?.error?.message || 'No se pudo eliminar el usuario.';
+      }
+    });
+  }
+
+  resetUserForm(): void {
+    this.editingUserId = null;
+    this.userForm = {
+      name: '',
+      email: '',
+      password: '',
+      status: 'active',
+      role_ids: []
+    };
+  }
+
+  editUser(user: User): void {
+    this.editingUserId = user.user_id;
+    this.userForm = {
+      name: user.name,
+      email: user.email,
+      password: '',
+      status: user.status as 'active' | 'banned',
+      role_ids: user.roles?.map(role => role.role_id) || []
+    };
+
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  toggleFormRole(roleId: number): void {
+    if (this.userForm.role_ids.includes(roleId)) {
+      this.userForm.role_ids = this.userForm.role_ids.filter(id => id !== roleId);
+    } else {
+      this.userForm.role_ids = [...this.userForm.role_ids, roleId];
+    }
+  }
+
+  submitUser(): void {
+    if (!this.userForm.name.trim() || !this.userForm.email.trim()) {
+      this.errorMessage = 'Nombre y correo son obligatorios.';
+      return;
+    }
+
+    if (!this.editingUserId && !this.userForm.password.trim()) {
+      this.errorMessage = 'La contraseña es obligatoria al crear un usuario.';
+      return;
+    }
+
+    this.submitting = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    const payload = {
+      name: this.userForm.name.trim(),
+      email: this.userForm.email.trim(),
+      status: this.userForm.status,
+      role_ids: this.userForm.role_ids,
+      ...(this.userForm.password.trim() ? { password: this.userForm.password.trim() } : {})
+    };
+
+    const request = this.editingUserId
+      ? this.adminUsersService.updateUser(this.editingUserId, payload)
+      : this.adminUsersService.createUser(payload as {
+        name: string;
+        email: string;
+        password: string;
+        status: 'active' | 'banned';
+        role_ids: number[];
+      });
+
+    request.subscribe({
+      next: (response) => {
+        this.submitting = false;
+        this.successMessage = response.message;
+        this.resetUserForm();
+        this.loadUsers();
+      },
+      error: (error) => {
+        this.submitting = false;
+        this.errorMessage = error?.error?.message || 'No se pudo guardar el usuario.';
       }
     });
   }
