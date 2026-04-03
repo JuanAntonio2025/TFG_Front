@@ -3,8 +3,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { SupportIncidences } from '../../services/support-incidences';
+import { SupportUserSummary } from '../../models/support-user-summary.model';
 import { Incidence } from '../../../incidences/models/incidence.model';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-incidences-admin',
@@ -19,11 +20,13 @@ export class IncidencesAdmin implements OnInit {
   loading = false;
   errorMessage = '';
   successMessage = '';
+  userSummary: SupportUserSummary | null = null;
 
   incidences: Incidence[] = [];
   selectedIncidence: Incidence | null = null;
   supportMessage = '';
   selectedStatus: 'active' | 'inactive' | '' = '';
+  summaryLoading = false;
 
   ngOnInit(): void {
     this.loadIncidences();
@@ -52,9 +55,32 @@ export class IncidencesAdmin implements OnInit {
     this.supportIncidencesService.getIncidenceById(incidenceId).subscribe({
       next: (response) => {
         this.selectedIncidence = response.data;
+
+        const userId = response.data.user?.user_id;
+        if (userId) {
+          this.loadUserSummary(userId);
+        } else {
+          this.userSummary = null;
+        }
       },
       error: () => {
         this.errorMessage = 'No se pudo cargar el detalle de la incidencia.';
+      }
+    });
+  }
+
+  loadUserSummary(userId: number): void {
+    this.summaryLoading = true;
+    this.userSummary = null;
+
+    this.supportIncidencesService.getUserSummary(userId).subscribe({
+      next: (response) => {
+        this.summaryLoading = false;
+        this.userSummary = response.data;
+      },
+      error: () => {
+        this.summaryLoading = false;
+        this.userSummary = null;
       }
     });
   }

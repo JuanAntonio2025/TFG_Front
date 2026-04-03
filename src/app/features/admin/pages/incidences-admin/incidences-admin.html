@@ -98,22 +98,86 @@
             </span>
           </div>
 
-          <div class="detail-meta">
-            <div class="meta-box">
-              <span>Usuario</span>
-              <strong>{{ selectedIncidence.user?.name || '—' }}</strong>
-            </div>
+          @if (summaryLoading) {
+            <section class="support-summary-card">
+              <h3>Resumen del usuario</h3>
+              <p>Cargando información del usuario...</p>
+            </section>
+          }
 
-            <div class="meta-box">
-              <span>Email</span>
-              <strong>{{ selectedIncidence.user?.email || '—' }}</strong>
-            </div>
+          @if (userSummary && !summaryLoading) {
+            <section class="support-summary-card">
+              <h3>Resumen del usuario</h3>
 
-            <div class="meta-box">
-              <span>ID incidencia</span>
-              <strong>#{{ selectedIncidence.incidence_id }}</strong>
-            </div>
-          </div>
+              <div class="support-user-meta">
+                <div class="meta-box">
+                  <span>Nombre</span>
+                  <strong>{{ userSummary.user.name }}</strong>
+                </div>
+
+                <div class="meta-box">
+                  <span>Email</span>
+                  <strong>{{ userSummary.user.email }}</strong>
+                </div>
+
+                <div class="meta-box">
+                  <span>Estado</span>
+                  <strong>{{ userSummary.user.status }}</strong>
+                </div>
+
+                <div class="meta-box">
+                  <span>Registro</span>
+                  <strong>{{ userSummary.user.register_date }}</strong>
+                </div>
+              </div>
+
+              <div class="support-summary-sections">
+                <div class="summary-block">
+                  <h4>Pedidos</h4>
+
+                  @if (userSummary.orders.length === 0) {
+                    <p>No hay pedidos registrados.</p>
+                  }
+
+                  <div class="summary-list">
+                    @for (order of userSummary.orders; track order.order_id) {
+                      <div class="summary-row">
+                        <strong>#{{ order.order_id }}</strong>
+                        <span>{{ order.order_date }}</span>
+                        <span>{{ order.total_amount }} €</span>
+                        <span>{{ order.status }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="summary-block">
+                  <h4>Libros comprados</h4>
+
+                  @if (userSummary.books.length === 0) {
+                    <p>No hay libros comprados.</p>
+                  }
+
+                  <div class="summary-books">
+                    @for (book of userSummary.books; track book.book_id) {
+                      <div class="summary-book-row">
+                        <img
+                          [src]="book.front_page || 'https://via.placeholder.com/60x90?text=Libro'"
+                          [alt]="book.title"
+                        />
+
+                        <div>
+                          <strong>{{ book.title }}</strong>
+                          <p>{{ book.author }} · {{ book.format }}</p>
+                          <small>{{ book.unit_price }} € · {{ book.purchased_at }}</small>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </section>
+          }
 
           <div class="status-actions">
             <button class="app-btn app-btn--primary" (click)="updateStatus('active')">

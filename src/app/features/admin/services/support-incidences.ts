@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Incidence } from '../../incidences/models/incidence.model';
 import { IncidenceMessage } from '../../incidences/models/message.model';
+import { SupportUserSummaryResponse } from '../models/support-user-summary.model';
 import { environment } from '../../../../environments/environment';
 
 export interface SupportIncidencesResponse {
@@ -51,5 +52,11 @@ export class SupportIncidences {
     return this.http.post<SupportMessageResponse>(`${this.supportApiUrl}/${incidenceId}/messages`, {
       message
     });
+  }
+
+  getUserSummary(userId: number) {
+    return this.http.get<SupportUserSummaryResponse>(
+      `${environment.apiBaseUrl}/support/users/${userId}/summary`
+    );
   }
 }
