@@ -6,6 +6,7 @@ import { CartData } from '../models/cart.model';
 import { environment } from '../../../../environments/environment';
 
 export interface CartResponse {
+  message: string;
   data: CartData;
 }
 

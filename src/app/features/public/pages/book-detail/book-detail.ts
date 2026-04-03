@@ -8,6 +8,7 @@ import { Cart } from '../../../cart/services/cart';
 import { Book } from '../../models/book.model';
 import { Review } from '../../../reviews/models/review.model';
 import { Auth } from '../../../../core/services/auth';
+import { GuestCart } from '../../../../core/services/guest-cart';
 import { Reviews } from '../../../reviews/services/reviews';
 
 @Component({
@@ -23,6 +24,7 @@ export class BookDetail implements OnInit {
   private readonly booksService = inject(Books);
   private readonly cartService = inject(Cart);
   private readonly authService = inject(Auth);
+  private readonly guestCartService = inject(GuestCart);
   private readonly reviewsService = inject(Reviews);
 
   loading = false;
@@ -103,19 +105,27 @@ export class BookDetail implements OnInit {
   addToCart(): void {
     if (!this.book) return;
 
+    this.errorMessage = '';
+    this.successMessage = '';
+
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/auth/login']);
+      const added = this.guestCartService.addItem(this.book.book_id);
+
+      if (!added) {
+        this.errorMessage = 'Este libro ya está en tu carrito.';
+        return;
+      }
+
+      this.successMessage = 'Libro añadido al carrito.';
       return;
     }
 
     this.cartLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
 
     this.cartService.addItem(this.book.book_id).subscribe({
-      next: () => {
+      next: (response) => {
         this.cartLoading = false;
-        this.successMessage = 'Libro añadido al carrito correctamente.';
+        this.successMessage = response.message;
       },
       error: (error) => {
         this.cartLoading = false;
@@ -126,10 +136,8 @@ export class BookDetail implements OnInit {
           this.errorMessage = 'Ya has comprado este libro.';
         } else if (backendMessage === 'This book is already in your cart.') {
           this.errorMessage = 'Este libro ya está en tu carrito.';
-        } else if (backendMessage) {
-          this.errorMessage = backendMessage;
         } else {
-          this.errorMessage = 'No se pudo añadir el libro al carrito.';
+          this.errorMessage = backendMessage || 'No se pudo añadir el libro al carrito.';
         }
       }
     });

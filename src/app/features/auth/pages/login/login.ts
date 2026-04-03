@@ -4,9 +4,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { Auth } from '../../../../core/services/auth';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+import { GuestCart } from '../../../../core/services/guest-cart';
+import { Cart } from '../../../cart/services/cart';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -15,6 +21,8 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(Auth);
   private readonly router = inject(Router);
+  private readonly guestCartService = inject(GuestCart);
+  private readonly cartService = inject(Cart);
 
   loading = false;
   errorMessage = '';
@@ -33,34 +41,19 @@ export class Login {
     this.loading = true;
     this.errorMessage = '';
 
-    const payload = {
-      email: this.loginForm.value.email as string,
-      password: this.loginForm.value.password as string
-    };
+    const payload = this.loginForm.getRawValue();
 
-    this.authService.login(payload).subscribe({
-      next: (response) => {
+    this.authService.login({
+      email: payload.email as string,
+      password: payload.password as string
+    }).subscribe({
+      next: () => {
         this.loading = false;
-
-        const roles = response.user.roles?.map(role => role.name) ?? [];
-
-        if (roles.includes('admin')) {
-          this.router.navigate(['/admin']);
-          return;
-        }
-
-        this.router.navigate(['/']);
+        this.mergeGuestCart();
       },
       error: (error) => {
         this.loading = false;
-
-        if (error?.error?.message) {
-          this.errorMessage = error.error.message;
-        } else if (error?.error?.errors?.email?.length) {
-          this.errorMessage = error.error.errors.email[0];
-        } else {
-          this.errorMessage = 'An unexpected error occurred while logging in.';
-        }
+        this.errorMessage = error?.error?.message || 'No se pudo iniciar sesión.';
       }
     });
   }
@@ -71,5 +64,53 @@ export class Login {
 
   get password() {
     return this.loginForm.get('password');
+  }
+
+  private mergeGuestCart(): void {
+    const guestItems = this.guestCartService.getItems();
+
+    if (guestItems.length === 0) {
+      this.redirectAfterLogin();
+      return;
+    }
+
+    const requests = guestItems.map(bookId =>
+      this.cartService.addItem(bookId).pipe(
+        catchError(() => of(null))
+      )
+    );
+
+    forkJoin(requests).subscribe({
+      next: () => {
+        this.guestCartService.clear();
+        this.redirectAfterLogin();
+      },
+      error: () => {
+        this.guestCartService.clear();
+        this.redirectAfterLogin();
+      }
+    });
+  }
+
+  private redirectAfterLogin(): void {
+    const postLoginRedirect = localStorage.getItem('post_login_redirect');
+
+    if (postLoginRedirect) {
+      localStorage.removeItem('post_login_redirect');
+      this.router.navigate([postLoginRedirect]);
+      return;
+    }
+
+    if (this.authService.hasRole('admin') || this.authService.hasRole('employee')) {
+      this.router.navigate(['/admin']);
+      return;
+    }
+
+    if (this.authService.hasRole('support')) {
+      this.router.navigate(['/admin/incidences']);
+      return;
+    }
+
+    this.router.navigate(['/']);
   }
 }

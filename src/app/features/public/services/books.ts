@@ -35,6 +35,12 @@ export class Books {
     return this.http.get<BookDetailResponse>(`${this.apiUrl}/${bookId}`);
   }
 
+  //Para el carrito público
+  getBooksByIds(ids: number[]) {
+    const query = ids.join(',');
+    return this.http.get<BooksResponse>(`${this.apiUrl}/by-ids?ids=${query}`);
+  }
+
   getFeaturedBooks() {
     return this.http.get<BooksResponse>(`${this.apiUrl}?featured=true`);
   }
