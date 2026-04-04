@@ -1,24 +1,43 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../services/auth';
 
 export const roleGuard: CanActivateFn = (route, state) => {
   const authService = inject(Auth);
   const router = inject(Router);
 
-  const expectedRoles = route.data['roles'] as string[] | undefined;
+  const allowedRoles = route.data?.['roles'] as string[] | undefined;
+
+  if (!allowedRoles || allowedRoles.length === 0) {
+    return true;
+  }
 
   if (!authService.isLoggedIn()) {
-    return router.createUrlTree(['/auth/login']);
+    router.navigate(['/auth/login']);
+    return false;
   }
 
-  if (!expectedRoles || expectedRoles.length === 0) {
+  const hasAccess = allowedRoles.some(role => authService.hasRole(role));
+
+  if (hasAccess) {
     return true;
   }
 
-  if (authService.hasAnyRole(expectedRoles)) {
-    return true;
+  if (authService.hasRole('support')) {
+    router.navigate(['/admin/incidences']);
+    return false;
   }
 
-  return router.createUrlTree(['/']);
+  if (authService.hasAnyRole(['admin', 'employee'])) {
+    router.navigate(['/admin']);
+    return false;
+  }
+
+  if (authService.hasRole('customer')) {
+    router.navigate(['/']);
+    return false;
+  }
+
+  router.navigate(['/']);
+  return false;
 };

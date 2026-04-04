@@ -33,15 +33,15 @@ import { Profile } from './features/auth/pages/profile/profile';
 export const routes: Routes = [
   {
     path: '',
-    component: Landing
+    component: Landing,
   },
   {
     path: 'catalog',
-    component: Catalog
+    component: Catalog,
   },
   {
     path: 'books/:id',
-    component: BookDetail
+    component: BookDetail,
   },
   {
     path: 'auth/login',
@@ -55,7 +55,7 @@ export const routes: Routes = [
   },
   {
     path: 'faq',
-    component: Faq
+    component: Faq,
   },
   {
     path: 'auth/forgot-password',
@@ -69,42 +69,49 @@ export const routes: Routes = [
   },
   {
     path: 'cart',
-    component: CartComponent
+    component: CartComponent,
   },
   {
     path: 'checkout',
     component: Checkout,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'library',
     component: LibraryComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'orders/history',
     component: OrdersHistory,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'incidences',
     component: IncidencesList,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'incidences/:id',
     component: IncidenceDetail,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'profile',
     component: Profile,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'reader/:bookId',
     component: ReaderComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['customer', 'employee', 'admin']}
   },
   {
     path: 'admin',

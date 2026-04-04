@@ -1,42 +1,90 @@
-<header class="app-navbar">
-  <div class="page-container app-navbar__inner">
-    <div class="app-navbar__left">
-      <a routerLink="/" class="app-navbar__brand">
-        <span class="brand-box">J</span> <!--Aquí iría el logo-->
-        <span class="brand-text">Júpiter</span>
-      </a>
+<nav class="app-navbar">
+  <div class="page-container navbar-container">
+    <a class="navbar-brand" routerLink="/" (click)="onNavigate()">
+      <span class="brand-mark">J</span>
+      <span class="brand-text">Júpiter</span>
+    </a>
 
-      <nav class="app-navbar__nav">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
-        <a routerLink="/catalog" routerLinkActive="active">Catálogo</a>
-        <a routerLink="/faq" routerLinkActive="active">FAQ</a>
-        <a routerLink="/cart" routerLinkActive="active">Carrito</a>
+    <button class="mobile-toggle" type="button" (click)="toggleMobileMenu()">
+      ☰
+    </button>
 
-        @if (isLoggedIn) {
-          <a routerLink="/library" routerLinkActive="active">Mi Biblioteca</a>
-          <a routerLink="/orders/history" routerLinkActive="active">Mis Pedidos</a>
-          <a routerLink="/profile" routerLinkActive="active">Mi Perfil</a>
-        }
+    <div class="navbar-links" [class.open]="mobileMenuOpen()">
+      @if (!isSupport) {
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="onNavigate()">
+          Inicio
+        </a>
 
-        @if (canAccessAdminPanel) {
-          <a routerLink="/admin" routerLinkActive="active">Panel</a>
-        }
+        <a routerLink="/catalog" routerLinkActive="active" (click)="onNavigate()">
+          Catálogo
+        </a>
 
-        @if (isSupport) {
-          <a routerLink="/support/incidences" routerLinkActive="active">Incidencias</a>
-        }
+        <a routerLink="/faq" routerLinkActive="active" (click)="onNavigate()">
+          FAQ
+        </a>
+      }
 
-      </nav>
-    </div>
+      @if (!isLoggedIn || hasClientFeatures) {
+        <a routerLink="/cart" routerLinkActive="active" class="cart-link" (click)="onNavigate()">
+          Carrito
+          @if (!isLoggedIn && cartCount > 0) {
+            <span class="cart-badge">{{ cartCount }}</span>
+          }
+        </a>
+      }
 
-    <div class="app-navbar__right">
+      @if (canAccessAdminPanel) {
+        <a routerLink="/admin" routerLinkActive="active" (click)="onNavigate()">
+          Panel
+        </a>
+      }
+
+      @if (!canAccessAdminPanel && canAccessSupportPanel) {
+        <a routerLink="/admin/incidences" routerLinkActive="active" (click)="onNavigate()">
+          Panel Soporte
+        </a>
+      }
+
       @if (!isLoggedIn) {
-        <a routerLink="/auth/login" class="nav-btn nav-btn--ghost">Iniciar sesión</a>
-        <a routerLink="/auth/register" class="nav-btn nav-btn--primary">Registrarse</a>
-      } @else {
-        <span class="user-chip">Hola, {{ user?.name }}</span>
-        <button class="nav-btn nav-btn--danger" (click)="logout()">Cerrar sesión</button>
+        <div class="navbar-auth">
+          <a routerLink="/auth/login" routerLinkActive="active" (click)="onNavigate()">
+            Iniciar sesión
+          </a>
+          <a class="register-btn" routerLink="/auth/register" (click)="onNavigate()">
+            Registrarse
+          </a>
+        </div>
+      }
+
+      @if (isLoggedIn && (isCustomer || isAdmin || isEmployee)) {
+        <div class="user-menu">
+          <button type="button" class="user-menu__toggle" (click)="toggleDropdown()">
+            <span class="user-avatar">
+              {{ currentUser?.name?.charAt(0)?.toUpperCase() || 'U' }}
+            </span>
+            <span class="user-name">{{ currentUser?.name }}</span>
+            <span class="user-caret">▾</span>
+          </button>
+
+          @if (dropdownOpen()) {
+            <div class="user-menu__dropdown">
+              <a routerLink="/profile" (click)="onNavigate()">Mi Perfil</a>
+              <a routerLink="/library" (click)="onNavigate()">Mi Biblioteca</a>
+              <a routerLink="/orders" (click)="onNavigate()">Mis Pedidos</a>
+              <a routerLink="/incidences" (click)="onNavigate()">Soporte</a>
+              <button type="button" (click)="logout()">Cerrar sesión</button>
+            </div>
+          }
+        </div>
+      }
+
+      @if (isLoggedIn && isSupport && !hasClientFeatures && !isAdmin) {
+        <div class="navbar-auth">
+          <button type="button" class="logout-inline-btn" (click)="logout()">
+            Cerrar sesión
+          </button>
+        </div>
       }
     </div>
   </div>
-</header>
+</nav>
