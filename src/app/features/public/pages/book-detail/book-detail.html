@@ -72,9 +72,9 @@
             }
 
             <div class="meta-item">
-              <strong>Valoración media:</strong>
+              <strong>Puntuación:</strong>
               @if (avgPoints !== null) {
-                <span>{{ avgPoints }}/5</span>
+                <span class="review-stars">{{ getStars(avgPoints) }}</span>
               } @else {
                 <span>Sin valoraciones</span>
               }
@@ -169,7 +169,7 @@
                   <strong>{{ review.user?.name || 'Usuario' }}</strong>
                   <small>{{ review.date }}</small>
                 </div>
-                <span class="review-score">{{ review.points }}/5</span>
+                <span class="review-stars">{{ getStars(review.points) }}</span>
               </div>
               <p>{{ review.comment }}</p>
             </article>

@@ -245,4 +245,10 @@ export class BookDetail implements OnInit {
       }
     });
   }
+
+  getStars(points: number): string {
+    const full = '★'.repeat(points);
+    const empty = '☆'.repeat(5 - points);
+    return full + empty;
+  }
 }

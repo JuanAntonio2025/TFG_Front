@@ -36,7 +36,7 @@
         @for (review of reviews; track review.review_id) {
           <article class="review-row">
             <div class="review-row__main">
-              <div class="review-score">{{ review.points }}/5</div>
+              <span class="review-stars">{{ getStars(review.points) }}</span>
 
               <div class="review-row__info">
                 <h3>{{ review.book?.title || 'Libro' }}</h3>
