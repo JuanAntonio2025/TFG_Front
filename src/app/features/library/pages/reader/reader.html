@@ -36,6 +36,20 @@
         </div>
 
         <div class="toolbar-group">
+          <label for="fontFamily" class="toolbar-select-label">Fuente</label>
+          <select
+            id="fontFamily"
+            class="app-select reader-select"
+            [ngModel]="fontFamily()"
+            (ngModelChange)="setFontFamily($event)"
+          >
+            <option value="serif">Serif</option>
+            <option value="sans">Sans</option>
+            <option value="reading">Reading</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
           <button class="app-btn app-btn--secondary" (click)="toggleDarkMode()">
             @if (!darkMode()) {
               Modo oscuro
@@ -48,7 +62,16 @@
 
       <section class="reader-content section-card">
         @if (currentPage()) {
-          <pre [style.fontSize.px]="fontSize()">{{ currentPage()!.content }}</pre>
+          <pre
+            [style.fontSize.px]="fontSize()"
+            [ngClass]="{
+              'reader-font-serif': fontFamily() === 'serif',
+              'reader-font-sans': fontFamily() === 'sans',
+              'reader-font-reading': fontFamily() === 'reading'
+            }"
+                    >
+            {{ currentPage()!.content }}
+          </pre>
         }
       </section>
 

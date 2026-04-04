@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { Reader } from '../../services/reader';
 import { ReaderContent } from '../../models/reader-content.model';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-reader',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './reader.html',
   styleUrl: './reader.scss',
 })
@@ -23,6 +24,7 @@ export class ReaderComponent implements OnInit {
   currentPageIndex = signal(0);
 
   fontSize = signal(18);
+  fontFamily = signal<'serif' | 'sans' | 'reading'>('serif');
   darkMode = signal(false);
 
   currentPage = computed(() => {
@@ -126,11 +128,17 @@ export class ReaderComponent implements OnInit {
   private saveReaderPreferences(): void {
     localStorage.setItem('reader_font_size', String(this.fontSize()));
     localStorage.setItem('reader_dark_mode', String(this.darkMode()));
+    localStorage.setItem('reader_font_family', this.fontFamily());
   }
 
   private restoreReaderPreferences(): void {
     const savedFontSize = localStorage.getItem('reader_font_size');
     const savedDarkMode = localStorage.getItem('reader_dark_mode');
+    const savedFontFamily = localStorage.getItem('reader_font_family') as
+      | 'serif'
+      | 'sans'
+      | 'reading'
+      | null;
 
     if (savedFontSize) {
       this.fontSize.set(Number(savedFontSize));
@@ -139,5 +147,14 @@ export class ReaderComponent implements OnInit {
     if (savedDarkMode) {
       this.darkMode.set(savedDarkMode === 'true');
     }
+
+    if (savedFontFamily) {
+      this.fontFamily.set(savedFontFamily);
+    }
+  }
+
+  setFontFamily(font: 'serif' | 'sans' | 'reading'): void {
+    this.fontFamily.set(font);
+    this.saveReaderPreferences();
   }
 }
