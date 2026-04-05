@@ -29,12 +29,12 @@ export class AdminBooks {
     return this.http.get<AdminBookResponse>(`${this.apiUrl}/${bookId}`);
   }
 
-  createBook(payload: unknown): Observable<AdminBookResponse> {
-    return this.http.post<AdminBookResponse>(this.apiUrl, payload);
+  createBook(payload: FormData) {
+    return this.http.post<{ message: string; data: Book }>(this.apiUrl, payload);
   }
 
-  updateBook(bookId: number, payload: unknown): Observable<AdminBookResponse> {
-    return this.http.put<AdminBookResponse>(`${this.apiUrl}/${bookId}`, payload);
+  updateBook(bookId: number, payload: FormData) {
+    return this.http.post<{ message: string; data: Book }>(`${this.apiUrl}/${bookId}`, payload);
   }
 
   deleteBook(bookId: number): Observable<{ message: string }> {

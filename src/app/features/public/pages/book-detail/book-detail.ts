@@ -10,6 +10,7 @@ import { Review } from '../../../reviews/models/review.model';
 import { Auth } from '../../../../core/services/auth';
 import { GuestCart } from '../../../../core/services/guest-cart';
 import { Reviews } from '../../../reviews/services/reviews';
+import { ImageUrl } from '../../../../core/services/image-url';
 
 @Component({
   selector: 'app-book-detail',
@@ -26,6 +27,7 @@ export class BookDetail implements OnInit {
   private readonly authService = inject(Auth);
   private readonly guestCartService = inject(GuestCart);
   private readonly reviewsService = inject(Reviews);
+  protected readonly imageUrlService = inject(ImageUrl);
 
   loading = false;
   cartLoading = false;

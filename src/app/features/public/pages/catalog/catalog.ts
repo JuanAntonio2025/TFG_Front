@@ -8,6 +8,7 @@ import { BooksResponse } from '../../models/books-response.model';
 import { Categories } from '../../services/categories';
 import { Book } from '../../models/book.model';
 import { Category } from '../../models/category.model';
+import { ImageUrl } from '../../../../core/services/image-url';
 
 @Component({
   selector: 'app-catalog',
@@ -18,6 +19,7 @@ import { Category } from '../../models/category.model';
 export class Catalog implements OnInit {
   private readonly booksService = inject(Books);
   private readonly categoriesService = inject(Categories);
+  protected readonly imageUrlService = inject(ImageUrl);
 
   books: Book[] = [];
   categories: Category[] = [];

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { Library } from '../../services/library';
 import { LibraryBook } from '../../models/library-book.model';
+import { ImageUrl } from '../../../../core/services/image-url';
 
 @Component({
   selector: 'app-library',
@@ -15,6 +16,7 @@ import { LibraryBook } from '../../models/library-book.model';
 })
 export class LibraryComponent implements OnInit {
   private readonly libraryService = inject(Library);
+  protected readonly imageUrlService = inject(ImageUrl);
 
   loading = false;
   errorMessage = '';

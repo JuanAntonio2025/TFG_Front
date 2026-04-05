@@ -48,10 +48,7 @@
             @for (item of items; track item.book_id) {
               <article class="cart-product-row">
                 <div class="product-main">
-                  <img
-                    [src]="item.front_page || 'https://via.placeholder.com/90x130?text=Libro'"
-                    [alt]="item.title"
-                  />
+                  <img [src]="imageUrlService.resolve(item.front_page)" [alt]="item.title" />
 
                   <div class="product-info">
                     <h3>{{ item.title }}</h3>
