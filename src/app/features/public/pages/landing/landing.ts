@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { Books } from '../../services/books';
 import { Book } from '../../models/book.model';
+import { ImageUrl } from '../../../../core/services/image-url';
 
 @Component({
   selector: 'app-landing',
@@ -14,6 +15,7 @@ import { Book } from '../../models/book.model';
 })
 export class Landing implements OnInit {
   private readonly booksService = inject(Books);
+  protected readonly imageUrlService = inject(ImageUrl);
 
   featuredBooks: Book[] = [];
   featuredLoading = false;

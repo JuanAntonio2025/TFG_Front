@@ -50,8 +50,20 @@
 
         <div class="form-group">
           <label>Portada</label>
-          <input class="app-input" type="text" [(ngModel)]="form.front_page" placeholder="Ruta o URL de portada" />
+          <input
+            #coverInput
+            class="app-input"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            (change)="onCoverSelected($event)"
+          />
         </div>
+
+        @if (coverPreview) {
+          <div class="cover-preview">
+            <img [src]="coverPreview" alt="Vista previa portada" />
+          </div>
+        }
 
         <div class="form-group">
           <label>Formato</label>
@@ -143,10 +155,7 @@
           <article class="book-row">
             <div class="book-row__main">
               <div class="book-row__cover">
-                <img
-                  [src]="book.front_page || 'https://via.placeholder.com/90x130?text=Libro'"
-                  [alt]="book.title"
-                />
+                <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
               </div>
 
               <div class="book-row__info">

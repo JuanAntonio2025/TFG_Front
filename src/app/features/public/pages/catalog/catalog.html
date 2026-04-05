@@ -99,10 +99,7 @@
               <article class="catalog-book-card">
                 <a class="book-cover-link" [routerLink]="['/books', book.book_id]">
                   <div class="book-cover">
-                    <img
-                      [src]="book.front_page || 'https://via.placeholder.com/180x260?text=Libro'"
-                      [alt]="book.title"
-                    />
+                    <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
                   </div>
                 </a>
 

@@ -28,10 +28,7 @@
     @if (book && !loading) {
       <section class="book-hero section-card">
         <div class="book-hero__cover">
-          <img
-            [src]="book.front_page || 'https://via.placeholder.com/280x420?text=Libro'"
-            [alt]="book.title"
-          />
+          <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
         </div>
 
         <div class="book-hero__content">

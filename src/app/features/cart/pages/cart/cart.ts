@@ -7,6 +7,7 @@ import { CartData, CartItem } from '../../models/cart.model';
 import { Auth } from '../../../../core/services/auth';
 import { GuestCart } from '../../../../core/services/guest-cart';
 import { Books } from '../../../public/services/books';
+import { ImageUrl } from '../../../../core/services/image-url';
 
 @Component({
   selector: 'app-cart',
@@ -20,6 +21,7 @@ export class CartComponent implements OnInit {
   private readonly guestCartService = inject(GuestCart);
   private readonly authService = inject(Auth);
   private readonly booksService = inject(Books);
+  protected readonly imageUrlService = inject(ImageUrl);
 
   loading = false;
   errorMessage = '';
