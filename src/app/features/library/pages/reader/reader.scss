@@ -133,6 +133,27 @@
   font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
 }
 
+.pdf-viewer {
+  width: 100%;
+  height: 78vh;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.epub-viewer-wrapper {
+  width: 100%;
+  min-height: 78vh;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.epub-viewer {
+  width: 100%;
+  height: 78vh;
+}
+
 @media (max-width: 768px) {
   .reader-page {
     padding: 1.25rem 0 2rem;

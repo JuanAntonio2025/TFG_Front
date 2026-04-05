@@ -61,7 +61,17 @@
       </section>
 
       <section class="reader-content section-card">
-        @if (currentPage()) {
+        @if (useDocumentViewer && fileUrl && bookContent()?.format === 'PDF') {
+          <iframe
+            class="pdf-viewer"
+            [src]="fileUrl"
+            title="Visor PDF"
+          ></iframe>
+        } @else if (useDocumentViewer && bookContent()?.format === 'EPUB') {
+          <div class="epub-viewer-wrapper">
+            <div #epubViewer class="epub-viewer"></div>
+          </div>
+        } @else if (currentPage()) {
           <pre
             [style.fontSize.px]="fontSize()"
             [ngClass]="{
@@ -69,21 +79,25 @@
               'reader-font-sans': fontFamily() === 'sans',
               'reader-font-reading': fontFamily() === 'reading'
             }"
-                    >
+                >
             {{ currentPage()!.content }}
           </pre>
         }
       </section>
 
       <section class="reader-controls">
-        <button class="app-btn app-btn--secondary" (click)="previousPage()" [disabled]="currentPageIndex() === 0">
+        <button
+          class="app-btn app-btn--secondary"
+          (click)="previousPage()"
+          [disabled]="!useDocumentViewer && currentPageIndex() === 0"
+        >
           Página anterior
         </button>
 
         <button
           class="app-btn app-btn--primary"
           (click)="nextPage()"
-          [disabled]="!bookContent() || currentPageIndex() >= bookContent()!.pages.length - 1"
+          [disabled]="!useDocumentViewer && (!bookContent() || currentPageIndex() >= bookContent()!.pages.length - 1)"
         >
           Página siguiente
         </button>

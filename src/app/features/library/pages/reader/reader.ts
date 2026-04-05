@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, computed, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import ePub, { Book as EpubBook, Rendition } from 'epubjs';
 
 import { Reader } from '../../services/reader';
 import { ReaderContent } from '../../models/reader-content.model';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-reader',
@@ -13,12 +15,24 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './reader.html',
   styleUrl: './reader.scss',
 })
-export class ReaderComponent implements OnInit {
+export class ReaderComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly readerService = inject(Reader);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   loading = false;
   errorMessage = '';
+
+  @ViewChild('epubViewer') epubViewer?: ElementRef<HTMLDivElement>;
+
+  fileUrl: SafeResourceUrl | null = null;
+  rawObjectUrl: string | null = null;
+  useDocumentViewer = false;
+
+  epubBook: EpubBook | null = null;
+  epubRendition: Rendition | null = null;
+  epubReady = false;
 
   bookContent = signal<ReaderContent | null>(null);
   currentPageIndex = signal(0);
@@ -45,6 +59,16 @@ export class ReaderComponent implements OnInit {
     this.loadContent(bookId);
   }
 
+  ngOnDestroy(): void {
+    if (this.epubRendition) {
+      this.epubRendition.destroy();
+    }
+
+    if (this.rawObjectUrl) {
+      URL.revokeObjectURL(this.rawObjectUrl);
+    }
+  }
+
   loadContent(bookId: number): void {
     this.loading = true;
     this.errorMessage = '';
@@ -53,6 +77,7 @@ export class ReaderComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         this.bookContent.set(response.data);
+        this.loadDocumentFile(response.data.book_id, response.data.format);
 
         const savedPage = this.getSavedProgress(response.data.book_id);
         const maxIndex = response.data.pages.length - 1;
@@ -70,8 +95,58 @@ export class ReaderComponent implements OnInit {
     });
   }
 
+  loadDocumentFile(bookId: number, format: string): void {
+    this.readerService.getBookFileBlob(bookId).subscribe({
+      next: async (blob) => {
+        if (this.rawObjectUrl) {
+          URL.revokeObjectURL(this.rawObjectUrl);
+          this.rawObjectUrl = null;
+        }
+
+        if (format === 'PDF') {
+          this.rawObjectUrl = URL.createObjectURL(blob);
+          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawObjectUrl);
+          this.useDocumentViewer = true;
+          this.epubReady = false;
+          return;
+        }
+
+        if (format === 'EPUB') {
+          this.useDocumentViewer = true;
+          this.fileUrl = null;
+          this.epubReady = false;
+
+          // Forzamos que Angular pinte el contenedor #epubViewer
+          this.cdr.detectChanges();
+
+          const arrayBuffer = await blob.arrayBuffer();
+
+          setTimeout(() => {
+            this.renderEpub(arrayBuffer);
+          }, 0);
+
+          return;
+        }
+
+        this.useDocumentViewer = false;
+        this.fileUrl = null;
+      },
+      error: () => {
+        this.useDocumentViewer = false;
+        this.fileUrl = null;
+        this.epubReady = false;
+      }
+    });
+  }
+
   nextPage(): void {
     const content = this.bookContent();
+
+    if (this.useDocumentViewer && content?.format === 'EPUB' && this.epubRendition) {
+      this.epubRendition.next();
+      return;
+    }
+
     if (!content) return;
 
     if (this.currentPageIndex() < content.pages.length - 1) {
@@ -81,6 +156,13 @@ export class ReaderComponent implements OnInit {
   }
 
   previousPage(): void {
+    const content = this.bookContent();
+
+    if (this.useDocumentViewer && content?.format === 'EPUB' && this.epubRendition) {
+      this.epubRendition.prev();
+      return;
+    }
+
     if (this.currentPageIndex() > 0) {
       this.currentPageIndex.update(value => value - 1);
       this.saveProgress();
@@ -151,6 +233,27 @@ export class ReaderComponent implements OnInit {
     if (savedFontFamily) {
       this.fontFamily.set(savedFontFamily);
     }
+  }
+
+  private renderEpub(epubData: ArrayBuffer): void {
+    if (!this.epubViewer?.nativeElement) {
+      this.errorMessage = 'No se pudo inicializar el visor EPUB.';
+      return;
+    }
+
+    if (this.epubRendition) {
+      this.epubRendition.destroy();
+      this.epubRendition = null;
+    }
+
+    this.epubBook = ePub(epubData);
+    this.epubRendition = this.epubBook.renderTo(this.epubViewer.nativeElement, {
+      width: '100%',
+      height: '78vh'
+    });
+
+    this.epubRendition.display();
+    this.epubReady = true;
   }
 
   setFontFamily(font: 'serif' | 'sans' | 'reading'): void {

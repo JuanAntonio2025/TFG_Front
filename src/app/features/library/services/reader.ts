@@ -15,4 +15,14 @@ export class Reader {
   getBookContent(bookId: number): Observable<ReaderContentResponse> {
     return this.http.get<ReaderContentResponse>(`${this.apiUrl}/${bookId}`);
   }
+
+  getBookFileUrl(bookId: number): string {
+    return `${environment.apiBaseUrl}/reader/${bookId}/file`;
+  }
+
+  getBookFileBlob(bookId: number) {
+    return this.http.get(`${this.apiUrl}/${bookId}/file`, {
+      responseType: 'blob'
+    });
+  }
 }

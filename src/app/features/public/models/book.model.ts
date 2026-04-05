@@ -11,6 +11,7 @@ export interface Book {
   description?: string | null;
   price: number;
   front_page?: string | null;
+  file_path?: string | null;
   format: BookFormat;
   available: BookAvailability;
   featured?: boolean;

@@ -208,6 +208,16 @@
   }
 }
 
+.book-file-preview {
+  margin-top: 0.75rem;
+
+  p {
+    margin: 0;
+    color: var(--color-text-soft);
+    font-weight: 600;
+  }
+}
+
 @media (max-width: 992px) {
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);

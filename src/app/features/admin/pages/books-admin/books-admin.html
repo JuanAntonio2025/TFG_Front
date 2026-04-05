@@ -67,11 +67,27 @@
 
         <div class="form-group">
           <label>Formato</label>
-          <select class="app-select" [(ngModel)]="form.format">
+          <select class="app-select" [(ngModel)]="form.format" (ngModelChange)="onFormatChange()">
             <option value="PDF">PDF</option>
             <option value="EPUB">EPUB</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label>Archivo del libro</label>
+          <input
+            class="app-input"
+            type="file"
+            [accept]="form.format === 'PDF' ? '.pdf,application/pdf' : '.epub,application/epub+zip'"
+            (change)="onBookFileSelected($event)"
+          />
+        </div>
+
+        @if (bookFileName) {
+          <div class="book-file-preview">
+            <p>Archivo seleccionado: {{ bookFileName }}</p>
+          </div>
+        }
 
         <div class="form-group">
           <label>Disponibilidad</label>

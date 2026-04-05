@@ -33,6 +33,9 @@ export class BooksAdmin implements OnInit {
   categories: Category[] = [];
   editingBookId: number | null = null;
 
+  selectedBookFile: File | null = null;
+  bookFileName: string | null = null;
+
   form = {
     title: '',
     author: '',
@@ -118,6 +121,9 @@ export class BooksAdmin implements OnInit {
     this.selectedCoverFile = null;
     this.coverPreview = book.front_page ? this.imageUrlService.resolve(book.front_page) : null;
 
+    this.selectedBookFile = null;
+    this.bookFileName = book.file_path ? book.file_path.split('/').pop() || null : null;
+
     this.errorMessage = '';
     this.successMessage = '';
   }
@@ -134,6 +140,9 @@ export class BooksAdmin implements OnInit {
       featured: false,
       category_ids: []
     };
+
+    this.selectedBookFile = null;
+    this.bookFileName = null;
 
     this.clearCoverSelection();
     this.errorMessage = '';
@@ -164,6 +173,10 @@ export class BooksAdmin implements OnInit {
 
     if (this.selectedCoverFile) {
       formData.append('front_page', this.selectedCoverFile);
+    }
+
+    if (this.selectedBookFile) {
+      formData.append('book_file', this.selectedBookFile);
     }
 
     if (this.editingBookId) {
@@ -221,5 +234,18 @@ export class BooksAdmin implements OnInit {
     if (this.coverInput?.nativeElement) {
       this.coverInput.nativeElement.value = '';
     }
+  }
+
+  onBookFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] || null;
+
+    this.selectedBookFile = file;
+    this.bookFileName = file ? file.name : null;
+  }
+
+  onFormatChange(): void {
+    this.selectedBookFile = null;
+    this.bookFileName = null;
   }
 }
