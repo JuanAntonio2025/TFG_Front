@@ -64,7 +64,7 @@
             <div class="order-items">
               @for (item of order.items; track item.book_id) {
                 <div class="order-item">
-                  <img [src]="imageUrlService.resolve(item.front_page)" [alt]="item.title" />
+                  <img [src]="item.front_page_url || imageUrlService.resolve(item.front_page)" [alt]="item.title" />
 
                   <div class="order-item__info">
                     <h3>{{ item.title }}</h3>

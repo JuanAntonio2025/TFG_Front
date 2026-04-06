@@ -3,6 +3,7 @@ export interface OrderItem {
   title: string;
   author: string;
   front_page?: string | null;
+  front_page_url?: string | null;
   format: string;
   unit_price: number;
 }
