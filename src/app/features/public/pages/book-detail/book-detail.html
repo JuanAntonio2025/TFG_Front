@@ -28,7 +28,7 @@
     @if (book && !loading) {
       <section class="book-hero section-card">
         <div class="book-hero__cover">
-          <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
+          <img [src]="book.front_page_url || imageUrlService.resolve(book.front_page)" [alt]="book.title" />
         </div>
 
         <div class="book-hero__content">

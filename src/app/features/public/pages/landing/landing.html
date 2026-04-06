@@ -92,7 +92,7 @@
           @for (book of featuredBooks; track book.book_id) {
             <article class="showcase-book section-card">
               <a [routerLink]="['/books', book.book_id]" class="showcase-book__link">
-                <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
+                <img [src]="book.front_page_url || imageUrlService.resolve(book.front_page)" [alt]="book.title" />
                 <h3>{{ book.title }}</h3>
                 <p>{{ book.author }}</p>
               </a>

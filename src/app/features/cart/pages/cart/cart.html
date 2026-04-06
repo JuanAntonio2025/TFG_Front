@@ -48,7 +48,7 @@
             @for (item of items; track item.book_id) {
               <article class="cart-product-row">
                 <div class="product-main">
-                  <img [src]="imageUrlService.resolve(item.front_page)" [alt]="item.title" />
+                  <img [src]="item.front_page_url || imageUrlService.resolve(item.front_page)" [alt]="item.title" />
 
                   <div class="product-info">
                     <h3>{{ item.title }}</h3>

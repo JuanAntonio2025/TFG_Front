@@ -80,7 +80,7 @@
               @for (book of filteredBooks; track book.book_id) {
                 <article class="library-book-card">
                   <div class="book-cover">
-                    <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
+                    <img [src]="book.front_page_url || imageUrlService.resolve(book.front_page)" [alt]="book.title" />
                   </div>
 
                   <div class="book-body">

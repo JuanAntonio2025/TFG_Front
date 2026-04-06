@@ -3,6 +3,7 @@ export interface CartItem {
   title: string;
   author: string;
   front_page?: string | null;
+  front_page_url?: string | null;
   format: string;
   price: number;
   line_total: number;

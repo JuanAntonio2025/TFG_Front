@@ -99,7 +99,7 @@
               <article class="catalog-book-card">
                 <a class="book-cover-link" [routerLink]="['/books', book.book_id]">
                   <div class="book-cover">
-                    <img [src]="imageUrlService.resolve(book.front_page)" [alt]="book.title" />
+                    <img [src]="book.front_page_url || imageUrlService.resolve(book.front_page)" [alt]="book.title" />
                   </div>
                 </a>
 
