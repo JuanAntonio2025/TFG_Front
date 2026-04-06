@@ -161,10 +161,7 @@
                   <div class="summary-books">
                     @for (book of userSummary.books; track book.book_id) {
                       <div class="summary-book-row">
-                        <img
-                          [src]="book.front_page || 'https://via.placeholder.com/60x90?text=Libro'"
-                          [alt]="book.title"
-                        />
+                        <img [src]="book.front_page_url" [alt]="book.title" />
 
                         <div>
                           <strong>{{ book.title }}</strong>

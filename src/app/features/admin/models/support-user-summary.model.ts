@@ -19,6 +19,7 @@ export interface SupportSummaryBook {
   author: string;
   format: string;
   front_page?: string | null;
+  front_page_url?: string | null;
   unit_price: number;
   purchased_at: string;
 }
