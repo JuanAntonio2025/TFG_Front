@@ -11,7 +11,9 @@
 
         <div class="hero__actions">
           <a routerLink="/catalog" class="app-btn app-btn--primary">Explorar Catálogo</a>
-          <a routerLink="/auth/register" class="app-btn app-btn--secondary">Crear Cuenta</a>
+          @if (!isLoggedIn) {
+            <a routerLink="/auth/register" class="app-btn app-btn--secondary">Crear Cuenta</a>
+          }
         </div>
       </div>
 

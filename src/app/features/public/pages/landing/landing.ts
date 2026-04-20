@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { Books } from '../../services/books';
 import { Book } from '../../models/book.model';
 import { ImageUrl } from '../../../../core/services/image-url';
+import { Auth } from '../../../../core/services/auth';
 
 @Component({
   selector: 'app-landing',
@@ -16,12 +17,17 @@ import { ImageUrl } from '../../../../core/services/image-url';
 export class Landing implements OnInit {
   private readonly booksService = inject(Books);
   protected readonly imageUrlService = inject(ImageUrl);
+  private readonly authService = inject(Auth);
 
   featuredBooks: Book[] = [];
   featuredLoading = false;
 
   ngOnInit(): void {
     this.loadFeaturedBooks();
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   loadFeaturedBooks(): void {
