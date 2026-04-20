@@ -109,14 +109,16 @@
     </div>
   </section>
 
-  <section class="cta-banner">
-    <div class="page-container cta-banner__inner">
-      <div>
-        <h2>Empieza hoy tu biblioteca digital</h2>
-        <p>Regístrate y accede a una experiencia moderna de lectura y gestión de libros.</p>
-      </div>
+  @if (!isLoggedIn) {
+    <section class="cta-banner">
+      <div class="page-container cta-banner__inner">
+        <div>
+          <h2>Empieza hoy tu biblioteca digital</h2>
+          <p>Regístrate y accede a una experiencia moderna de lectura y gestión de libros.</p>
+        </div>
 
-      <a routerLink="/auth/register" class="app-btn app-btn--primary">Registrarse ahora</a>
-    </div>
-  </section>
+        <a routerLink="/auth/register" class="app-btn app-btn--primary">Registrarse ahora</a>
+      </div>
+    </section>
+  }
 </main>
