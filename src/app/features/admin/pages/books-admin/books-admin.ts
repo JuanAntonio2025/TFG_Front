@@ -27,7 +27,7 @@ export class BooksAdmin implements OnInit {
   successMessage = '';
 
   selectedCoverFile: File | null = null;
-  coverPreview: Book['front_page'] | null = null;
+  coverPreview: Book['front_page_url'] | null = null;
 
   books: Book[] = [];
   categories: Category[] = [];
