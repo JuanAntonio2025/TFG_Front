@@ -1,5 +1,5 @@
 .reader-page {
-  min-height: calc(100vh - 140px);
+  min-height: 100vh;
   background: var(--color-bg);
   padding: 2rem 0 3rem;
   transition: background 0.2s ease, color 0.2s ease;
@@ -31,6 +31,31 @@
   .reader-content pre {
     color: #f3f4f6;
   }
+}
+
+.reader-layout {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) 180px;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.reader-side-control {
+  display: flex;
+  align-items: center;
+}
+
+.reader-side-control--left {
+  justify-content: flex-start;
+}
+
+.reader-side-control--right {
+  justify-content: flex-end;
+}
+
+.reader-side-control .app-btn {
+  width: 100%;
+  max-width: 170px;
 }
 
 .breadcrumb {
@@ -157,6 +182,19 @@
 @media (max-width: 768px) {
   .reader-page {
     padding: 1.25rem 0 2rem;
+  }
+
+  .reader-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-side-control {
+    justify-content: space-between;
+  }
+
+  .reader-side-control .app-btn {
+    max-width: none;
+    width: auto;
   }
 
   .reader-header,

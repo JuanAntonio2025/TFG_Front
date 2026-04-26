@@ -23,32 +23,14 @@
           <p class="page-subtitle">{{ bookContent()!.author }} · {{ bookContent()!.format }}</p>
         </div>
 
-        <div class="reader-page-indicator">
-          Página {{ currentPageIndex() + 1 }}
-        </div>
+        @if (showPageIndicator()) {
+          <div class="reader-page-indicator">
+            {{ displayedPageText() }}
+          </div>
+        }
       </section>
 
       <section class="reader-toolbar section-card">
-        <!--<div class="toolbar-group">
-          <button class="app-btn app-btn--secondary" (click)="decreaseFontSize()">A-</button>
-          <span class="toolbar-label">Tamaño: {{ fontSize() }}px</span>
-          <button class="app-btn app-btn--secondary" (click)="increaseFontSize()">A+</button>
-        </div>
-
-        <div class="toolbar-group">
-          <label for="fontFamily" class="toolbar-select-label">Fuente</label>
-          <select
-            id="fontFamily"
-            class="app-select reader-select"
-            [ngModel]="fontFamily()"
-            (ngModelChange)="setFontFamily($event)"
-          >
-            <option value="serif">Serif</option>
-            <option value="sans">Sans</option>
-            <option value="reading">Reading</option>
-          </select>
-        </div>-->
-
         <div class="toolbar-group">
           <button class="app-btn app-btn--secondary" (click)="toggleDarkMode()">
             @if (!darkMode()) {
@@ -60,47 +42,55 @@
         </div>
       </section>
 
-      <section class="reader-content section-card">
-        @if (useDocumentViewer && fileUrl && bookContent()?.format === 'PDF') {
-          <iframe
-            class="pdf-viewer"
-            [src]="fileUrl"
-            title="Visor PDF"
-          ></iframe>
-        } @else if (useDocumentViewer && bookContent()?.format === 'EPUB') {
-          <div class="epub-viewer-wrapper">
-            <div #epubViewer class="epub-viewer"></div>
+      <section class="reader-layout">
+        @if (showReaderControls()) {
+          <div class="reader-side-control reader-side-control--left">
+            <button
+              class="app-btn app-btn--secondary"
+              (click)="previousPage()"
+              [disabled]="isEpub() ? epubAtStart() : currentPageIndex() === 0"
+            >
+              Página anterior
+            </button>
           </div>
-        } @else if (currentPage()) {
-          <pre
-            [style.fontSize.px]="fontSize()"
-            [ngClass]="{
-              'reader-font-serif': fontFamily() === 'serif',
-              'reader-font-sans': fontFamily() === 'sans',
-              'reader-font-reading': fontFamily() === 'reading'
-            }"
-                >
-            {{ currentPage()!.content }}
-          </pre>
         }
-      </section>
 
-      <section class="reader-controls">
-        <button
-          class="app-btn app-btn--secondary"
-          (click)="previousPage()"
-          [disabled]="!useDocumentViewer && currentPageIndex() === 0"
-        >
-          Página anterior
-        </button>
+        <section class="reader-content section-card">
+          @if (useDocumentViewer && fileUrl && isPdf()) {
+            <iframe
+              class="pdf-viewer"
+              [src]="fileUrl"
+              title="Visor PDF"
+            ></iframe>
+          } @else if (useDocumentViewer && isEpub()) {
+            <div class="epub-viewer-wrapper">
+              <div #epubViewer class="epub-viewer"></div>
+            </div>
+          } @else if (currentPage()) {
+            <pre
+              [style.fontSize.px]="fontSize()"
+              [ngClass]="{
+                'reader-font-serif': fontFamily() === 'serif',
+                'reader-font-sans': fontFamily() === 'sans',
+                'reader-font-reading': fontFamily() === 'reading'
+              }"
+            >
+            {{ currentPage()!.content }}
+            </pre>
+          }
+        </section>
 
-        <button
-          class="app-btn app-btn--primary"
-          (click)="nextPage()"
-          [disabled]="!useDocumentViewer && (!bookContent() || currentPageIndex() >= bookContent()!.pages.length - 1)"
-        >
-          Página siguiente
-        </button>
+        @if (showReaderControls()) {
+          <div class="reader-side-control reader-side-control--right">
+            <button
+              class="app-btn app-btn--primary"
+              (click)="nextPage()"
+              [disabled]="isEpub() ? epubAtEnd() : (!bookContent() || currentPageIndex() >= bookContent()!.pages.length - 1)"
+            >
+              Página siguiente
+            </button>
+          </div>
+        }
       </section>
     }
   </div>

@@ -37,6 +37,10 @@ export class ReaderComponent implements OnInit, OnDestroy {
   bookContent = signal<ReaderContent | null>(null);
   currentPageIndex = signal(0);
 
+  epubTotalPages = signal<number | null>(null);
+  epubAtStart = signal(true);
+  epubAtEnd = signal(false);
+
   fontSize = signal(18);
   fontFamily = signal<'serif' | 'sans' | 'reading'>('serif');
   darkMode = signal(false);
@@ -45,6 +49,32 @@ export class ReaderComponent implements OnInit, OnDestroy {
     const content = this.bookContent();
     if (!content || content.pages.length === 0) return null;
     return content.pages[this.currentPageIndex()];
+  });
+
+  isPdf = computed(() => this.bookContent()?.format === 'PDF');
+  isEpub = computed(() => this.bookContent()?.format === 'EPUB');
+
+  showPageIndicator = computed(() => !!this.bookContent() && !this.isPdf());
+  showReaderControls = computed(() => !!this.bookContent() && !this.isPdf());
+
+  displayedPageText = computed(() => {
+    if (this.isPdf()) {
+      return '';
+    }
+
+    if (this.isEpub()) {
+      const current = this.currentPageIndex() + 1;
+      const total = this.epubTotalPages();
+
+      return total ? `Página ${current} de ${total}` : `Página ${current}`;
+    }
+
+    const content = this.bookContent();
+    if (!content) {
+      return '';
+    }
+
+    return `Página ${this.currentPageIndex() + 1} de ${content.pages.length}`;
   });
 
   ngOnInit(): void {
@@ -77,7 +107,6 @@ export class ReaderComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.loading = false;
         this.bookContent.set(response.data);
-        this.loadDocumentFile(response.data.book_id, response.data.format);
 
         const savedPage = this.getSavedProgress(response.data.book_id);
         const maxIndex = response.data.pages.length - 1;
@@ -87,6 +116,8 @@ export class ReaderComponent implements OnInit, OnDestroy {
         } else {
           this.currentPageIndex.set(0);
         }
+
+        this.loadDocumentFile(response.data.book_id, response.data.format);
       },
       error: (error) => {
         this.loading = false;
@@ -105,9 +136,16 @@ export class ReaderComponent implements OnInit, OnDestroy {
 
         if (format === 'PDF') {
           this.rawObjectUrl = URL.createObjectURL(blob);
-          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawObjectUrl);
+
+          // Intenta ocultar parte de la toolbar del visor nativo, pero no lo garantiza en todos los navegadores
+          const pdfUrl = `${this.rawObjectUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+
           this.useDocumentViewer = true;
           this.epubReady = false;
+          this.epubTotalPages.set(null);
+          this.epubAtStart.set(true);
+          this.epubAtEnd.set(false);
           return;
         }
 
@@ -115,8 +153,10 @@ export class ReaderComponent implements OnInit, OnDestroy {
           this.useDocumentViewer = true;
           this.fileUrl = null;
           this.epubReady = false;
+          this.epubTotalPages.set(null);
+          this.epubAtStart.set(true);
+          this.epubAtEnd.set(false);
 
-          // Forzamos que Angular pinte el contenedor #epubViewer
           this.cdr.detectChanges();
 
           const arrayBuffer = await blob.arrayBuffer();
@@ -236,24 +276,48 @@ export class ReaderComponent implements OnInit, OnDestroy {
   }
 
   private renderEpub(epubData: ArrayBuffer): void {
-    if (!this.epubViewer?.nativeElement) {
-      this.errorMessage = 'No se pudo inicializar el visor EPUB.';
-      return;
+    try {
+      if (!this.epubViewer?.nativeElement) {
+        this.errorMessage = 'No se pudo inicializar el visor EPUB.';
+        return;
+      }
+
+      if (this.epubRendition) {
+        this.epubRendition.destroy();
+        this.epubRendition = null;
+      }
+
+      this.epubBook = ePub(epubData);
+      this.epubRendition = this.epubBook.renderTo(this.epubViewer.nativeElement, {
+        width: '100%',
+        height: '78vh'
+      });
+
+      this.epubRendition.on('relocated', (location: any) => {
+        const displayedPage = location?.start?.displayed?.page;
+        const totalPages = location?.start?.displayed?.total;
+        const atStart = !!location?.atStart;
+        const atEnd = !!location?.atEnd;
+
+        if (typeof displayedPage === 'number' && displayedPage > 0) {
+          this.currentPageIndex.set(displayedPage - 1);
+          this.saveProgress();
+        }
+
+        if (typeof totalPages === 'number' && totalPages > 0) {
+          this.epubTotalPages.set(totalPages);
+        }
+
+        this.epubAtStart.set(atStart);
+        this.epubAtEnd.set(atEnd);
+      });
+
+      this.epubRendition.display();
+      this.epubReady = true;
+    } catch (error) {
+      console.error('EPUB render error:', error);
+      this.errorMessage = 'No se pudo renderizar el EPUB.';
     }
-
-    if (this.epubRendition) {
-      this.epubRendition.destroy();
-      this.epubRendition = null;
-    }
-
-    this.epubBook = ePub(epubData);
-    this.epubRendition = this.epubBook.renderTo(this.epubViewer.nativeElement, {
-      width: '100%',
-      height: '78vh'
-    });
-
-    this.epubRendition.display();
-    this.epubReady = true;
   }
 
   setFontFamily(font: 'serif' | 'sans' | 'reading'): void {
