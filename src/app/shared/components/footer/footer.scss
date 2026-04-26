@@ -2,6 +2,7 @@
   background: var(--color-primary);
   color: #fff;
   margin-top: 0 !important;
+  overflow-x: hidden;
 }
 
 .app-footer__inner {
@@ -15,10 +16,17 @@
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+  min-width: 0;
 
   p {
     margin: 0.5rem 0 0;
     color: #dbeafe;
+  }
+
+  strong,
+  p {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -32,12 +40,18 @@
   justify-content: center;
   font-size: 1.5rem;
   font-weight: 800;
+  flex-shrink: 0;
 }
 
 .app-footer__links {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  min-width: 0;
+
+  > div {
+    min-width: 0;
+  }
 
   h4 {
     margin: 0 0 0.8rem;
@@ -47,5 +61,24 @@
     display: block;
     color: #dbeafe;
     margin-bottom: 0.45rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-footer__inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .app-footer__links {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .app-footer__brand {
+    align-items: flex-start;
   }
 }
