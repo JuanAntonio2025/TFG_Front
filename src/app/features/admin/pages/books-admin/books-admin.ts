@@ -27,7 +27,7 @@ export class BooksAdmin implements OnInit {
   successMessage = '';
 
   selectedCoverFile: File | null = null;
-  coverPreview: Book['front_page_url'] | null = null;
+  coverPreview: string | null = null;
 
   books: Book[] = [];
   categories: Category[] = [];
@@ -119,7 +119,7 @@ export class BooksAdmin implements OnInit {
     };
 
     this.selectedCoverFile = null;
-    this.coverPreview = book.front_page ? this.imageUrlService.resolve(book.front_page) : null;
+    this.coverPreview = book.front_page_url || (book.front_page ? this.imageUrlService.resolve(book.front_page) : null);
 
     this.selectedBookFile = null;
     this.bookFileName = book.file_path ? book.file_path.split('/').pop() || null : null;
