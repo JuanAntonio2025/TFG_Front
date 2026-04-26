@@ -60,26 +60,25 @@
 
         <section class="reader-content section-card">
           @if (useDocumentViewer && fileUrl && isPdf()) {
-            <iframe
-              class="pdf-viewer"
-              [src]="fileUrl"
-              title="Visor PDF"
-            ></iframe>
-          } @else if (useDocumentViewer && isEpub()) {
-            <div class="epub-viewer-wrapper">
-              <div #epubViewer class="epub-viewer"></div>
-            </div>
-          } @else if (currentPage()) {
-            <pre
-              [style.fontSize.px]="fontSize()"
-              [ngClass]="{
-                'reader-font-serif': fontFamily() === 'serif',
-                'reader-font-sans': fontFamily() === 'sans',
-                'reader-font-reading': fontFamily() === 'reading'
-              }"
-            >
-{{ currentPage()!.content }}
-            </pre>
+            @if (!isMobile()) {
+              <iframe
+                class="pdf-viewer"
+                [src]="fileUrl"
+                title="Visor PDF"
+              ></iframe>
+            } @else {
+              <div class="pdf-mobile-fallback">
+                <p>Este PDF no puede mostrarse embebido correctamente en algunos navegadores móviles.</p>
+                <a
+                  class="app-btn app-btn--primary"
+                  [href]="rawObjectUrl || ''"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Abrir PDF
+                </a>
+              </div>
+            }
           }
         </section>
 
