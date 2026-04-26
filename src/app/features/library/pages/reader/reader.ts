@@ -292,8 +292,9 @@ export class ReaderComponent implements OnInit, OnDestroy {
       this.epubBook = ePub(epubData);
       this.epubRendition = this.epubBook.renderTo(this.epubViewer.nativeElement, {
         width: '100%',
-        height: '100%'
-      });
+        height: '100%',
+        spread: 'none'
+      } as any);
 
       this.epubRendition.on('relocated', (location: any) => {
         const displayedPage = location?.start?.displayed?.page;

@@ -34,43 +34,6 @@
   }
 }
 
-.reader-layout {
-  display: block;
-}
-
-.reader-layout--with-controls {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) 180px;
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.reader-side-control {
-  display: flex;
-  align-items: center;
-}
-
-.reader-side-control--left {
-  justify-content: flex-start;
-}
-
-.reader-side-control--right {
-  justify-content: flex-end;
-}
-
-.reader-side-control .app-btn {
-  width: 100%;
-  max-width: 170px;
-}
-
-.reader-side-control--desktop {
-  display: flex;
-}
-
-.reader-controls--mobile {
-  display: none;
-}
-
 .breadcrumb {
   font-size: 0.9rem;
   color: var(--color-text-soft);
@@ -128,12 +91,48 @@
   font-weight: 600;
 }
 
+.reader-layout {
+  display: block;
+}
+
+.reader-layout--with-controls {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 820px) 140px;
+  justify-content: center;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.reader-side-control {
+  display: flex;
+  align-items: center;
+}
+
+.reader-side-control--left {
+  justify-content: flex-start;
+}
+
+.reader-side-control--right {
+  justify-content: flex-end;
+}
+
+.reader-side-control--desktop {
+  display: flex;
+}
+
+.reader-side-control .app-btn {
+  width: 100%;
+  max-width: 140px;
+}
+
 .reader-content {
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
   background: #fcfcfa;
   transition: background 0.2s ease;
   min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 
   pre {
     margin: 0;
@@ -143,21 +142,6 @@
     color: #2f2f2f;
     transition: color 0.2s ease, font-size 0.2s ease;
   }
-}
-
-.reader-controls {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.toolbar-select-label {
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.reader-select {
-  min-width: 140px;
 }
 
 .reader-font-serif {
@@ -174,8 +158,8 @@
 
 .pdf-viewer {
   width: 100%;
-  min-height: 78vh;
   height: 78vh;
+  min-height: 78vh;
   border: none;
   border-radius: 12px;
   background: #fff;
@@ -184,6 +168,7 @@
 
 .epub-viewer-wrapper {
   width: 100%;
+  height: 78vh;
   min-height: 78vh;
   background: #fff;
   border-radius: 12px;
@@ -192,21 +177,22 @@
 
 .epub-viewer {
   width: 100%;
-  height: 78vh;
+  height: 100%;
+  max-width: 100%;
 }
-/*Para evitar desbordamiento*/
+
+.reader-controls--mobile {
+  display: none;
+}
+
 .page-container,
 .reader-layout,
 .reader-content,
 .epub-viewer-wrapper,
-.epub-viewer {
+.epub-viewer,
+.pdf-viewer {
   min-width: 0;
   max-width: 100%;
-}
-
-.reader-content,
-.epub-viewer-wrapper {
-  overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -214,30 +200,10 @@
     padding: 1.25rem 0 2rem;
   }
 
-  .reader-layout {
-    display: block;
-  }
-
-  .reader-layout--with-controls {
-    display: block;
-  }
-
-  .reader-side-control--desktop {
-    display: none;
-  }
-
-  .reader-controls--mobile {
-    display: none;
-  }
-
-  .reader-controls--mobile .app-btn {
-    flex: 1 1 0;
-  }
-
   .reader-header,
   .reader-toolbar,
   .reader-content {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 
   .reader-header {
@@ -250,26 +216,34 @@
     align-items: flex-start;
   }
 
-  .pdf-viewer,
-  .epub-viewer,
-  .epub-viewer-wrapper {
-    height: 70vh;
-    min-height: 70vh;
+  .reader-layout,
+  .reader-layout--with-controls {
+    display: block;
   }
 
-  /*Para evitar desbordamiento*/
-  .reader-header,
-  .reader-toolbar,
-  .reader-content {
-    padding: 1rem;
+  .reader-side-control--desktop {
+    display: none;
+  }
+
+  .reader-controls--mobile {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .reader-controls--mobile .app-btn {
+    flex: 1 1 0;
   }
 
   .pdf-viewer,
-  .epub-viewer,
   .epub-viewer-wrapper {
     width: 100%;
-    max-width: 100%;
     height: 68vh;
     min-height: 68vh;
+  }
+
+  .epub-viewer {
+    width: 100%;
+    height: 100%;
   }
 }

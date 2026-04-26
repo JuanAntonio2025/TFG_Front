@@ -73,13 +73,13 @@
             <pre
               [style.fontSize.px]="fontSize()"
               [ngClass]="{
-          'reader-font-serif': fontFamily() === 'serif',
-          'reader-font-sans': fontFamily() === 'sans',
-          'reader-font-reading': fontFamily() === 'reading'
-        }"
+                'reader-font-serif': fontFamily() === 'serif',
+                'reader-font-sans': fontFamily() === 'sans',
+                'reader-font-reading': fontFamily() === 'reading'
+              }"
             >
 {{ currentPage()!.content }}
-      </pre>
+            </pre>
           }
         </section>
 
@@ -97,7 +97,7 @@
       </section>
 
       @if (showReaderControls()) {
-        <section class="reader-controls reader-controls--mobile">
+        <section class="reader-controls--mobile">
           <button
             class="app-btn app-btn--secondary"
             (click)="previousPage()"
