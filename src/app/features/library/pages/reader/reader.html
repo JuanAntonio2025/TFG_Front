@@ -42,9 +42,12 @@
         </div>
       </section>
 
-      <section class="reader-layout">
+      <section
+        class="reader-layout"
+        [class.reader-layout--with-controls]="showReaderControls()"
+      >
         @if (showReaderControls()) {
-          <div class="reader-side-control reader-side-control--left">
+          <div class="reader-side-control reader-side-control--left reader-side-control--desktop">
             <button
               class="app-btn app-btn--secondary"
               (click)="previousPage()"
@@ -70,18 +73,18 @@
             <pre
               [style.fontSize.px]="fontSize()"
               [ngClass]="{
-                'reader-font-serif': fontFamily() === 'serif',
-                'reader-font-sans': fontFamily() === 'sans',
-                'reader-font-reading': fontFamily() === 'reading'
-              }"
+          'reader-font-serif': fontFamily() === 'serif',
+          'reader-font-sans': fontFamily() === 'sans',
+          'reader-font-reading': fontFamily() === 'reading'
+        }"
             >
-            {{ currentPage()!.content }}
-            </pre>
+{{ currentPage()!.content }}
+      </pre>
           }
         </section>
 
         @if (showReaderControls()) {
-          <div class="reader-side-control reader-side-control--right">
+          <div class="reader-side-control reader-side-control--right reader-side-control--desktop">
             <button
               class="app-btn app-btn--primary"
               (click)="nextPage()"
@@ -92,6 +95,26 @@
           </div>
         }
       </section>
+
+      @if (showReaderControls()) {
+        <section class="reader-controls reader-controls--mobile">
+          <button
+            class="app-btn app-btn--secondary"
+            (click)="previousPage()"
+            [disabled]="isEpub() ? epubAtStart() : currentPageIndex() === 0"
+          >
+            Página anterior
+          </button>
+
+          <button
+            class="app-btn app-btn--primary"
+            (click)="nextPage()"
+            [disabled]="isEpub() ? epubAtEnd() : (!bookContent() || currentPageIndex() >= bookContent()!.pages.length - 1)"
+          >
+            Página siguiente
+          </button>
+        </section>
+      }
     }
   </div>
 </main>

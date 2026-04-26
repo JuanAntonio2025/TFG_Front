@@ -34,6 +34,10 @@
 }
 
 .reader-layout {
+  display: block;
+}
+
+.reader-layout--with-controls {
   display: grid;
   grid-template-columns: 180px minmax(0, 1fr) 180px;
   gap: 1rem;
@@ -56,6 +60,14 @@
 .reader-side-control .app-btn {
   width: 100%;
   max-width: 170px;
+}
+
+.reader-side-control--desktop {
+  display: flex;
+}
+
+.reader-controls--mobile {
+  display: none;
 }
 
 .breadcrumb {
@@ -120,6 +132,7 @@
   margin-bottom: 1.5rem;
   background: #fcfcfa;
   transition: background 0.2s ease;
+  min-width: 0;
 
   pre {
     margin: 0;
@@ -160,10 +173,12 @@
 
 .pdf-viewer {
   width: 100%;
+  min-height: 78vh;
   height: 78vh;
   border: none;
   border-radius: 12px;
   background: #fff;
+  display: block;
 }
 
 .epub-viewer-wrapper {
@@ -185,16 +200,26 @@
   }
 
   .reader-layout {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
-  .reader-side-control {
+  .reader-layout--with-controls {
+    display: block;
+  }
+
+  .reader-side-control--desktop {
+    display: none;
+  }
+
+  .reader-controls--mobile {
+    display: flex;
     justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
-  .reader-side-control .app-btn {
-    max-width: none;
-    width: auto;
+  .reader-controls--mobile .app-btn {
+    flex: 1 1 0;
   }
 
   .reader-header,
@@ -208,12 +233,15 @@
     align-items: flex-start;
   }
 
-  .reader-controls {
-    flex-direction: column;
-  }
-
   .reader-toolbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .pdf-viewer,
+  .epub-viewer,
+  .epub-viewer-wrapper {
+    height: 70vh;
+    min-height: 70vh;
   }
 }

@@ -57,16 +57,16 @@ export class ReaderComponent implements OnInit, OnDestroy {
   showPageIndicator = computed(() => !!this.bookContent() && !this.isPdf());
   showReaderControls = computed(() => !!this.bookContent() && !this.isPdf());
 
+  epubCurrentDisplayPage = signal(1);
+  epubDisplayedTotal = signal<number | null>(null);
+
   displayedPageText = computed(() => {
     if (this.isPdf()) {
       return '';
     }
 
     if (this.isEpub()) {
-      const current = this.currentPageIndex() + 1;
-      const total = this.epubTotalPages();
-
-      return total ? `Página ${current} de ${total}` : `Página ${current}`;
+      return `Página ${this.epubCurrentDisplayPage()}`;
     }
 
     const content = this.bookContent();
@@ -137,15 +137,15 @@ export class ReaderComponent implements OnInit, OnDestroy {
         if (format === 'PDF') {
           this.rawObjectUrl = URL.createObjectURL(blob);
 
-          // Intenta ocultar parte de la toolbar del visor nativo, pero no lo garantiza en todos los navegadores
-          const pdfUrl = `${this.rawObjectUrl}#toolbar=0&navpanes=0&scrollbar=1`;
-          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+          this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawObjectUrl);
 
           this.useDocumentViewer = true;
           this.epubReady = false;
           this.epubTotalPages.set(null);
           this.epubAtStart.set(true);
           this.epubAtEnd.set(false);
+          this.epubCurrentDisplayPage.set(1);
+          this.epubDisplayedTotal.set(null);
           return;
         }
 
@@ -156,6 +156,8 @@ export class ReaderComponent implements OnInit, OnDestroy {
           this.epubTotalPages.set(null);
           this.epubAtStart.set(true);
           this.epubAtEnd.set(false);
+          this.epubCurrentDisplayPage.set(1);
+          this.epubDisplayedTotal.set(null);
 
           this.cdr.detectChanges();
 
@@ -295,17 +297,20 @@ export class ReaderComponent implements OnInit, OnDestroy {
 
       this.epubRendition.on('relocated', (location: any) => {
         const displayedPage = location?.start?.displayed?.page;
-        const totalPages = location?.start?.displayed?.total;
+        const displayedTotal = location?.start?.displayed?.total;
         const atStart = !!location?.atStart;
         const atEnd = !!location?.atEnd;
 
         if (typeof displayedPage === 'number' && displayedPage > 0) {
+          this.epubCurrentDisplayPage.set(displayedPage);
           this.currentPageIndex.set(displayedPage - 1);
           this.saveProgress();
         }
 
-        if (typeof totalPages === 'number' && totalPages > 0) {
-          this.epubTotalPages.set(totalPages);
+        if (typeof displayedTotal === 'number' && displayedTotal > 0) {
+          this.epubDisplayedTotal.set(displayedTotal);
+        } else {
+          this.epubDisplayedTotal.set(null);
         }
 
         this.epubAtStart.set(atStart);
