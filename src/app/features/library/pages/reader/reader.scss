@@ -170,20 +170,6 @@
   margin: 0 auto;
 }
 
-.pdf-mobile-fallback {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2rem 1rem;
-
-  p {
-    margin: 0 0 1rem;
-    color: var(--color-text-soft);
-    line-height: 1.6;
-  }
-}
-
 .epub-viewer-wrapper {
   width: 100%;
   height: 78vh;

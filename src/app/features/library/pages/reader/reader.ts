@@ -60,8 +60,6 @@ export class ReaderComponent implements OnInit, OnDestroy {
   epubCurrentDisplayPage = signal(1);
   epubDisplayedTotal = signal<number | null>(null);
 
-  isMobile = computed(() => window.innerWidth <= 768);
-
   displayedPageText = computed(() => {
     if (this.isPdf()) {
       return '';
