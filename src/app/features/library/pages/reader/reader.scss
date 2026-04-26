@@ -3,6 +3,7 @@
   background: var(--color-bg);
   padding: 2rem 0 3rem;
   transition: background 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
 }
 
 .reader-page--dark {
@@ -193,6 +194,20 @@
   width: 100%;
   height: 78vh;
 }
+/*Para evitar desbordamiento*/
+.page-container,
+.reader-layout,
+.reader-content,
+.epub-viewer-wrapper,
+.epub-viewer {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.reader-content,
+.epub-viewer-wrapper {
+  overflow: hidden;
+}
 
 @media (max-width: 768px) {
   .reader-page {
@@ -212,10 +227,7 @@
   }
 
   .reader-controls--mobile {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1rem;
+    display: none;
   }
 
   .reader-controls--mobile .app-btn {
@@ -243,5 +255,21 @@
   .epub-viewer-wrapper {
     height: 70vh;
     min-height: 70vh;
+  }
+
+  /*Para evitar desbordamiento*/
+  .reader-header,
+  .reader-toolbar,
+  .reader-content {
+    padding: 1rem;
+  }
+
+  .pdf-viewer,
+  .epub-viewer,
+  .epub-viewer-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 68vh;
+    min-height: 68vh;
   }
 }
