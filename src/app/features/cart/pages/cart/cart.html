@@ -92,8 +92,12 @@
             <strong>{{ cartData.summary.total_amount }} €</strong>
           </div>
 
-          <button class="app-btn app-btn--primary summary-btn" (click)="goToCheckout()">
-            Realizar Pago
+          <button class="app-btn app-btn--primary summary-btn" (click)="goToCheckout()" [disabled]="checkoutLoading">
+            @if (!checkoutLoading) {
+              Realizar Pago
+            } @else {
+              Redirigiendo...
+            }
           </button>
         </aside>
       </section>

@@ -14,7 +14,7 @@ import { ForgotPassword } from './features/auth/pages/forgot-password/forgot-pas
 import { ResetPassword } from './features/auth/pages/reset-password/reset-password';
 
 import { CartComponent } from './features/cart/pages/cart/cart';
-import { Checkout } from './features/orders/pages/checkout/checkout';
+//import { Checkout } from './features/orders/pages/checkout/checkout';
 import { LibraryComponent } from './features/library/pages/library/library';
 import { Dashboard } from './features/admin/pages/dashboard/dashboard';
 import { OrdersHistory } from './features/orders/pages/orders-history/orders-history';
@@ -71,12 +71,12 @@ export const routes: Routes = [
     path: 'cart',
     component: CartComponent,
   },
-  {
+  /*{
     path: 'checkout',
     component: Checkout,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['customer', 'employee', 'admin']}
-  },
+  },*/
   {
     path: 'library',
     component: LibraryComponent,

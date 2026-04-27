@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+/*import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
@@ -134,5 +134,166 @@ export class CartComponent implements OnInit {
     }
 
     this.router.navigate(['/checkout']);
+  }
+}*/
+
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+
+import { Cart } from '../../services/cart';
+import { CartData, CartItem } from '../../models/cart.model';
+import { Auth } from '../../../../core/services/auth';
+import { GuestCart } from '../../../../core/services/guest-cart';
+import { Books } from '../../../public/services/books';
+import { ImageUrl } from '../../../../core/services/image-url';
+import { Orders } from '../../../orders/services/orders';
+
+@Component({
+  selector: 'app-cart',
+  imports: [CommonModule, RouterModule],
+  templateUrl: './cart.html',
+  styleUrl: './cart.scss',
+})
+export class CartComponent implements OnInit {
+  private readonly cartService = inject(Cart);
+  private readonly router = inject(Router);
+  private readonly guestCartService = inject(GuestCart);
+  private readonly authService = inject(Auth);
+  private readonly booksService = inject(Books);
+  private readonly ordersService = inject(Orders);
+  protected readonly imageUrlService = inject(ImageUrl);
+
+  loading = false;
+  checkoutLoading = false;
+  errorMessage = '';
+  successMessage = '';
+
+  cartData: CartData | null = null;
+  items: CartItem[] = [];
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.loadCart();
+    } else {
+      this.loadGuestCart();
+    }
+  }
+
+  loadCart(): void {
+    this.loading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.cartData = response.data;
+        this.items = response.data.items;
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'No se pudo cargar el carrito.';
+      }
+    });
+  }
+
+  removeItem(bookId: number): void {
+    if (!this.authService.isLoggedIn()) {
+      this.guestCartService.removeItem(bookId);
+      this.loadGuestCart();
+      return;
+    }
+
+    this.cartService.deleteItem(bookId).subscribe({
+      next: (response) => {
+        this.successMessage = response.message;
+        this.cartData = response.data;
+        this.items = response.data.items;
+      },
+      error: (error) => {
+        this.errorMessage = error?.error?.message || 'No se pudo eliminar el libro del carrito.';
+      }
+    });
+  }
+
+  loadGuestCart(): void {
+    this.loading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    const ids = this.guestCartService.getItems();
+
+    if (ids.length === 0) {
+      this.loading = false;
+      this.cartData = {
+        cart: null,
+        items: [],
+        summary: {
+          items_count: 0,
+          total_amount: 0
+        }
+      };
+      this.items = [];
+      return;
+    }
+
+    this.booksService.getBooksByIds(ids).subscribe({
+      next: (response) => {
+        this.loading = false;
+
+        this.items = response.data.map(book => ({
+          book_id: book.book_id,
+          title: book.title,
+          author: book.author,
+          front_page: book.front_page,
+          front_page_url: book.front_page_url,
+          format: book.format,
+          price: Number(book.price),
+          line_total: Number(book.price)
+        }));
+
+        this.cartData = {
+          cart: null,
+          items: this.items,
+          summary: {
+            items_count: this.items.length,
+            total_amount: this.items.reduce((sum, item) => sum + Number(item.line_total), 0)
+          }
+        };
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'No se pudo cargar el carrito de visitante.';
+      }
+    });
+  }
+
+  goToCheckout(): void {
+    if (!this.authService.isLoggedIn()) {
+      localStorage.setItem('post_login_redirect', '/cart');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    if (!this.cartData || this.items.length === 0) {
+      this.errorMessage = 'No hay productos en el carrito.';
+      return;
+    }
+
+    this.checkoutLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.ordersService.createStripeSession().subscribe({
+      next: (response) => {
+        this.checkoutLoading = false;
+        window.location.href = response.url;
+      },
+      error: (error) => {
+        this.checkoutLoading = false;
+        this.errorMessage = error?.error?.message || 'No se pudo iniciar el pago con Stripe.';
+      }
+    });
   }
 }
