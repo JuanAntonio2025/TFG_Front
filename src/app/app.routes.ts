@@ -155,6 +155,17 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['admin'] }
   },
+  //Checkout con Stripe
+  {
+    path: 'checkout/success',
+    loadComponent: () =>
+      import('./features/orders/pages/checkout-success/checkout-success').then(m => m.CheckoutSuccess),
+  },
+  {
+    path: 'checkout/cancel',
+    loadComponent: () =>
+      import('./features/orders/pages/checkout-cancel/checkout-cancel').then(m => m.CheckoutCancel),
+  },
   {
     path: '**',
     redirectTo: ''

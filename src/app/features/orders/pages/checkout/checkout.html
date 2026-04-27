@@ -6,7 +6,9 @@
 
     <section class="checkout-header">
       <h1 class="page-title">Realizar Compra</h1>
-      <p class="page-subtitle">Selecciona un método de pago para completar la compra simulada.</p>
+      <p class="page-subtitle">
+        Serás redirigido a Stripe para completar el pago de forma segura en modo prueba.
+      </p>
     </section>
 
     @if (loading) {
@@ -21,102 +23,32 @@
       </div>
     }
 
-    @if (successMessage && !loading) {
-      <div class="checkout-state section-card success">
-        <p>{{ successMessage }}</p>
-        @if (transactionReference) {
-          <p><strong>Referencia:</strong> {{ transactionReference }}</p>
-        }
-      </div>
-    }
-
     @if (!loading && cartData && cartData.items.length > 0) {
       <section class="checkout-layout">
         <div class="payment-panel section-card">
-          <h2>Método de pago</h2>
+          <h2>Pago seguro con Stripe</h2>
 
-          <div class="payment-option" [class.active]="selectedPaymentMethod === 'card'">
-            <label class="payment-option__header">
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="card"
-                [(ngModel)]="selectedPaymentMethod"
-              />
-              <span>Tarjeta de Crédito / Débito</span>
-            </label>
+          <div class="stripe-info-box">
+            <p>
+              Al pulsar el botón de pago, se abrirá la pasarela segura de Stripe en entorno de prueba.
+            </p>
 
-            @if (selectedPaymentMethod === 'card') {
-              <div class="payment-card-box">
-                <div class="payment-card-visual">
-                  <div class="payment-card-visual__chip"></div>
-                  <div class="payment-card-visual__number">
-                    {{ cardForm.card_number || '**** **** **** 1234' }}
-                  </div>
-                  <div class="payment-card-visual__footer">
-                    <span>{{ cardForm.card_holder || 'CARD HOLDER' }}</span>
-                    <span>{{ cardForm.expiry_date || 'MM/YY' }}</span>
-                  </div>
-                </div>
+            <p>
+              Podrás completar la compra utilizando una tarjeta de test.
+            </p>
 
-                <div class="card-form-grid">
-                  <input
-                    class="app-input"
-                    type="text"
-                    placeholder="Titular"
-                    [(ngModel)]="cardForm.card_holder"
-                  />
+            <div class="stripe-test-card">
+              <strong>Tarjeta de prueba:</strong>
+              <span>4242 4242 4242 4242</span>
+            </div>
 
-                  <input
-                    class="app-input"
-                    type="text"
-                    placeholder="Número de tarjeta"
-                    [(ngModel)]="cardForm.card_number"
-                  />
-
-                  <input
-                    class="app-input"
-                    type="text"
-                    placeholder="MM/AA"
-                    [(ngModel)]="cardForm.expiry_date"
-                  />
-
-                  <input
-                    class="app-input"
-                    type="text"
-                    placeholder="CVV"
-                    [(ngModel)]="cardForm.cvv"
-                  />
-                </div>
-              </div>
-            }
-          </div>
-
-          <div class="payment-option" [class.active]="selectedPaymentMethod === 'paypal'">
-            <label class="payment-option__header">
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="paypal"
-                [(ngModel)]="selectedPaymentMethod"
-              />
-              <span>PayPal</span>
-            </label>
-
-            @if (selectedPaymentMethod === 'paypal') {
-              <div class="paypal-box">
-                <input
-                  class="app-input"
-                  type="email"
-                  placeholder="Correo de PayPal"
-                  [(ngModel)]="paypalForm.paypal_email"
-                />
-                <p>La autorización del pago se simulará mediante tu cuenta PayPal.</p>
-              </div>
-            }
+            <p class="stripe-note">
+              Puedes introducir cualquier fecha futura, cualquier CVC de 3 dígitos y cualquier código postal válido.
+            </p>
           </div>
 
           <div class="checkout-actions">
+            <a class="app-btn app-btn--secondary" routerLink="/cart">Volver al carrito</a>
             <a class="app-btn app-btn--secondary" routerLink="/catalog">Volver al catálogo</a>
           </div>
         </div>
@@ -142,16 +74,20 @@
             </div>
           </div>
 
-          <button class="app-btn app-btn--primary summary-btn" (click)="confirmOrder()" [disabled]="orderLoading">
+          <button
+            class="app-btn app-btn--primary summary-btn"
+            (click)="confirmOrder()"
+            [disabled]="orderLoading"
+          >
             @if (!orderLoading) {
-              Finalizar Compra
+              Pagar con Stripe
             } @else {
-              Procesando...
+              Redirigiendo...
             }
           </button>
 
           <p class="checkout-note">
-            Este pago es una simulación académica. No se realizará ningún cargo real.
+            Se utilizará Stripe en modo de prueba. No se realizará ningún cargo real.
           </p>
         </aside>
       </section>

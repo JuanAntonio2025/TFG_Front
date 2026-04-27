@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+/*import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -141,5 +141,79 @@ export class Checkout implements OnInit {
       payment_method: 'paypal',
       paypal_email: this.paypalForm.paypal_email.trim()
     };
+  }
+}*/
+
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { Cart } from '../../../cart/services/cart';
+import { Orders } from '../../services/orders';
+import { CartData } from '../../../cart/models/cart.model';
+import { Notification } from '../../../../core/services/notification';
+
+@Component({
+  selector: 'app-checkout',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './checkout.html',
+  styleUrl: './checkout.scss',
+})
+export class Checkout implements OnInit {
+  private readonly cartService = inject(Cart);
+  private readonly ordersService = inject(Orders);
+  private readonly notificationService = inject(Notification);
+
+  loading = false;
+  orderLoading = false;
+  errorMessage = '';
+
+  cartData: CartData | null = null;
+
+  ngOnInit(): void {
+    this.loadCart();
+  }
+
+  loadCart(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.cartService.getCart().subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.cartData = response.data;
+
+        if (!this.cartData.items.length) {
+          this.errorMessage = 'Tu carrito está vacío.';
+        }
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'No se pudo cargar el carrito.';
+      }
+    });
+  }
+
+  confirmOrder(): void {
+    if (!this.cartData || this.cartData.items.length === 0) {
+      this.errorMessage = 'No hay productos en el carrito.';
+      return;
+    }
+
+    this.errorMessage = '';
+    this.orderLoading = true;
+
+    this.ordersService.createStripeSession().subscribe({
+      next: (response) => {
+        this.orderLoading = false;
+        window.location.href = response.url;
+      },
+      error: (error) => {
+        this.orderLoading = false;
+        this.errorMessage = error?.error?.message || 'No se pudo iniciar el pago con Stripe.';
+        this.notificationService.error(this.errorMessage);
+      }
+    });
   }
 }

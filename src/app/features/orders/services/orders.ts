@@ -53,4 +53,8 @@ export class Orders {
   getOrderById(orderId: number): Observable<OrderResponse> {
     return this.http.get<OrderResponse>(`${this.apiUrl}/${orderId}`);
   }
+
+  createStripeSession() {
+    return this.http.post<{ url: string }>(`${environment.apiBaseUrl}/checkout/stripe/session`, {});
+  }
 }
