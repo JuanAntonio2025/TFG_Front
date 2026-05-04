@@ -1,0 +1,160 @@
+<main class="admin-page">
+  <div class="page-container">
+    <div class="breadcrumb">
+      <a routerLink="/">Inicio</a> > <a routerLink="/admin">Panel de administración</a> > <span>Pedidos</span>
+    </div>
+
+    <section class="page-header">
+      <h1 class="page-title">Gestión de Pedidos</h1>
+      <p class="page-subtitle">Consulta los pedidos realizados por los usuarios de la plataforma.</p>
+    </section>
+
+    @if (errorMessage) {
+      <div class="admin-state section-card error">
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    <section class="orders-filters section-card">
+      <div class="form-group">
+        <label>Buscar usuario</label>
+        <input
+          class="app-input"
+          type="text"
+          placeholder="Nombre o email"
+          [(ngModel)]="filters.search"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <select class="app-select" [(ngModel)]="filters.status">
+          <option value="">Todos</option>
+          <option value="paid">Pagado</option>
+          <option value="pending">Pendiente</option>
+          <option value="cancelled">Cancelado</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button class="app-btn app-btn--primary" type="button" (click)="loadOrders()">
+          Filtrar
+        </button>
+
+        <button class="app-btn app-btn--secondary" type="button" (click)="clearFilters()">
+          Limpiar
+        </button>
+      </div>
+    </section>
+
+    <section class="orders-layout" [class.orders-layout--detail-open]="selectedOrder">
+      <div class="orders-list section-card">
+        <div class="card-header">
+          <h2>Pedidos</h2>
+        </div>
+
+        @if (loading) {
+          <div class="admin-state">
+            <p>Cargando pedidos...</p>
+          </div>
+        }
+
+        @if (!loading && orders.length === 0) {
+          <div class="admin-state">
+            <p>No hay pedidos disponibles.</p>
+          </div>
+        }
+
+        @if (!loading && orders.length > 0) {
+          <div class="orders-table">
+            <div class="orders-table__header">
+              <span>ID</span>
+              <span>Usuario</span>
+              <span>Fecha</span>
+              <span>Libros</span>
+              <span>Total</span>
+              <span>Estado</span>
+            </div>
+
+            @for (order of orders; track order.order_id) {
+              <article
+                class="orders-table__row"
+                [class.selected]="selectedOrder?.order_id === order.order_id"
+                role="button"
+                tabindex="0"
+                (click)="selectOrder(order)"
+                (keyup.enter)="selectOrder(order)"
+              >
+                <span>#{{ order.order_id }}</span>
+
+                <span>
+    <strong>{{ order.user?.name || 'Usuario eliminado' }}</strong>
+    <small>{{ order.user?.email || '-' }}</small>
+  </span>
+
+                <span>{{ formatDate(order.order_date) }}</span>
+
+                <span>{{ order.items_count }}</span>
+
+                <span>{{ order.total_amount | number:'1.2-2' }} €</span>
+
+                <span>
+    <span class="status-badge" [class.paid]="order.status === 'paid'">
+      {{ order.status }}
+    </span>
+  </span>
+              </article>
+            }
+          </div>
+        }
+      </div>
+
+      @if (selectedOrder) {
+        <aside class="order-detail section-card">
+          <div class="order-detail__header">
+            <div>
+              <h2>Pedido #{{ selectedOrder.order_id }}</h2>
+              <p>{{ formatDate(selectedOrder.order_date) }}</p>
+            </div>
+
+            <button class="close-btn" type="button" (click)="closeDetail()">×</button>
+          </div>
+
+          <div class="order-user">
+            <h3>Usuario</h3>
+            <p><strong>{{ selectedOrder.user?.name || 'Usuario eliminado' }}</strong></p>
+            <p>{{ selectedOrder.user?.email || '-' }}</p>
+          </div>
+
+          <div class="order-summary">
+            <div>
+              <span>Estado</span>
+              <strong>{{ selectedOrder.status }}</strong>
+            </div>
+
+            <div>
+              <span>Total</span>
+              <strong>{{ selectedOrder.total_amount | number:'1.2-2' }} €</strong>
+            </div>
+          </div>
+
+          <div class="order-books">
+            <h3>Libros comprados</h3>
+
+            @for (book of selectedOrder.items; track book.book_id) {
+              <article class="order-book">
+                <img [src]="book.front_page_url || imageUrlService.resolve(book.front_page)" [alt]="book.title" />
+
+                <div>
+                  <h4>{{ book.title }}</h4>
+                  <p>{{ book.author }}</p>
+                  <small>{{ book.format }} · {{ book.unit_price | number:'1.2-2' }} €</small>
+                </div>
+              </article>
+            }
+          </div>
+        </aside>
+      }
+    </section>
+  </div>
+</main>

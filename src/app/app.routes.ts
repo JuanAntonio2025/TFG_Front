@@ -26,6 +26,7 @@ import { CategoriesAdmin } from './features/admin/pages/categories-admin/categor
 import { UsersAdmin } from './features/admin/pages/users-admin/users-admin';
 import { IncidencesAdmin } from './features/admin/pages/incidences-admin/incidences-admin';
 import { ReviewsAdmin } from './features/admin/pages/reviews-admin/reviews-admin';
+import { OrdersAdmin } from './features/admin/pages/orders-admin/orders-admin';
 
 import { ReaderComponent } from './features/library/pages/reader/reader';
 import { Profile } from './features/auth/pages/profile/profile';
@@ -142,6 +143,12 @@ export const routes: Routes = [
     component: IncidencesAdmin,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['admin', 'support'] }
+  },
+  {
+    path: 'admin/orders',
+    component: OrdersAdmin,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
   },
   {
     path: 'support/incidences',
